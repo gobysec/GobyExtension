@@ -353,7 +353,7 @@ banner列表的标题栏 - bannerTop
 扫描弹窗页的配置，使得用户可以对扫描配置进行自定义的处理和操作，下面我们看一个简单的例子。这个例子主要是在扫描弹窗页里，新增一个按钮，点击显示自定义页面，在这个自定义页面里可以进行fofa查询，获取扫描对象，并导入到扫描ip、端口里。
 
 ### 下载链接
-[FOFA](http://gobies.org/fofa.zip)
+[FOFA](http://gobies.org/FOFA.zip)
 
 ### 使用的**goby API**
 
@@ -449,7 +449,7 @@ banner列表的标题栏 - bannerTop
 
 ![](./img/fofa-html.png)
 
-至于具体的代码内容，可以[下载代码](http://gobies.org/fofa.zip)查看详细。
+至于具体的代码内容，可以[下载代码](http://gobies.org/FOFA.zip)查看详细。
 
 最终效果如下：
 
@@ -459,7 +459,7 @@ banner列表的标题栏 - bannerTop
 扫描结果页的配置，使得用户可以对扫描后的结果进行自定义的处理和操作，下面我们看一个简单的例子。这个例子主要是在扫描结果页更多下拉框里，新增一个按钮，点击可以选择导出不同字段的csv文件的功能。
 
 ### 下载链接
-[ExportCsv](http://gobies.org/export.zip)
+[ExportCsv](http://gobies.org/ExportCsv.zip)
 
 ### 使用的**goby API**
 
@@ -514,7 +514,7 @@ banner列表的标题栏 - bannerTop
       
 第三步，点击自定义的组件后，要显示用户自定义的界面，可以用goby.showIframeDia，传入html页面。
 
-至于具体的代码内容，可以[下载代码](http://gobies.org/export.zip)查看详细。
+至于具体的代码内容，可以[下载代码](http://gobies.org/ExportCsv.zip)查看详细。
 
 最终效果如下：
 
@@ -524,7 +524,7 @@ banner列表的标题栏 - bannerTop
 ip详情页的配置，使得用户可以对ip详情页进行自定义的处理和操作，下面我们看一个简单的例子。这个例子主要是在ip详情页的banner列表里，新增一个按钮，点击可以进行http发包测试。
 
 ### 下载链接
-[Http](http://gobies.org/http.zip)
+[Http](http://gobies.org/Http.zip)
 
 ### 使用的**goby API**
 
@@ -573,7 +573,7 @@ ip详情页的配置，使得用户可以对ip详情页进行自定义的处理�
       
 第三步，点击自定义的组件后，要显示用户自定义的界面，可以用goby.showIframeDia，传入html页面。
 
-至于具体的代码内容，可以[下载代码](http://gobies.org/http.zip)查看详细。
+至于具体的代码内容，可以[下载代码](http://gobies.org/Http.zip)查看详细。
 
 最终效果如下：
 
@@ -583,7 +583,7 @@ ip详情页的配置，使得用户可以对ip详情页进行自定义的处理�
 漏洞列表页的配置，使得用户可以对漏洞相关的页面进行自定义的处理和操作，下面我们看一个简单的例子。这个例子主要是在漏洞相关的页面，根据当前漏洞名是否在自定义的列表里，动态显示MSF利用按钮，点击按钮可以一键调用本地Metasploit框架，对该漏洞进行检测。
 
 ### 下载链接
-[MSF Sploit](http://gobies.org/msf.zip)
+[MSF Sploit](http://gobies.org/MSF Sploit.zip)
 
 ### 使用的**goby API**
 
@@ -692,7 +692,7 @@ ip详情页的配置，使得用户可以对ip详情页进行自定义的处理�
 ```
         
       
-至于具体的代码内容，可以[下载代码](http://gobies.org/msf.zip)查看详细。
+至于具体的代码内容，可以[下载代码](http://gobies.org/MSF Sploit.zip)查看详细。
 
 最终效果如下：
 
