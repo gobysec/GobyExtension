@@ -1,0 +1,31 @@
+{
+    "name": "MSF Sploit",
+    "publisher": "Goby Team",
+    "description": "Metasploit安全漏洞检测工具",
+    "version": "0.1.0",
+    "icon": "./src/assets/img/metasploit.png",
+    "engines": "1.6.170",
+    "initEvents": "",
+    "main": "./src/extension.js",
+    "contributes": {
+        "configuration": {
+            "url": {
+                "type": "string",
+                "default": "",
+                "description": "请输入插件地址"
+            }
+        },
+        "views": {
+            "vulList": [
+                {
+                    "command": "msf",
+                    "title": "MSF",
+                    "visible": "msf_visi"
+                }
+            ]
+        }
+    },
+    "scripts": {},
+    "devDependencies": {},
+    "dependencies": {}
+}

@@ -1,0 +1,26 @@
+{
+ "name": "ExportCsv",
+ "publisher": "Goby Team",
+ "description": "可以选择IP、端口、协议字段，导出对应csv文件。",
+ "version": "0.1.0",
+ "engines": "1.6.170",
+ "initEvents": "",
+ "icon": "src/assets/img/import.png",
+ "main": "./src/extension.js",
+ "contributes": {
+  "views": {
+   "scanRes": {
+      "moreOptions": [
+        {
+          "command": "ExportCsv",
+          "title": "ExportCsv",
+          "icon": "src/assets/img/import.png"
+        }
+      ]
+   }
+  }
+ },
+ "scripts": {},
+ "devDependencies": {},
+ "dependencies": {}
+}

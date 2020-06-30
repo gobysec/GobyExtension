@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>fofa-查询</title>
+  <link rel="stylesheet" href="assets/lib/layui/css/layui.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/font/iconfont.css">
+</head>
+
+<body>
+  <div class="layui-form-item clearfix">
+    <div class="layui-input-block marLeft0 fl search-input-wrap">
+      <input id="fofa-input" type="text" name="title" required lay-verify="required" placeholder="请输入查询规则"
+        autocomplete="off"
+        class="layui-input">
+      <span class="fofa-search"><i class="iconfont iconfangdajing"></i></span>
+    </div>
+    <button class="layui-btn export-ip fr" lay-submit lay-filter="formDemo">导入当前页/100条</button>
+  </div>
+  <div class="layui-table-wrap">
+    <table lay-filter="demo" id="ip-table" class="layui-table">
+      <thead>
+        <tr>
+          <th min-width="50">host</th>
+          <th min-width="50">IP</th>
+          <th min-width="50">端口</th>
+          <th min-width="50">title</th>
+        </tr> 
+      </thead>
+      <tbody>
+        <tr>
+        </tr>
+      </tbody>
+    </table>
+    <div class="no-data">
+    </div>
+    <div class="loading">
+      <i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop"></i>
+    </div>
+  </div>
+  <div id="page"></div>
+
+  <script src="assets/js/jquery-3.3.1.min.js"></script>
+  <script src="assets/js/jquery.base64.js"></script>
+  <script src="assets/lib/layui/layui.all.js"></script>
+  <script>
+    let goby = parent.goby; // 获取GobyAPi
+    let results = []; // 定义搜索结果数组
+
+    // 字符串转base64
+    function encode(str){
+      var base64 = $.base64.encode(str);
+      return base64;
+    }
+
+    // 查询数据
+    function getData(page, type) {
+      $(".no-data").hide();
+      $(".loading").show();
+      $("#ip-table tbody").html("");
+      let config = goby.getConfiguration(); // 获取插件配置
+      let email = config.Email.default;
+      let key = config.Key.default;
+      let content = $("#fofa-input").val(); // 调用fofaApi搜索
+      let qbase64 = encode(content);
+      let url = `https://beta.fofa.so/api/v1/search/all?email=${email}&key=${key}&qbase64=${qbase64}&page=${page}&fields=host,ip,port,title`;
+      $.ajax({
+        type: "get",
+        url: url,
+        contentType: 'application/x-www-form-urlencoded;charset=utf-8',
+        dataType: "json",
+        success(res) {
+          results = res.results;
+          if (results && results.length > 0) {
+            let html = "";
+            res.results.forEach((v, k) => {
+              html += `<tr>
+                  <td>${v[0]}</td>
+                  <td>${v[1]}</td>
+                  <td>${v[2]}</td>
+                  <td>${v[3]}</td>
+                </tr>`
+            })
+            $("#ip-table tbody").html(html);
+            if (type) {
+              var laypage = layui.laypage;
+              laypage.render({
+                elem: 'page', 
+                limit: 100,
+                count: res.size,
+                jump: function(obj, first) {
+                  getData(obj.curr);
+                }
+              });
+            }
+          } else {
+            $(".no-data").show();
+            $("#ip-table tbody").html("");
+            $(".no-data").html(content + " 0");
+          }
+           $(".loading").hide();
+        },
+        error(res) {
+          goby.showErrorMessage(JSON.parse(res.responseText).errmsg);
+          $(".no-data").html(JSON.parse(res.responseText).errmsg);
+          
+          results = [];
+          let html = "";
+          $("#ip-table tbody").html(html);
+          $(".no-data").show();
+          $(".loading").hide();
+        }
+      });
+    }
+
+    // 回车搜索
+    $("#fofa-input").keydown(function(e) {
+      if(e.keyCode == 13) {  
+        getData(1, 1);
+      }
+    });
+
+    // 按钮搜索
+    $(".fofa-search").click(function() {
+      getData(1, 1);
+    });
+
+    // 导出Ip和端口
+    $(".export-ip").on("click", function() {
+      if (results && results.length > 0) {
+        let ips = [];
+        let ports = [];
+        results.forEach((v, k) => {
+          ips.push(v[1]);
+          ports.push(v[2]);
+        })
+        goby.addScanIps(ips, 1);
+        goby.addScanPorts(ports, 1);
+        goby.showSuccessMessage("导入扫描对象成功");
+        goby.closeIframeDia();
+      } else {
+        goby.showInformationMessage("导入对象不能为空");
+      }
+    })
+  </script>
+</body>
+
+</html>

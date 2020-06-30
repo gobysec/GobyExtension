@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>导出csv</title>
+  <link rel="stylesheet" href="assets/lib/layui/css/layui.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+</head>
+<body>
+  <form class="layui-form" action="">
+    <div class="title">请选择导出项：</div>
+    <div class="layui-form-item">
+      <div>
+        <input id="ip-item" type="checkbox" lay-skin="primary" name="IP" title="IP">
+        <input id="port-item" type="checkbox" lay-skin="primary" name="Port" title="Port">
+        <input id="protocol-item" type="checkbox" lay-skin="primary" name="Protocol" title="Protocol">
+      </div>
+    </div>
+  </form>
+  <button class="layui-btn export-csv" lay-submit lay-filter="formDemo" style="float: right;">导出</button>
+
+  <script src="assets/js/jquery-3.3.1.min.js"></script>
+  <script src="assets/js/json2csv.js"></script>
+  <script src="assets/lib/layui/layui.all.js"></script>
+
+  <script>
+    let goby = parent.goby; // 获取GobyAPi
+    let ipItem = "";
+    let portItem = "";
+    let protocolItem = "";
+
+    // 导出
+    $(".export-csv").on("click", function() {
+      ipItem = $("#ip-item").prop("checked");
+      portItem = $("#port-item").prop("checked");
+      protocolItem = $("#protocol-item").prop("checked");
+      goby.getAsset(goby.getTaskId(), getAssetCb);
+    })
+
+    // 回调函数
+    function getAssetCb(data) {
+      if (data.statusCode == 200) {
+        if (data.data.ips) {
+          let fields = [];
+          if (ipItem) {
+            fields.push("IP");
+          }
+          if (portItem) {
+            fields.push("Port");
+          }
+          if (protocolItem) {
+            fields.push("Protocol");
+          }
+          let opts = {
+            fields
+          };
+          let myData = [];
+          data.data.ips.forEach((v, k) => {
+            let obj = {};
+            if (ipItem) {
+              obj.IP = v.ip;
+            }
+            if (portItem) {
+              let portsStr = "";
+              if (v.ports) {
+                v.ports.forEach((v1, k1) => {
+                  portsStr += v1.port + ",";
+                })
+              }
+              obj.Port = portsStr;
+            }
+            if (protocolItem) {
+              let proStr = "";
+              if (v.protocols) {
+                for (var i in v.protocols) {
+                  proStr += v.protocols[i].protocol + ",";
+                }
+              }
+              obj.Protocol = proStr;
+            }
+            
+            myData.push(obj);
+          })
+          try {
+            const parser = new json2csv.Parser(opts);
+            const csv = parser.parse(myData);
+            var csvContent = "data:text/csv;charset=utf-8,\ufeff" + csv;
+            var name = 'goby.csv';
+            let encodedUri = encodeURI(csvContent);
+            let link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", name);
+            document.body.appendChild(link);
+            link.click();
+            goby.showSuccessMessage("导出成功");
+            goby.closeIframeDia();
+          } catch (err) {
+            goby.showErrorMessage(err);
+          }
+        } else {
+          goby.showInformationMessage("无数据");
+        }
+      } else {
+        goby.showErrorMessage(data.messages);
+      }
+    }
+  </script>
+</body>
+</html>

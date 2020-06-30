@@ -1,0 +1,185 @@
+/* 滚动条轨道的样式 */
+::-webkit-scrollbar {
+  width: 5px;
+  /*竖向滚动条的宽度*/
+  height: 5px;
+  /*横向滚动条的高度*/
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+}
+
+/* 滚动条轨道内滑块的样式 */
+::-webkit-scrollbar-thumb {
+  border-radius: 0;
+  background-color: #A0B0CD;
+}
+
+/* 当焦点不在当前区域滑块的状态 */
+::-webkit-scrollbar-thumb:window-inactive {
+  background-color: #FFFFFF;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+}
+
+.clearfix:before,
+.clearfix:after {
+  /*清除浮动*/
+  content: "";
+  display: table;
+}
+
+.clearfix:after {
+  clear: both;
+}
+
+.clearfix {
+  *zoom: 1;
+  /*IE/7/6*/
+}
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+.marLeft0 {
+  margin-left: 0;
+}
+
+.layui-input-block {
+  min-height: 26px;
+}
+
+.search-input-wrap {
+  width: 480px;
+}
+
+.layui-table-wrap {
+  max-height: 390px;
+  overflow: auto;
+}
+
+.search-input-wrap .layui-input {
+  height: 26px;
+  font-size: 12px;
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 1);
+  border: 1px solid rgba(207, 217, 229, 1);
+}
+
+.layui-btn.export-ip {
+  height: 26px;
+  line-height: 26px;
+  font-size: 12px;
+  background-color: rgba(71, 120, 199, 1);
+  border-radius: 4px;
+}
+
+.layui-table thead tr {
+  background-color: #F2F6FB;
+}
+
+.layui-table td,
+.layui-table th {
+  font-size: 12px;
+  color: #7586A6;
+  padding: 4px 10px;
+  line-height: inherit;
+  border: none;
+}
+
+.layui-table td {
+  color: #163366;
+  line-height: 16px;
+  padding: 10px;
+  border-bottom: 1px solid #EFF2F7;
+}
+
+.layui-table tbody tr:hover {
+  background-color: #ffffff;
+}
+
+#page {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+}
+
+.layui-laypage {
+  margin: 0;
+}
+
+.layui-laypage a,
+.layui-laypage span {
+  height: 20px;
+  line-height: 20px;
+  margin-bottom: 0;
+  padding: 0 8px;
+  color: #163366;
+  text-align: center;
+  border-radius: 10px !important;
+  margin-right: 8px;
+  border: none;
+}
+
+.layui-laypage a:hover,
+.layui-laypage .layui-laypage-curr em {
+  color: #4577C6;
+}
+
+.layui-laypage-curr .layui-laypage-em {
+  color: #4577C6 !important;
+  border-radius: 50% !important;
+  border: none;
+  left: 0 !important;
+  top: 0 !important;
+  padding: 0 !important;
+  background-color: transparent !important;
+}
+
+.iconImport- {
+  font-size: 13px !important;
+  margin-right: 8px;
+}
+
+.search-input-wrap>span {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  background: #4778C7;
+  border-radius: 10px;
+}
+
+.search-input-wrap>span .iconfangdajing {
+  color: #fff;
+  opacity: 0.9;
+  font-size: 12px;
+}
+
+.no-data,
+.loading {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 5;
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
+  color: rgb(160, 181, 205);
+}
+
+.loading {
+  color: #4778C7;
+}

@@ -1,0 +1,103 @@
+/* 滚动条轨道的样式 */
+::-webkit-scrollbar {
+  width: 5px;
+  /*竖向滚动条的宽度*/
+  height: 5px;
+  /*横向滚动条的高度*/
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+}
+
+/* 滚动条轨道内滑块的样式 */
+::-webkit-scrollbar-thumb {
+  border-radius: 0;
+  background-color: #A0B0CD;
+}
+
+/* 当焦点不在当前区域滑块的状态 */
+::-webkit-scrollbar-thumb:window-inactive {
+  background-color: #FFFFFF;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+}
+
+.clearfix:before,
+.clearfix:after {
+  /*清除浮动*/
+  content: "";
+  display: table;
+}
+
+.clearfix:after {
+  clear: both;
+}
+
+.clearfix {
+  *zoom: 1;
+  /*IE/7/6*/
+}
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+.layui-input {
+  width: 303px;
+  height: 30px;
+  font-size: 12px;
+  color: #163366;
+  background:rgba(33, 43, 66, 0);
+  border: 1px solid rgba(207, 217, 229, 1);
+  border-radius: 2px;
+}
+
+.layui-btn {
+  width: 87px;
+  height: 30px;
+  line-height: 30px;
+  font-size: 12px;
+  color: #fff;
+  margin-top: 0;
+  padding: 0;
+  background:rgba(71, 120, 199, 1);
+  border-radius: 4px;
+}
+
+.res-wrap {
+  background:rgba(255, 255, 255, 1);
+  border: 1px solid rgba(229, 235, 247, 1);
+  border-radius: 4px;
+  margin-top: 20px;
+}
+
+.res-wrap>p {
+  color: #7586A6;
+  height: 21px;
+  line-height: 21px;
+  font-size: 12px;
+  padding: 0 10px;
+  background:rgba(235, 240, 248, 1);
+  border: 1px solid rgba(229, 235, 247, 1);
+  border-radius: 4px 4px 0 0;
+}
+
+#res {
+  font-size: 12px;
+  color: #7586A6;
+  line-height: 18px;
+  padding: 10px;
+  height: 53px;
+  overflow: auto;
+}
+
+
+
+

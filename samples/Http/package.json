@@ -1,0 +1,26 @@
+{
+ "name": "Http",
+ "publisher": "Goby Team",
+ "description": "可以对扫描出的IP进行http发包测试。",
+ "version": "0.1.0",
+ "engines": "1.6.170",
+ "icon": "src/assets/img/http.png",
+ "initEvents": "",
+ "main": "./src/extension.js",
+ "contributes": {
+  "views": {
+   "ipDetail": {
+    "bannerTop": [
+      {
+        "command": "http",
+        "title": "Http发包",
+        "icon": "src/assets/img/http.png"
+      }
+    ]
+   }
+  }
+ },
+ "scripts": {},
+ "devDependencies": {},
+ "dependencies": {}
+}

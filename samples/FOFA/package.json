@@ -1,0 +1,36 @@
+{
+	"name": "FOFA",
+	"publisher": "Goby Team",
+	"description": "将通过FOFA查询的IP和端口，快速导入goby进行扫描。",
+	"version": "0.1.4",
+	"icon": "src/assets/img/fofa.png",
+	"engines": "1.6.170",
+	"initEvents": "",
+	"main": "./src/extension.js",
+	"contributes": {
+		"configuration": {
+			"Email": {
+				"type": "string",
+				"default": "",
+				"description": "FOFA Email"
+			},
+			"Key": {
+				"type": "string",
+				"default": "",
+				"description": "FOFA Key"
+			}
+		},
+		"views": {
+			"scanDia": [
+				{
+					"command": "fofa",
+					"title": "FOFA",
+					"icon": "src/assets/img/fofa.png"
+				}
+			]
+		}
+	},
+	"scripts": {},
+	"devDependencies": {},
+	"dependencies": {}
+}

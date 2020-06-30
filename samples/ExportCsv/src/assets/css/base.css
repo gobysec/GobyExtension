@@ -1,0 +1,103 @@
+/* 滚动条轨道的样式 */
+::-webkit-scrollbar {
+  width: 5px;
+  /*竖向滚动条的宽度*/
+  height: 5px;
+  /*横向滚动条的高度*/
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+}
+
+/* 滚动条轨道内滑块的样式 */
+::-webkit-scrollbar-thumb {
+  border-radius: 0;
+  background-color: #A0B0CD;
+}
+
+/* 当焦点不在当前区域滑块的状态 */
+::-webkit-scrollbar-thumb:window-inactive {
+  background-color: #FFFFFF;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+}
+
+.clearfix:before,
+.clearfix:after {
+  /*清除浮动*/
+  content: "";
+  display: table;
+}
+
+.clearfix:after {
+  clear: both;
+}
+
+.clearfix {
+  *zoom: 1;
+  /*IE/7/6*/
+}
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+.title {
+  color: #163366;
+  font-size: 12px;
+  margin-bottom: 14px;
+}
+
+.layui-btn {
+  width: 100%;
+  font-size: 14px;
+  height: 34px;
+  line-height: 34px;
+  margin-top: 12px;
+  background:rgba(71, 120, 199, 1);
+  border-radius: 4px;
+}
+
+.layui-form-checkbox[lay-skin=primary] {
+  display: block;
+  padding-left: 22px;
+  margin-top: 12px!important;
+}
+
+.layui-form-checkbox[lay-skin=primary] span {
+  color: #163366;
+  font-size: 12px;
+}
+
+.layui-form-checkbox[lay-skin=primary] i {
+  width: 13px;
+  height: 13px;
+  font-size: 10px;
+  border: 1px solid rgba(207, 217, 229, 1);
+  border-radius: 2px;
+}
+
+.layui-form-checked[lay-skin=primary] i {
+  border-color: #4778C7!important;
+  background-color: #4778C7;
+}
+
+.layui-form-checkbox[lay-skin=primary]:hover i {
+  border-color: #4778C7!important;
+}
+
+.layui-icon-ok:before {
+  position: relative;
+  top: -1px;
+}
+
+
+
+

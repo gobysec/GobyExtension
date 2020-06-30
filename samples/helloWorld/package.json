@@ -1,0 +1,23 @@
+{
+    "name": "helloWorld",
+    "publisher": "Goby Team",
+    "description": "helloWorld by Goby Team",
+    "version": "0.1.0",
+    "icon": "",
+    "engines": "1.6.170",
+    "initEvents": "",
+    "main": "./src/extension.js",
+    "contributes": {
+        "views": {
+            "scanDia": [
+                {
+                    "command": "hello",
+                    "title": "hello"
+                }
+            ]
+        }
+    },
+    "scripts": {},
+    "devDependencies": {},
+    "dependencies": {}
+}
