@@ -583,7 +583,7 @@ ip详情页的配置，使得用户可以对ip详情页进行自定义的处理�
 漏洞列表页的配置，使得用户可以对漏洞相关的页面进行自定义的处理和操作，下面我们看一个简单的例子。这个例子主要是在漏洞相关的页面，根据当前漏洞名是否在自定义的列表里，动态显示MSF利用按钮，点击按钮可以一键调用本地Metasploit框架，对该漏洞进行检测。
 
 ### 下载链接
-[MSF Sploit](http://gobies.org/MSF Sploit.zip)
+[MSF Sploit](http://gobies.org/MSFSploit.zip)
 
 ### 使用的**goby API**
 
@@ -692,7 +692,7 @@ ip详情页的配置，使得用户可以对ip详情页进行自定义的处理�
 ```
         
       
-至于具体的代码内容，可以[下载代码](http://gobies.org/MSF Sploit.zip)查看详细。
+至于具体的代码内容，可以[下载代码](http://gobies.org/MSFSploit.zip)查看详细。
 
 最终效果如下：
 
