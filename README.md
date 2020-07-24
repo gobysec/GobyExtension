@@ -28,7 +28,7 @@ goby内置了扩展能力，在插件API加持之下，goby指定的部分可以
 
 点击开始扫描，你会发现扫描弹窗顶部会有一个hello的按钮，点击按钮，如果出现了helloWorld提示信息弹窗，那么恭喜你运行成功了！
 
-![](./img/hello_1.gif)
+![](./img/hello.gif)
 
 ### 开发插件
 
@@ -315,7 +315,7 @@ goby提供了一些方法，供插件扩展goby本身的能力。但是有的时
 ###### 更多下拉菜单 - moreOptions
 在插件清单中配置contributes.views.scanRes.moreOptions，就可以给扫描结果的下拉菜单添加自定义的组件，同时资产列表、漏洞列表页的下拉菜单也会出现相同组件。具体位置如图：
 
-![](./img/moreOptions_3.png)
+![](./img/moreOptions.png)
 ![](./img/moreOptions1.png)
 ![](./img/moreOptions2.png)
 
@@ -325,7 +325,7 @@ goby提供了一些方法，供插件扩展goby本身的能力。但是有的时
 banner列表的标题栏 - bannerTop
 在插件清单中配置contributes.views.ipDetail.bannerTop，就可以给ip详情页banner列表的标题栏添加自定义的组件。具体位置如图：
 
-![](./img/bannerTop_1.png)
+![](./img/bannerTop.png)
 
 同时关于bannerTop的具体使用，也有一个简单的例子可供学习，具体见ip详情页。
 
