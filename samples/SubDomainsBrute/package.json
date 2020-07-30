@@ -1,0 +1,31 @@
+{
+	"name": "SubDomainsBrute",
+	"publisher": "GobySec",
+	"description": "输入根域名，暴力破解子域名。",
+	"version": "0.1.7",
+	"icon": "src/assets/img/logo.png",
+	"engines": "1.6.170",
+	"initEvents": "",
+	"main": "./src/extension.js",
+	"contributes": {
+		"configuration": {
+			"dictFilePath": {
+				"type": "string",
+				"default": "",
+				"description": "请输入自定义字典文件的完整路径"
+			}
+		},
+		"views": {
+			"scanDia": [
+				{
+					"command": "subDomainsBrute",
+					"title": "subDomainsBrute",
+					"icon": "src/assets/img/logo.png"
+				}
+			]
+		}
+	},
+	"scripts": {},
+	"devDependencies": {},
+	"dependencies": {}
+}

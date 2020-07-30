@@ -1,6 +1,6 @@
 {
  "name": "Http",
- "publisher": "Goby Team",
+ "publisher": "GobySec",
  "description": "可以对扫描出的IP进行http发包测试。",
  "version": "0.1.0",
  "engines": "1.6.170",

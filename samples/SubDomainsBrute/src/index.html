@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>子域名爆破</title>
+  <link rel="stylesheet" href="assets/lib/layui/css/layui.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/font/iconfont.css">
+</head>
+
+<body>
+  <div class="layui-form-item clearfix">
+    <div class="layui-input-block marLeft0 fl search-input-wrap">
+      <input id="fofa-input" type="text" name="title" required lay-verify="required" placeholder="请输入根域名"
+        autocomplete="off"
+        class="layui-input">
+      <span class="fofa-search"><i class="iconfont iconfangdajing"></i></span>
+    </div>
+    <button class="layui-btn export-ip fr" lay-submit lay-filter="formDemo">导入子域名</button>
+  </div>
+  <p class="progress-info"><span class="num">0</span>/<span class="total">3000</span></p>
+  <div class="layui-form layui-form-item">
+    <select lay-filter="dict" id="dictType">
+      <option value="0" selected>默认</option>
+      <option value="1" class="user-option">自定义</option>
+    </select>
+  </div>
+  <div class="layui-table-wrap">
+    <table lay-filter="demo" id="ip-table" class="layui-table">
+      <thead>
+        <tr>
+          <th min-width="50">Domain</th>
+        </tr> 
+      </thead>
+      <tbody>
+        <tr>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script src="assets/js/jquery-3.3.1.min.js"></script>
+  <script src="assets/js/jquery.base64.js"></script>
+  <script src="assets/lib/layui/layui.all.js"></script>
+  <script>
+    let goby = parent.goby; // 获取GobyAPi
+    let results = []; // 定义搜索结果数组
+    let userDictFilePath = parent.goby.getConfiguration("dictFilePath");
+
+    // 获取iframe的参数
+    function GetIframeQueryString(name, id) {
+      var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+      var r = window.parent.document.getElementById(id).contentWindow.location.search.substr(1).match(reg);
+      if (r != null) {
+        return decodeURI(r[2]);
+      }
+      return null;
+    }
+
+    // 监听select事件
+    $("#dictType").on("change", function() {
+      readDict();
+    });
+
+    // 读取字典内容
+    function readDict() {
+      let dictType = $("#dictType").val();
+      if (dictType == 0) {
+        // 获取__dirname
+        let dirname = GetIframeQueryString("curDirname", "goby-iframe");
+        var dict = parent.fs.readFileSync(dirname + "/dict.txt", 'utf-8');
+      } else {
+        if (userDictFilePath) {
+          var dict = parent.fs.readFileSync(userDictFilePath, 'utf-8');
+        } else {
+          goby.showConfigurationDia();
+          goby.closeIframeDia();
+        }
+      }
+      var dictArr = dict.split("\n");
+      $(".total").html(dictArr.length);
+      return dictArr;
+    }
+
+    // 请求某个二级域名是否存在
+    function isAlive(domain) {
+      let ajaxIns = $.ajax({
+        type: "get",
+        timeout: 120000,
+        url: "http://" + domain,
+        contentType: 'application/x-www-form-urlencoded;charset=utf-8',
+        dataType: "json",
+        success(res) {
+          if (res.status == 200) {
+            let html = `
+            <tr>
+              <td>${domain}</td>
+            </tr>
+            `;
+            results.push(domain);
+            $("#ip-table tbody").append(html);
+          }
+        },
+        error(err) {
+          if (err.status == 200) {
+            let html = `
+            <tr>
+              <td>${domain}</td>
+            </tr>
+            `;
+            results.push(domain);
+            $("#ip-table tbody").append(html);
+          }
+        },
+        complete: function (XMLHttpRequest, status) { // 当请求完成时调用函数
+          let num = Number($(".num").html()) + 1;
+          $(".num").html(num);
+          if (status == 'timeout') {
+            console.log(domain, ajaxIns, "ajaxIns");
+            ajaxIns.abort(); // 取消请求
+          }
+          if (num == $(".total").html()) {
+            // thrDomain();
+            goby.showSuccessMessage("爆破结束");
+          }
+        }
+      });
+    }
+
+    // 爆破
+    function subDomain() {
+      $(".num").html(0);
+      $("#ip-table tbody").html("");
+      let dictArr = readDict();
+      let domain = $("#fofa-input").val();
+      if (domain.trim()) {
+        for(var i = 0; i < dictArr.length; i++) {
+          $(function(i) {
+            isAlive(dictArr[i]+"."+domain);
+          }(i))
+        }
+      } else {
+        goby.showInformationMessage("请输入根域名");
+      }
+    }
+
+    // 三级域名爆破
+    function thrDomain() {
+      let dictArr = readDict();
+      results.forEach((v, k) => {
+        for(var i = 0; i < dictArr.length; i++) {
+          $(function(i) {
+            isAlive(dictArr[i]+"."+v);
+          }(i))
+        }
+      })
+    }
+    
+    // 回车搜索
+    $("#fofa-input").keydown(function(e) {
+      if(e.keyCode == 13) {  
+        subDomain();
+      }
+    });
+
+    // 按钮搜索
+    $(".fofa-search").click(function() {
+      subDomain();
+    });
+
+    // 导出Ip和端口
+    $(".export-ip").on("click", function() {
+      if (results && results.length > 0) {
+        let ips = [];
+        results.forEach((v, k) => {
+          ips.push(v);
+        })
+        goby.addScanIps(ips, 0);
+        goby.showSuccessMessage("导入扫描对象成功");
+        goby.closeIframeDia();
+      } else {
+        goby.showInformationMessage("导入对象不能为空");
+      }
+    })
+  </script>
+</body>
+
+</html>

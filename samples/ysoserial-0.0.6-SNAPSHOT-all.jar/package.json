@@ -1,0 +1,15 @@
+{
+ "name": "ysoserial-0.0.6-SNAPSHOT-all.jar",
+ "publisher": "GobySec",
+ "description": "Java 反序列化漏洞 Payload 生成工具。",
+ "version": "0.1.2",
+ "engines": "1.6.170",
+ "icon": "src/logo.png",
+ "initEvents": "init",
+ "main": "./src/extension.js",
+ "contributes": {
+ },
+ "scripts": {},
+ "devDependencies": {},
+ "dependencies": {}
+}

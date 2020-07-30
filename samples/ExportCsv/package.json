@@ -1,6 +1,6 @@
 {
  "name": "ExportCsv",
- "publisher": "Goby Team",
+ "publisher": "GobySec",
  "description": "可以选择IP、端口、协议字段，导出对应csv文件。",
  "version": "0.1.0",
  "engines": "1.6.170",

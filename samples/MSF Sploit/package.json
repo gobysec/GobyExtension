@@ -1,8 +1,8 @@
 {
     "name": "MSF Sploit",
-    "publisher": "Goby Team",
+    "publisher": "GobySec",
     "description": "Metasploit安全漏洞检测工具",
-    "version": "0.1.0",
+    "version": "0.1.9",
     "icon": "./src/assets/img/metasploit.png",
     "engines": "1.6.170",
     "initEvents": "",

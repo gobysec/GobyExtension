@@ -65,7 +65,7 @@
       let key = config.Key.default;
       let content = $("#fofa-input").val(); // 调用fofaApi搜索
       let qbase64 = encode(content);
-      let url = `https://beta.fofa.so/api/v1/search/all?email=${email}&key=${key}&qbase64=${qbase64}&page=${page}&fields=host,ip,port,title`;
+      let url = `https://fofa.so/api/v1/search/all?email=${email}&key=${key}&qbase64=${qbase64}&page=${page}&fields=host,ip,port,title`;
       $.ajax({
         type: "get",
         url: url,
