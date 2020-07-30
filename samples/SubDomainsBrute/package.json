@@ -2,7 +2,7 @@
 	"name": "SubDomainsBrute",
 	"publisher": "GobySec",
 	"description": "输入根域名，暴力破解子域名。",
-	"version": "0.1.7",
+	"version": "0.1.9",
 	"icon": "src/assets/img/logo.png",
 	"engines": "1.6.170",
 	"initEvents": "",

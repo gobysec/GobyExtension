@@ -47,6 +47,7 @@
     let goby = parent.goby; // 获取GobyAPi
     let results = []; // 定义搜索结果数组
     let userDictFilePath = parent.goby.getConfiguration("dictFilePath");
+    let isFinish = true;
 
     // 获取iframe的参数
     function GetIframeQueryString(name, id) {
@@ -122,6 +123,7 @@
           }
           if (num == $(".total").html()) {
             // thrDomain();
+            isFinish = true;
             goby.showSuccessMessage("爆破结束");
           }
         }
@@ -130,18 +132,23 @@
 
     // 爆破
     function subDomain() {
-      $(".num").html(0);
-      $("#ip-table tbody").html("");
-      let dictArr = readDict();
-      let domain = $("#fofa-input").val();
-      if (domain.trim()) {
-        for(var i = 0; i < dictArr.length; i++) {
-          $(function(i) {
-            isAlive(dictArr[i]+"."+domain);
-          }(i))
+      if (isFinish) {
+        isFinish = false;
+        $(".num").html(0);
+        $("#ip-table tbody").html("");
+        let dictArr = readDict();
+        let domain = $("#fofa-input").val();
+        if (domain.trim()) {
+          for(var i = 0; i < dictArr.length; i++) {
+            $(function(i) {
+              isAlive(dictArr[i]+"."+domain);
+            }(i))
+          }
+        } else {
+          goby.showInformationMessage("请输入根域名");
         }
       } else {
-        goby.showInformationMessage("请输入根域名");
+        goby.showInformationMessage("正在爆破中，请稍等");
       }
     }
 
