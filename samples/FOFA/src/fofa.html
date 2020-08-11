@@ -17,7 +17,7 @@
         class="layui-input">
       <span class="fofa-search"><i class="iconfont iconfangdajing"></i></span>
     </div>
-    <button class="layui-btn export-ip fr" lay-submit lay-filter="formDemo">导入当前页/100条</button>
+    <button class="layui-btn export-ip fr" lay-submit lay-filter="formDemo">导入当前页</button>
   </div>
   <div class="layui-table-wrap">
     <table lay-filter="demo" id="ip-table" class="layui-table">
@@ -63,9 +63,10 @@
       let config = goby.getConfiguration(); // 获取插件配置
       let email = config.Email.default;
       let key = config.Key.default;
+      let size = config.Size.default; // fofaApi size
       let content = $("#fofa-input").val(); // 调用fofaApi搜索
       let qbase64 = encode(content);
-      let url = `https://fofa.so/api/v1/search/all?email=${email}&key=${key}&qbase64=${qbase64}&page=${page}&fields=host,ip,port,title`;
+      let url = `https://fofa.so/api/v1/search/all?email=${email}&key=${key}&qbase64=${qbase64}&page=${page}&size=${size}&fields=host,ip,port,title`;
       $.ajax({
         type: "get",
         url: url,
@@ -88,7 +89,7 @@
               var laypage = layui.laypage;
               laypage.render({
                 elem: 'page', 
-                limit: 100,
+                limit: size,
                 count: res.size,
                 jump: function(obj, first) {
                   getData(obj.curr);
