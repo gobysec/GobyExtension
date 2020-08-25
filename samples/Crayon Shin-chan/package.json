@@ -1,0 +1,15 @@
+{
+ "name": "Crayon Shin-chan",
+ "publisher": "GobySec",
+ "description": "蜡笔小新主题。",
+ "version": "0.1.3",
+ "engines": "1.7.192",
+ "icon": "src/logo.png",
+ "initEvents": "init",
+ "main": "./src/extension.js",
+ "contributes": {
+ },
+ "scripts": {},
+ "devDependencies": {},
+ "dependencies": {}
+}

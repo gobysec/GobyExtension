@@ -1,0 +1,15 @@
+{
+ "name": "The Matrix",
+ "publisher": "GobySec",
+ "description": "黑客帝国主题。",
+ "version": "0.1.6",
+ "engines": "1.7.192",
+ "icon": "src/logo.png",
+ "initEvents": "init",
+ "main": "./src/extension.js",
+ "contributes": {
+ },
+ "scripts": {},
+ "devDependencies": {},
+ "dependencies": {}
+}
