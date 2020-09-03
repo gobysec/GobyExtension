@@ -14,14 +14,14 @@ function activate(content) {
         let arr = ['C:/metasploit-framework/bin/msfconsole.bat', 'D:/metasploit-framework/bin/msfconsole.bat', 'C:/metasploit-framework/msfconsole'];
 
         let urlDefault = '';
-        if (config.url.default) {
-            urlDefault = config.url.default
+        if (config.Path.default) {
+            urlDefault = config.Path.default
         } else {
             let isExistence = arr.filter(v => {
                 return fs.existsSync(v)
             })
             urlDefault = isExistence[0];
-            goby.setConfiguration("url", urlDefault)
+            goby.setConfiguration("Path", urlDefault)
         }
 
         if (!urlDefault) return goby.showInformationMessage('Please set the plug-in installation path');

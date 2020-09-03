@@ -2,17 +2,18 @@
     "name": "MSF Sploit",
     "publisher": "GobySec",
     "description": "Metasploit安全漏洞检测工具",
-    "version": "0.1.9",
+    "version": "0.1.10",
     "icon": "./src/assets/img/metasploit.png",
     "engines": "1.6.170",
     "initEvents": "",
     "main": "./src/extension.js",
     "contributes": {
         "configuration": {
-            "url": {
+            "Path": {
                 "type": "string",
                 "default": "",
-                "description": "请输入插件地址"
+                "description": "请输入MSF安装路径",
+                "fromDialog": true
             }
         },
         "views": {
