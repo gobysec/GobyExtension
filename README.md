@@ -24,7 +24,7 @@ goby内置了扩展能力，在插件API加持之下，goby指定的部分可以
 
 # 第一步
 ## 你的第一个插件
-在本小节中，我们会教你一些基础概念，请先安装开发版goby(**该版本目前仅对内测用户开发**)，之后你需要下载一个可以立马开发的项目[(helloWorld)](http://gobies.org/helloWorld.zip)，将其解压到**goby/extensions**目录下，然后启动goby。
+在本小节中，我们会教你一些基础概念，请先安装开发版goby([Windows](https://gobies.org/goby-win-x64-1.7.199.zip) [MacOS](https://gobies.org/goby-darwin-x64-1.7.199.zip) [Linux](https://gobies.org/goby-linux-x64-1.7.199.zip))，之后你需要下载一个可以立马开发的项目[(helloWorld)](http://gobies.org/helloWorld.zip)，将其解压到**goby/extensions**目录下，然后启动goby。
 
 点击开始扫描，你会发现扫描弹窗顶部会有一个hello的按钮，点击按钮，如果出现了helloWorld提示信息弹窗，那么恭喜你运行成功了！
 
@@ -970,6 +970,7 @@ Value|Object|Name对应的值
 type|String|配置项的类型，目前只支持string
 default|String|配置项的值，即图中2的位置
 description|String|关于配置项的描述，即图中3的位置，划过会显示该内容的tips
+fromDialog|Boolean|该配置参数是否可以通过读取文件路径设置
 
 ### views
 views即用户可配置的自定义视图入口点，目前可配置的UI部分如下：
@@ -980,6 +981,7 @@ views即用户可配置的自定义视图入口点，目前可配置的UI部分�
  - ip详情页 - ipDetail
  - banner列表的标题栏 - bannerTop
  - 漏洞列表页 - vulList
+ - Webfinder页 - webfinder
 
 **配置字段说明**
 
