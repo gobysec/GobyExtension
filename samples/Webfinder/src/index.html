@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>webfinder</title>
+  <link rel="stylesheet" href="assets/lib/layui/css/layui.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+</head>
+
+<body>
+  <div class="clearfix">
+    <p id="hostinfo"></p>
+  </div>
+
+  <script src="assets/js/jquery-3.3.1.min.js"></script>
+  <script src="assets/lib/layui/layui.all.js"></script>
+  <script>
+    let goby = parent.goby; // 获取GobyApi
+    
+    // 获取iframe的参数
+    function GetIframeQueryString(name, id) {
+      var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+      var r =window.parent.document.getElementById(id).contentWindow.location.search.substr(1).match(reg);
+      if (r != null) {
+      return decodeURI(r[2]);
+      }
+      return null;
+    }
+
+    // 显示hostinfo
+    $("#hostinfo").html(GetIframeQueryString("hostinfo", "goby-iframe"));
+  </script>
+</body>
+
+</html>

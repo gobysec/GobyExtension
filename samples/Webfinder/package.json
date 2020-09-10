@@ -1,0 +1,24 @@
+{
+ "name": "Webfinder",
+ "publisher": "GobySec",
+ "description": "webfinder页入口配置的示例",
+ "version": "0.1.0",
+ "engines": "1.7.199",
+ "icon": "src/assets/img/logo.png",
+ "initEvents": "",
+ "main": "./src/extension.js",
+ "contributes": {
+  "views": {
+   "webfinder": [
+      {
+        "command": "webfinder",
+        "title": "webfinder",
+        "icon": "src/assets/img/logo.png"
+      }
+    ]
+  }
+ },
+ "scripts": {},
+ "devDependencies": {},
+ "dependencies": {}
+}

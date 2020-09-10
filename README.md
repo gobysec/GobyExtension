@@ -303,6 +303,7 @@ goby提供了一些方法，供插件扩展goby本身的能力。但是有的时
  - ip详情页 - ipDetail
  -  banner列表的标题栏 - bannerTop
  - 漏洞列表页 - vulList
+ - Webfinder页 - webfinder
 
 ## 扫描弹窗页 - **scanDia**
 在插件清单中配置contributes.views.scanDia，就可以给扫描弹窗顶部添加自定义的组件。具体位置如图：
@@ -338,6 +339,13 @@ banner列表的标题栏 - bannerTop
 ![](./img/vulList3.png)
 
 同时关于vulList的具体使用，也有一个简单的例子可供学习，具体见漏洞列表页。
+
+## Webfinder页 - **webfinder**
+在插件清单中配置contributes.views.webfinder，就可以给webfinder页面添加自定义的组件。具体位置如图：
+
+![](./img/webfinder.png)
+
+同时关于webfinder的具体使用，也有一个简单的例子可供学习，具体见webfinder页。
 
 # 插件示例
 ## 概述
@@ -697,6 +705,64 @@ ip详情页的配置，使得用户可以对ip详情页进行自定义的处理�
 最终效果如下：
 
 ![](./img/ex-msf.gif)
+
+## Webfinder页 - webfinder
+webfinder页，使得用户可以对扫描出的web列表，进行自定义的处理和操作，下面我们看一个简单的例子。这个例子主要是在webfinder的页面，点击按钮显示对应的hostinfo。
+
+### 下载链接
+[Webfinder](http://gobies.org/Webfinder.zip)
+
+### 使用的**goby API**
+
+ - goby.registerCommand
+ - goby.showIframeDia
+ - goby.closeIframeDia
+
+
+### 示例
+第一步，你需要注册自定义组件要触发的命令。
+
+        
+     
+
+``` javascript
+    function activate(content) {
+      goby.registerCommand('webfinder', function (content) {
+        let path = __dirname + "/index.html?hostinfo=" + content.hostinfo;
+        goby.showIframeDia(path, "webfinder", "441", "188");
+      });
+    }
+
+    exports.activate = activate;
+```
+        
+      
+第二步，你需要在package.json里配置对应视图入口点，即contributes.views.webfinder,填写想要的标题、对应的命令。
+
+        
+     
+
+``` xquery
+    "contributes": {
+      "views": {
+      "webfinder": [
+          {
+            "command": "webfinder",
+            "title": "webfinder",
+            "icon": "src/assets/img/logo.png"
+          }
+        ]
+      }
+    }
+```
+        
+      
+
+至于具体的代码内容，可以[下载代码](http://gobies.org/Webfinder.zip)查看详细。
+
+最终效果如下：
+
+![](./img/ex-webfinder.gif)
 
 # 参考
 ## goby API
