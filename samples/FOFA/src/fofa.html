@@ -46,15 +46,15 @@
   <script src="assets/js/jquery.base64.js"></script>
   <script src="assets/lib/layui/layui.all.js"></script>
   <script>
+    
     let goby = parent.goby; // 获取GobyAPi
     let results = []; // 定义搜索结果数组
-
     // 字符串转base64
     function encode(str){
       var base64 = $.base64.encode(str);
       return base64;
     }
-
+    
     // 查询数据
     function getData(page, type) {
       $(".no-data").hide();
@@ -73,6 +73,7 @@
         contentType: 'application/x-www-form-urlencoded;charset=utf-8',
         dataType: "json",
         success(res) {
+          console.log(res);
           results = res.results;
           if (results && results.length > 0) {
             let html = "";
@@ -133,10 +134,17 @@
       if (results && results.length > 0) {
         let ips = [];
         let ports = [];
+        
         results.forEach((v, k) => {
-          ips.push(v[1]);
-          ports.push(v[2]);
+          let reg = /^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$/ig;
+          if(!v[1].match(reg)){
+            ips.push(v[1]);
+            ports.push(v[2]);
+          }else{
+            console.log(v);
+          }
         })
+        
         goby.addScanIps(ips, 1);
         goby.addScanPorts(ports, 1);
         goby.showSuccessMessage("导入扫描对象成功");
