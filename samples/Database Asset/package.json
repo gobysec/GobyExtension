@@ -2,9 +2,9 @@
   "name": "Database Asset",
   "publisher": "GobySec",
   "description": "实时统计扫描过程中有数据库（目前仅支持mysql，redis，MongoDB，Elasticsearch）资产的ip信息，并且可以查看详情",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "icon": "src/assets/img/logo.png",
-  "engines": "1.8.221",
+  "engines": "1.8.225",
   "initEvents": ["left-nav"],
   "main": "./src/extension.js",
   "contributes": {
