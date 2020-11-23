@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>数据库详情页</title>
+	<link rel="stylesheet" href="./css/base.css">
+	<style>
+		.info {
+			text-align: center;
+			font-size: 14px;
+			padding: 10px 0;
+		}
+
+		.name {
+			width: 100px;
+		}
+	</style>
+</head>
+<body>
+	<table cellspacing="0">
+		<caption class="info"></caption>
+		<tbody>
+		</tbody>
+	</table>
+</body>
+
+<script src="./js/jquery-3.3.1.min.js"></script>
+<script>
+	$(function() {
+		let data = JSON.parse(getUrlParam('info'));
+		//设置头部
+		$('.info').html(`
+			${data.ip[0]}:${data.port[0]}
+		`);
+
+		for(let i in data){
+			if (i != "URL" && i != "addition") {
+				add(i, data[i]);
+			}
+		}
+	})
+
+	function add(name,res){
+		let tr = $(`
+			<tr>
+				<td class="name lv4BackgroundColor">${name}</td>
+				<td>${res.join(' ')}</td>
+			</tr>
+		`)
+		$('tbody').append(tr);
+	}
+
+	function getUrlParam(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); // 构造一个含有目标参数的正则表达式对象
+		var r = window.location.search.substr(1).match(reg);  // 匹配目标参数
+		if (r != null) return unescape(r[2]); return null; // 返回参数值
+	}
+</script>
+</html>
