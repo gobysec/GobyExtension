@@ -153,6 +153,7 @@ goby内置了扩展能力，在插件API加持之下，goby指定的部分可以
 
 需要特别注意的是：打包时必须把插件文件夹整个打包，即执行自动解压后，要确保整个插件的目录结构是完整的。
 
+
 ![](./img/unzip.gif)
 
 ### 插件发布
@@ -250,6 +251,7 @@ goby提供了一些方法，供插件扩展goby本身的能力。但是有的时
  - 使用用户自定义视图
  - 配置插件相关设置
  - 显示通知信息
+ - 事件通知
 
 ### 扩展工作台
 扩展工作台即用户可以配置的视图入口点，可以加强goby的功能，比如说你可以在扫描弹窗界面添加新的按钮，点击主动获取指定ip导入扫描对象中；也可以在ip详情页banner列表的部分新增按钮，点击对当前ip直接进行http发包测试；你甚至可以自定义一个html页面，来满足开发需求。
@@ -277,9 +279,11 @@ goby提供了一些方法，供插件扩展goby本身的能力。但是有的时
 用户可以自定义扫描弹窗顶部按钮，也可以自定义扫描页更多下拉的菜单内容。目前goby支持的视图入口点并不多，你可以在contributes.views中查看更多内容。
 
 ### 自定义视图
-很多时候，只配置视图入口点是不能满足开发需求的，比如说你想实现点击扫描弹窗自定义的按钮后，显示一个自定义的可搜索的列表页面，让用户自己操作、选择，这时候就需要用到自定义视图。
+很多时候，只配置视图入口点是不能满足开发需求的，比如说你想实现点击扫描弹窗自定义的按钮后，显示一个自定义的可搜索的列表页面，让用户自己操作、选择，这时候就需要用到自定义视图。目前goby提供了以下API来显示自定义页面：
+ 
+ - 使用goby.showPage方法也可以显示自定义页面内容，goby会将你的页面内嵌到右侧显示，可设置是否后台运行。 
 
-使用goby.showIframeDia方法就可以显示自定义页面内容，在goby里会将你的页面嵌入到弹窗里进行显示，弹窗的标题，宽高等都可以通过参数进行设置。
+ - 使用goby.showIframeDia方法就可以显示自定义页面内容，在goby里会将你的页面嵌入到弹窗里进行显示，弹窗的标题，宽高等都可以通过参数进行设置。
 
 ### 插件相关设置
 大部分插件在开发时，都会对外开放配置，如果你有这个需求，只要在contributes.configuration中填写有关的配置项即可。
@@ -294,6 +298,9 @@ goby提供了一些方法，供插件扩展goby本身的能力。但是有的时
  - goby.showErrorMessage
  - goby.showSuccessMessage
 
+### 事件通知
+很多时候，插件需要参与到扫描过程中，需要在扫描状态发生变化时执行一些事件，或者实时获取扫描数据，此时可以通过goby.bindEvent来绑定事件通知。
+
 ## 扩展工作台
 “工作台”是指整个goby UI，目前goby可配置的UI部分如下：
 
@@ -304,6 +311,7 @@ goby提供了一些方法，供插件扩展goby本身的能力。但是有的时
  -  banner列表的标题栏 - bannerTop
  - 漏洞列表页 - vulList
  - Webfinder页 - webfinder
+ - 左侧导航页 - leftNav
 
 ## 扫描弹窗页 - **scanDia**
 在插件清单中配置contributes.views.scanDia，就可以给扫描弹窗顶部添加自定义的组件。具体位置如图：
@@ -346,6 +354,13 @@ banner列表的标题栏 - bannerTop
 ![](./img/webfinder.png)
 
 同时关于webfinder的具体使用，也有一个简单的例子可供学习，具体见webfinder页。
+
+## 左侧导航页 - **leftNav**
+在插件清单中配置contributes.views.leftNav，就可以给左侧导航栏添加自定义的组件。具体位置如图：
+
+![](./img/leftNav.png)
+
+同时关于LeftNav的具体使用，也有一个简单的例子可供学习，具体见左侧导航页。
 
 # 插件示例
 ## 概述
@@ -411,18 +426,18 @@ banner列表的标题栏 - bannerTop
 
 ``` json
     {
-            "contributes": {
-              "views": {
-                "scanDia": [
-                  {
-                    "command": "fofa",
-                    "title": "FOFA",
-                    "icon": "src/assets/img/fofa.png"
-                  }
-                ]
-              }  
-            }
-          }
+		"contributes": {
+			"views": {
+			"scanDia": [
+				{
+				"command": "fofa",
+				"title": "FOFA",
+				"icon": "src/assets/img/fofa.png"
+				}
+			]
+			}  
+		}
+	}
 ```
         
       
@@ -432,22 +447,22 @@ banner列表的标题栏 - bannerTop
      
 
 ``` json
-     {
-            "contributes": {
-              "configuration": {
-                "email": {
-                  "type": "string",
-                  "default": "",
-                  "description": "fofa email"
-                },
-                "key": {
-                  "type": "string",
-                  "default": "",
-                  "description": "fofa key"
-                }
-              }
-            }
-          }
+    {
+		"contributes": {
+			"configuration": {
+				"email": {
+					"type": "string",
+					"default": "",
+					"description": "fofa email"
+				},
+				"key": {
+					"type": "string",
+					"default": "",
+					"description": "fofa key"
+				}
+			}
+		}
+	}
 ```
         
       
@@ -764,6 +779,96 @@ webfinder页，使得用户可以对扫描出的web列表，进行自定义的�
 
 ![](./img/ex-webfinder.gif)
 
+## 左侧导航页 - leftNav
+左侧导航页，使得用户可以全局执行插件，对扫描过程中的数据进行自定义的处理和操作，下面我们看一个简单的例子。这个例子主要是在左侧导航页面，点击按钮调用showPage API，在自定义页面调用bindEvent API获取扫描数据进行过滤输出。
+
+### 下载链接
+[Database Asset](http://gobies.org/Database%20Asset.zip)
+
+
+### 使用的**goby API**
+
+ - goby.registerCommand
+ - goby.showPage
+ - goby.bindEvent
+ - goby.changeBadge
+
+### 示例
+第一步，你需要注册自定义组件要触发的命令。
+
+
+
+
+``` javascript
+    function activate(content) {
+      goby.registerCommand('webfinder', function (content) {
+        goby.showPage('./assets/index.html',true);
+      });
+    }
+
+    exports.activate = activate;
+```
+
+
+第二步，你需要在package.json里配置对应视图入口点，即contributes.views.leftNav,填写想要的标题、对应的命令。
+
+
+
+
+``` xquery
+    "contributes": {
+      "views": {
+      "leftNav": [
+          {
+            "command": "left-nav",
+            "title": "Database",
+            "icon": "src/assets/img/logo.png"
+          }
+        ]
+      }
+    }
+```
+
+第三步，点击自定义组件后，要显示用户自定义的界面,可以用goby.showPage，传入html页面路径，该路径支持绝对路径与相对路径。第二个参数为是否后台运行此页面。
+
+
+
+
+``` javascript
+    goby.showPage('./assets/index.html',true);
+```
+
+需要特别注意的是，在goby.showPage的自定义页面中使用goby API对象时，无需再通过parent.goby获取,可直接使用goby，parent.goby在此处不推荐使用。
+
+
+第四步，因为在showPage页面里调用了goby.bindEvent，所以需要在package.json中initEvents配置该命令。
+
+
+
+``` xquery
+    {
+      "name": "Database Asset",
+      "publisher": "Goby Team",
+      "description": "实时统计扫描过程中有数据库(目前仅支持mysql，redis，MongoDB，Elasticsearch)资产的ip信息，并且可以查看详情",
+      "initEvents": ["left-nav"]
+    }
+```
+
+第五步，当开始扫描时，对返回的数据进行过滤处理，展示对应的数据，并调用goby.changeBadge，显示当前任务数据的总数。
+
+目前第一个参数只支持leftNav，第二个参数为标记位置对应的command，第三个参数为Badge显示的内容。
+
+``` javascript
+    //num是符合条件的数据量
+          
+    goby.changeBadge('leftNav','left-nav',num);
+```
+至于具体的代码内容，可以[下载代码](http://gobies.org/Database%20Asset.zip)查看详细。
+
+最终效果如下：
+
+![](./img/ex-Database%20Asset.gif)
+
 # 参考
 ## goby API
 ### 命令相关
@@ -805,6 +910,55 @@ height|Number|auto|否|iframe的高度，最大高度为500，超过显示滚动
 
 ##### closeIframeDia
 关闭内嵌iframe的弹窗
+
+#### showPage
+
+**1.8.225+ 新增** 
+
+显示自定义页面
+
+showPage打开的自定义页面,无需通过parent.goby来获取实例对象,可直接使用goby。
+
+[观看本节视频讲解](https://www.bilibili.com/video/BV1Ha411w7RF?from=search&seid=11763570465244390878)
+
+**请求**
+
+参数|类型|默认值|必填|说明
+--|:--|:--|:--|:--
+url|String  |  |是  |自定义页面的url地址，支持绝对路径与相对路径。如果需要绝对路径，可直接使用__dirname与__filename来获取当前所在目录与文件路径进行拼接
+background|Boolean|false  |否 |打开的页面是否后台运行，如果为true，该页面每次进入不会重新加载，如果为false，则每次进入重新加载
+
+#### openExternal
+
+**1.8.225+ 新增** 
+
+在浏览器打开给定的url链接
+
+[观看本节视频讲解](https://www.bilibili.com/video/BV11z4y1k7zP?from=search&seid=12528056831390729887)
+
+
+
+**请求**
+
+参数|类型|默认值|必填|说明
+--|:--|:--|:--|:--
+url|String|   |是|浏览器打开页面的url链接，链接中需要带有http、https、localhost或file协议。
+
+#### changeBadge
+
+**1.8.225+ 新增**
+
+修改按钮、图标旁的数字或状态标记
+
+[观看本节视频讲解](https://www.bilibili.com/video/BV1Ur4y1F7Bp?from=search&seid=12528056831390729887)
+
+**请求**
+
+参数|类型|默认值|必填|说明
+--|:--|:--|:--|:--
+placement|String| |是|标记的位置，目前仅支持leftNav
+command|String| |是|标记位置对应的command，如果是插件入口点的标记，则command为插件入口绑定的command
+content|<span style="white-space:nowrap;">String｜Number</span> |  |否|标记显示的内容，支持Number与String,String可传html片段，默认为空，不显示
 
 ### 配置相关
 #### getConfiguration
@@ -986,6 +1140,91 @@ type|Number	|	|是|添加的方式，0是追加，1是覆盖
 --|:--|:--|:--|:--
 ports|Array| |是|要添加的扫描端口数组
 type|Number	|	|是|添加的方式，0是追加，1是覆盖
+
+### 事件通知
+
+#### bindEvent
+
+**1.8.225+ 新增**
+
+绑定事件通知
+
+[观看本节视频讲解](https://www.bilibili.com/video/BV1Py4y1q7LD?from=search&seid=12528056831390729887)
+
+**请求**
+
+参数|类型|默认值|必填|说明
+--|:--|:--|:--|:--
+type|String|  |是|事件通知类型，包含︰onApp，onPort，onProtocol，onVulnerable，onStartScan，onEndScan，onBackIndex，onPauseScan，onContinueScan，onRescan，onRescanVulnerability
+callback(content)|Function| |是|绑定事件的回调函数，不同的type类型，content数据也不同
+
+callback(content) 返回数据示例
+
+以下type类型与扫描数据相关，其对应返回的content数据如下
+
+type︰onApp，返回app相关数据
+
+``` json
+    {
+        "hostinfo":"127.0.0.1:443",   
+        "product":"Bootstrap"         
+    }
+```
+
+type︰onPort，返回port相关数据
+
+``` json
+	{
+		"URL":"",
+		"addition":"",
+		"baseprotocol":"tcp",
+		"ip":"127.0.0.1",
+		"port":"80",
+		"protocol":""
+	}
+```
+
+type︰onProtocol，返回protocol相关数据
+
+``` json
+	{
+		"hostinfo":"127.0.0.1:80",
+		"protocol":"http"
+	}
+```
+
+type︰onVulnerable，返回vulnerable相关数据
+
+``` json
+	{
+		"hostinfo":"http://127.0.0.1",
+		"vulnerable":false
+	}
+```
+
+以下type类型与扫描状态相关，其对应返回的content数据一致，示例如下
+
+type : onStartScan 开始扫描
+
+type : onEndScan 结束扫描
+
+type : onPauseScan 暂停扫描
+
+type : onContinueScan 继续扫描
+
+type : onBackIndex 返回首页
+
+type : onRescan 重新扫描
+
+type : onRescanVulnerability 重新扫描漏洞
+
+``` json
+	{
+		"taskId":"20201113102303",  //任务id
+		"taskName":""               //任务名称
+	}
+```
+
 ## 发布内容配置
 发布内容配置即插件清单package.json中的contributes字段，格式为JSON，这个字段包含两个部分：
 
@@ -1048,6 +1287,7 @@ views即用户可配置的自定义视图入口点，目前可配置的UI部分�
  - banner列表的标题栏 - bannerTop
  - 漏洞列表页 - vulList
  - Webfinder页 - webfinder
+ - 左侧导航页 - leftNav
 
 **配置字段说明**
 
@@ -1060,7 +1300,7 @@ tips|String	|默认显示title字段，如果title字段不存在，默认显示
 visible|	String|	默认显示|	否	|控制自定义组件是否显示的命令，返回true显示，返回false不显示
 
 ## 初始化事件
-在插件安装成功后，如果你想直接执行一些操作，那就必须用到初始化事件，即initEvents。绑定要执行的命令名称，goby会在安装插件成功后，主动执行该命令。
+在插件安装成功后，如果你想直接执行一些操作，那就必须用到初始化事件，即initEvents。绑定要执行的命令名称，支持String与Array，如果要执行多个命令，需要将命令依次放到数组里，goby会在安装插件成功后，主动执行指定命令。
 
 ### 相关示例
 第一步，注册要自动执行的命令
@@ -1157,4 +1397,3 @@ devDependencies	| |Object	|等同于npm的devDependencies
             "dependencies": {}
           }
 ```
-
