@@ -942,7 +942,7 @@ background|Boolean|false  |否 |打开的页面是否后台运行，如果为tru
 
 参数|类型|默认值|必填|说明
 --|:--|:--|:--|:--
-url|String|   |是|浏览器打开页面的url链接，链接中需要带有http、https、localhost或file协议。
+url | String  |   | 是  |浏览器打开页面的url链接，链接中需要带有http、https、localhost或file协议。
 
 #### changeBadge
 
@@ -958,7 +958,7 @@ url|String|   |是|浏览器打开页面的url链接，链接中需要带有http
 --|:--|:--|:--|:--
 placement|String| |是|标记的位置，目前仅支持leftNav
 command|String| |是|标记位置对应的command，如果是插件入口点的标记，则command为插件入口绑定的command
-content|<span style="white-space:nowrap;">String｜Number</span> |  |否|标记显示的内容，支持Number与String,String可传html片段，默认为空，不显示
+content|<img width=200/> String｜Number <br><img width=200/>|  |否|标记显示的内容，支持Number与String,String可传html片段，默认为空，不显示
 
 ### 配置相关
 #### getConfiguration
