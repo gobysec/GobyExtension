@@ -1218,7 +1218,7 @@ type : onRescan 重新扫描
 
 type : onRescanVulnerability 重新扫描漏洞
 
-``` json
+``` 
 	{
 		"taskId":"20201113102303",  //任务id
 		"taskName":""               //任务名称
