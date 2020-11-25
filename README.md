@@ -24,7 +24,7 @@ goby内置了扩展能力，在插件API加持之下，goby指定的部分可以
 
 # 第一步
 ## 你的第一个插件
-在本小节中，我们会教你一些基础概念，请先安装开发版goby([Windows](https://gobies.org/goby-win-x64-1.7.199.zip) [MacOS](https://gobies.org/goby-darwin-x64-1.7.199.zip) [Linux](https://gobies.org/goby-linux-x64-1.7.199.zip))，之后你需要下载一个可以立马开发的项目[(helloWorld)](http://gobies.org/helloWorld.zip)，将其解压到**goby/extensions**目录下，然后启动goby。
+在本小节中，我们会教你一些基础概念，请先安装开发版goby([Windows](https://gobies.org/goby-win-x64-1.7.199.zip) [MacOS](https://gobies.org/goby-darwin-x64-1.7.199.zip) [Linux](https://gobies.org/goby-linux-x64-1.7.199.zip))，之后你需要下载一个可以立马开发的项目[(helloWorld)](https://gobies.org/helloWorld.zip)，将其解压到**goby/extensions**目录下，然后启动goby。
 
 点击开始扫描，你会发现扫描弹窗顶部会有一个hello的按钮，点击按钮，如果出现了helloWorld提示信息弹窗，那么恭喜你运行成功了！
 
@@ -376,7 +376,7 @@ banner列表的标题栏 - bannerTop
 扫描弹窗页的配置，使得用户可以对扫描配置进行自定义的处理和操作，下面我们看一个简单的例子。这个例子主要是在扫描弹窗页里，新增一个按钮，点击显示自定义页面，在这个自定义页面里可以进行fofa查询，获取扫描对象，并导入到扫描ip、端口里。
 
 ### 下载链接
-[FOFA](http://gobies.org/FOFA.zip)
+[FOFA](https://gobies.org/FOFA.zip)
 
 ### 使用的**goby API**
 
@@ -472,7 +472,7 @@ banner列表的标题栏 - bannerTop
 
 ![](./img/fofa-html.png)
 
-至于具体的代码内容，可以[下载代码](http://gobies.org/FOFA.zip)查看详细。
+至于具体的代码内容，可以[下载代码](https://gobies.org/FOFA.zip)查看详细。
 
 最终效果如下：
 
@@ -482,7 +482,7 @@ banner列表的标题栏 - bannerTop
 扫描结果页的配置，使得用户可以对扫描后的结果进行自定义的处理和操作，下面我们看一个简单的例子。这个例子主要是在扫描结果页更多下拉框里，新增一个按钮，点击可以选择导出不同字段的csv文件的功能。
 
 ### 下载链接
-[ExportCsv](http://gobies.org/ExportCsv.zip)
+[ExportCsv](https://gobies.org/ExportCsv.zip)
 
 ### 使用的**goby API**
 
@@ -537,7 +537,7 @@ banner列表的标题栏 - bannerTop
       
 第三步，点击自定义的组件后，要显示用户自定义的界面，可以用goby.showIframeDia，传入html页面。
 
-至于具体的代码内容，可以[下载代码](http://gobies.org/ExportCsv.zip)查看详细。
+至于具体的代码内容，可以[下载代码](https://gobies.org/ExportCsv.zip)查看详细。
 
 最终效果如下：
 
@@ -547,7 +547,7 @@ banner列表的标题栏 - bannerTop
 ip详情页的配置，使得用户可以对ip详情页进行自定义的处理和操作，下面我们看一个简单的例子。这个例子主要是在ip详情页的banner列表里，新增一个按钮，点击可以进行http发包测试。
 
 ### 下载链接
-[Http](http://gobies.org/Http.zip)
+[Http](https://gobies.org/Http.zip)
 
 ### 使用的**goby API**
 
@@ -596,7 +596,7 @@ ip详情页的配置，使得用户可以对ip详情页进行自定义的处理�
       
 第三步，点击自定义的组件后，要显示用户自定义的界面，可以用goby.showIframeDia，传入html页面。
 
-至于具体的代码内容，可以[下载代码](http://gobies.org/Http.zip)查看详细。
+至于具体的代码内容，可以[下载代码](https://gobies.org/Http.zip)查看详细。
 
 最终效果如下：
 
@@ -606,7 +606,7 @@ ip详情页的配置，使得用户可以对ip详情页进行自定义的处理�
 漏洞列表页的配置，使得用户可以对漏洞相关的页面进行自定义的处理和操作，下面我们看一个简单的例子。这个例子主要是在漏洞相关的页面，根据当前漏洞名是否在自定义的列表里，动态显示MSF利用按钮，点击按钮可以一键调用本地Metasploit框架，对该漏洞进行检测。
 
 ### 下载链接
-[MSF Sploit](http://gobies.org/MSFSploit.zip)
+[MSF Sploit](https://gobies.org/MSFSploit.zip)
 
 ### 使用的**goby API**
 
@@ -715,7 +715,7 @@ ip详情页的配置，使得用户可以对ip详情页进行自定义的处理�
 ```
         
       
-至于具体的代码内容，可以[下载代码](http://gobies.org/MSFSploit.zip)查看详细。
+至于具体的代码内容，可以[下载代码](https://gobies.org/MSFSploit.zip)查看详细。
 
 最终效果如下：
 
@@ -725,7 +725,7 @@ ip详情页的配置，使得用户可以对ip详情页进行自定义的处理�
 webfinder页，使得用户可以对扫描出的web列表，进行自定义的处理和操作，下面我们看一个简单的例子。这个例子主要是在webfinder的页面，点击按钮显示对应的hostinfo。
 
 ### 下载链接
-[Webfinder](http://gobies.org/Webfinder.zip)
+[Webfinder](https://gobies.org/Webfinder.zip)
 
 ### 使用的**goby API**
 
@@ -773,7 +773,7 @@ webfinder页，使得用户可以对扫描出的web列表，进行自定义的�
         
       
 
-至于具体的代码内容，可以[下载代码](http://gobies.org/Webfinder.zip)查看详细。
+至于具体的代码内容，可以[下载代码](https://gobies.org/Webfinder.zip)查看详细。
 
 最终效果如下：
 
@@ -783,7 +783,7 @@ webfinder页，使得用户可以对扫描出的web列表，进行自定义的�
 左侧导航页，使得用户可以全局执行插件，对扫描过程中的数据进行自定义的处理和操作，下面我们看一个简单的例子。这个例子主要是在左侧导航页面，点击按钮调用showPage API，在自定义页面调用bindEvent API获取扫描数据进行过滤输出。
 
 ### 下载链接
-[Database Asset](http://gobies.org/Database%20Asset.zip)
+[Database Asset](https://gobies.org/Database%20Asset.zip)
 
 
 ### 使用的**goby API**
@@ -863,7 +863,7 @@ webfinder页，使得用户可以对扫描出的web列表，进行自定义的�
           
     goby.changeBadge('leftNav','left-nav',num);
 ```
-至于具体的代码内容，可以[下载代码](http://gobies.org/Database%20Asset.zip)查看详细。
+至于具体的代码内容，可以[下载代码](https://gobies.org/Database%20Asset.zip)查看详细。
 
 最终效果如下：
 
