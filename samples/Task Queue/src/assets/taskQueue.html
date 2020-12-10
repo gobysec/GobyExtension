@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./lib/layui/css/layui.css">
+    <link rel="stylesheet" href="./font1/iconfont.css">
+    <link rel="stylesheet" href="./css//index.css">
+    
+</head>
+<body>
+    <div class="layui-tab layui-tab-brief" lay-filter="tab1">
+        <ul class="layui-tab-title">
+          <li class="layui-this li1">Add Scan Task</li>
+          <li class="li2">Task</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <form class="layui-form" action="" lay-filter="form1">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">IP/Domain</label>
+                        <div class="layui-input-block">
+                            <textarea name="ip" required lay-verify="required"  class="layui-textarea ip"></textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item xiangao">
+                        <label class="layui-form-label">Port</label>
+                        <div class="layui-input-block">
+                            <select name="portType" class="port" lay-verify="required" lay-filter="port">
+                                
+                            </select>
+                            <textarea name="port" required lay-verify="required"  class="layui-textarea portcontent"></textarea>
+                        </div>
+                    </div>
+                    <div style="overflow: hidden;">
+                        <span class="Advanced">
+                            Advanced 
+                            <i class="layui-icon">&#xe625;</i>
+                        </span>
+                    </div>
+                    <div class="Advanced1">
+                        <div class="layui-form-item xiangao">
+                            <label class="layui-form-label">Vulnerability</label>
+                            <div class="layui-input-block" style="width: 516px;">
+                                <select name="vulnerability" class="vulnerability" lay-verify="required" style="width: 516px;">
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">Order</label>
+                            <div class="layui-input-block" style="width: 516px;">
+                                <select name="order" class="order" lay-verify="required" style="width: 516px;">
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">Task name</label>
+                            <div class="layui-input-block" style="width: 516px;">
+                                <input type="text" name="taskName" required  lay-verify="required"  autocomplete="off" class="layui-input taskname">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item" style="margin-bottom: 0;">
+                        <label class="layui-form-label"></label>
+                        <div class="layui-input-block">
+                            <button type="button" class="layui-btn save">Start</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="layui-tab-item">
+                <form class="layui-form taskform" action="">
+                    <div class="box">
+                        <div class="head">
+                            <div class="div1">
+                                <input type="checkbox" lay-filter="allCheckbox" class="allCheckbox" lay-skin="primary">
+                            </div>
+                            <div>TaskName</div>
+                            <div>IP/Domain</div>
+                            <div>PortType</div>
+                            <div>Port</div>
+                            <div>State</div>
+                            <div>Operate</div>
+                        </div>
+                        <div class="con">
+                            
+                        </div>
+                        <div class="foot">
+                            No date
+                        </div>
+                    </div>
+                    <div class="batchesdelete">
+                        <span class="selected">Selected(0)</span>
+                        <span class="cancel1">Cancel</span>
+                        <i class="iconfont icon-lajitong- batchesremove"></i>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>  
+</body>
+<script src="./lib/layui/layui.js"></script>
+<script>
+    layui.use(['layer','jquery','table','form','element'],()=>{
+        var $ = layui.$,
+        layer = layui.layer,
+        table = layui.table,
+        form = layui.form,
+        element = layui.element;
+        $('head').prepend(`
+            <style>
+                :root{
+                        ${parent.document.querySelector('html').style.cssText}
+                    }
+            </style>
+        `)
+        let goby = parent.goby;
+        let taskQueue = parent.taskQueue;
+        var config={};
+        goby.getPortList().then((res)=>{
+            config.port = res.data;
+            let con = ``;
+            for(let i in res.data){
+                con += `
+                    <option value="${res.data[i].type}">${res.data[i].type}</option>
+                `;
+            }
+            $('.port').html(con);
+            form.render('select');
+            $('.portcontent').val(res.data[0].value);
+        })
+        goby.getVulnerabilityList().then((res)=>{
+            let con = ``;
+            for(let i in res.data){
+                con += `
+                    <option value="${res.data[i]}">${res.data[i]}</option>
+                `;
+            }
+            $('.vulnerability').html(con);
+            form.render('select');
+        })
+        goby.getOrderList().then((res)=>{
+            let con = ``;
+            for(let i in res.data){
+                con += `
+                    <option value="${res.data[i]}">${res.data[i]}</option>
+                `;
+            }
+            $('.order').html(con);
+            form.render('select');
+        })
+        form.on('select(port)', function(data){
+            console.log(data.value);
+            if(config.port){
+                $('.portcontent').val(config.port.filter(v=>v.type==data.value)[0].value);
+            }
+        });
+        goby.bindEvent('onStartScan',(res)=>{
+            setTimeout(()=>{
+                init();
+            },1000)
+        })
+        goby.bindEvent('onEndScan',(res)=>{
+            setTimeout(()=>{
+                init();
+            },1000)
+        })
+        goby.bindEvent('onPauseScan',(res)=>{
+            setTimeout(()=>{
+                init();
+            },1000)
+        })
+        $('.Advanced').on('click',function(){
+            $('.Advanced i').toggleClass('-xuan');
+            if(!this.lock){
+                $('.Advanced1').slideDown(300);
+            }else{
+                $('.Advanced1').slideUp(300);
+            }
+            this.lock = !this.lock;
+        })
+        var state = {
+            type:0,//0 add 1 change
+            id:'',
+        };
+        $('.save').on('click',()=>{
+            
+            let data = form.val("form1");
+            data.ip=data.ip.split(/[(\r\n)\r\n]+/);
+            console.log(data);
+            if(state.type==0){
+                taskQueue.add({
+                    ...data,
+                    state:2
+                }).then(()=>{
+                    init();
+                    setTimeout(()=>{
+                        $('.li2').click();
+                    },500)
+                    
+                })
+            }
+            if(state.type==1){
+                taskQueue.change({
+                    ...data,
+                    id:state.id,
+                    state:2
+                }).then(()=>{
+                    state={
+                        type:0,
+                        id:''
+                    }
+                    init();
+                    setTimeout(()=>{
+                        $('.li2').click();
+                    },500)
+                })
+            }
+        })
+        $('.con').delegate('.detial','click',function(){
+            if(!this.lock){
+                $(this).parent().siblings('.detialpage').slideDown();
+            }else{
+                $(this).parent().siblings('.detialpage').slideUp();
+            }
+            this.classList.toggle('xuan');
+            this.lock = !this.lock;
+        })
+        
+        $('.con').delegate('.change','click',function(){
+            state={
+                type:1,
+                id:$(this).parent().attr('queueId')
+            }
+            let data = taskQueue.getQueue().data.filter((v,k)=>{
+                return v.id == $(this).parent().attr('queueId');
+            });
+            if(data.length>0){
+                $('.li1').click();
+                $('textarea[name=ip]').val(data[0].ip.join('\r'));
+                $('select[name=portType]').val(data[0].portType);
+                $('textarea[name=port]').val(data[0].port);
+                $('select[name=vulnerability]').val(data[0].vulnerability);
+                $('select[name=order]').val(data[0].order);
+                $('input[name=taskName]').val(data[0].taskName);
+                form.render('select');
+            }else{
+
+            }
+        })
+        $('.con').delegate('.delete','click',function(){
+            taskQueue.delete([$(this).parent().attr('queueId')]).then(()=>{
+                init();
+            });
+        })
+        $('.batchesdelete').delegate('.xuan','click',function(){
+            let data = Array.from(document.querySelectorAll(".box .con input[type='checkbox'].scan:checked"));
+            taskQueue.delete(data.map(v=>$(v).attr('queueId'))).then(()=>{
+                init();
+            });
+        })
+        $('.cancel1').on('click',function(){
+            $('.box .con input[type="checkbox"]').each(function(){
+                $(this).prop('checked',false);
+            })
+            $('.box .head input[type="checkbox"]').each(function(){
+                $(this).prop('checked',false);
+            })
+            selected();
+            form.render('checkbox');
+        })
+        init();
+        form.on('checkbox(allCheckbox)',function(data){
+            let checked = $(this).prop('checked');
+            $('.box .con input[type="checkbox"].scan').each(function(){
+                $(this).prop('checked',checked);
+            })
+            selected();
+            form.render('checkbox');
+        })
+        form.on('checkbox(checkbox)',function(data){
+            if($(this).hasClass('scaning')) return;
+            if(!$(this).prop('checked') && $('.allCheckbox').prop('checked')){
+                $('.allCheckbox').prop('checked',false);
+                form.render('checkbox');
+            }
+            if($(this).prop('checked')){
+                if(document.querySelectorAll(".box .con input[type='checkbox'].scan:checked").length == document.querySelectorAll(".box .con input[type='checkbox'].scan").length){
+                    $('.allCheckbox').prop('checked',true);
+                    form.render('checkbox');
+                }
+            }
+            selected();
+        })
+        element.on('tab(tab1)', function(data){
+            switch (data.index) {
+                case 0:
+                    if(state.type==0){
+                        $('.save').html('Start');
+                    }else{
+                        $('.save').html('Save');
+                    }
+                    break;
+                case 1:
+                    state={
+                        type:0,
+                        id:""
+                    }
+                    break;
+                default:
+                    break;
+            }
+        });
+        
+        function init(){
+            let queue = taskQueue.getQueue().data;
+            if(queue.length>0){
+                $('.con').show();
+                $('.foot').hide();
+                let con = ``;
+                var time = 0;
+                
+                queue.forEach((v,k)=>{
+                    con += `
+                        <div queueId="${v['id']}" class="${v.state==0?'wancheng':''}">
+                            <div class="roughly ">
+                                <input type="checkbox" class="${v.taskId?'scaning':'scan'} " ${v.state!=2?'disabled':''} lay-filter="checkbox" queueId="${v['id']}"  lay-skin="primary">
+                                <i class="layui-icon detial">&#xe623;</i>
+                            </div>
+                            <div class="taskName roughly" queueId="${v['id']}"><span>${v.taskName?v.taskName:'-'}</span></div>
+                            <div class="ips roughly"><span>${v['ip'].join(',')}</span></div>
+                            <div class="portType roughly"><span>${v['portType']}</span></div>
+                            <div class="portContent roughly"><span>${v['port']}</span></div>
+                            <div class="scanState roughly"><span>${scanstate(v['state'])}</span></div>
+                            <div class="Operate roughly" queueId="${v['id']}">
+                                <i class="iconfont icon-icon-edit change ${v.taskId?'none':''}"></i>
+                                <i class="iconfont icon-lajitong- delete ${v.taskId?'none':''}"></i>
+                            </div>
+                            <div class="detialpage">
+                                <p>
+                                    <span>IP/Domain：</span>    
+                                    <span>${v['ip'].join(',')}</span>
+                                </p>
+                                <p>
+                                    <span>ProtType：</span>
+                                    <span>${v['portType']}</span>
+                                </p>
+                                <p>
+                                    <span>Prot：</span>
+                                    <span>${v['port']}</span>
+                                </p>
+                                <p>
+                                    <span>Vulnerability：</span>  
+                                    <span>${v['vulnerability']}</span>  
+                                </p>
+                                <p>
+                                    <span>Order：</span>
+                                    <span>${v['order']}</span>    
+                                </p>
+                                <p>
+                                    <span>Task name：</span>    
+                                    <span>${v['taskName']}</span>
+                                </p>
+                            </div>
+                        </div>
+                        
+                    `;
+                })
+                $('.con').html(con);
+                form.render('checkbox');
+                selected();
+                if(Array.from(document.querySelectorAll('.wancheng')).map(v=>$(v).attr('queueId')).length>0){
+                    setTimeout(()=>{
+                        taskQueue.delete(Array.from(document.querySelectorAll('.wancheng')).map(v=>$(v).attr('queueId')))
+                        $('.wancheng').remove();
+                        init();
+                    },3500)
+                }
+                
+            }else{
+                $('.con').hide();
+                $('.foot').show();
+            }
+            
+        }
+        function selected(){
+            if(document.querySelectorAll(".box .con input[type='checkbox'].scan:checked").length>0){
+                document.querySelector('.batchesremove').classList.add('xuan');
+            }else{
+                document.querySelector('.batchesremove').classList.remove('xuan');
+            }
+            $('.selected').html(`Selected(${document.querySelectorAll(".box .con input[type='checkbox'].scan:checked").length})`);
+        }
+        function scanstate(state){
+            switch (state) {
+                case 0:
+                    return `<svg class="xiao" t="1607492404499" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="9866" width="32" height="32"><path d="M512 0C230.4 0 0 230.4 0 512s230.4 512 512 512 512-230.4 512-512S793.6 0 512 0z m0 927.744c-230.4 0-415.744-185.344-415.744-415.744S281.6 96.256 512 96.256 927.744 281.6 927.744 512 742.4 927.744 512 927.744z" p-id="9867" fill="#1afa29"></path><path d="M444.928 588.8L307.2 454.656l-89.6 89.088 137.728 137.728 89.6 89.6L806.4 409.6 716.8 316.928z" p-id="9868" fill="#1afa29"></path></svg>`
+                    break;
+                case 1:
+                    return 'Scanning'
+                    break;
+                case 2:
+                    return 'Queuing'
+                    break;
+                default:
+                    break;
+            }
+        }
+    })
+</script>
+</html>
