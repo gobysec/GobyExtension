@@ -913,7 +913,7 @@ webfinder页，使得用户可以对扫描出的web列表，进行自定义的�
 ``` json
     "contributes": {
       "views": {
-        "leftNav": [
+        "toolbar": [
           {
             "command": "addTask",
             "title": "Task Queue ",
