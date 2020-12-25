@@ -1,0 +1,15 @@
+{
+ "name": "Christmas 2020",
+ "publisher": "GobySec",
+ "description": "圣诞节主题。",
+ "version": "0.1.0",
+ "engines": "1.7.192",
+ "icon": "src/img/Christmascj.png",
+ "initEvents": "init",
+ "main": "./src/extension.js",
+ "contributes": {
+ },
+ "scripts": {},
+ "devDependencies": {},
+ "dependencies": {}
+}
