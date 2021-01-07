@@ -24,6 +24,7 @@ body::-webkit-scrollbar {
     -webkit-border-radius: 0;
     border-radius: 0;
 }
+
 html,body{
     position: absolute;
     top: 0;
@@ -34,6 +35,7 @@ html,body{
 body{
     font-size: 12px;
     color:var(--primaryFont-color);
+    margin-top: 6px;
 }
 .layui-tab{
     margin: 0;
@@ -46,22 +48,43 @@ body{
 .layui-tab-title{
     height: auto;
     position: fixed;
-    top: 0;
+    top: 6px;
     left: 0;
     right: 0;
     background: var(--lv3Background-color);
     z-index: 10;
+    border-color: var(--secondaryBorder-color);
 }
 .layui-tab-title li {
     color: var(--level3Font-color);
     line-height: 1;
     padding-bottom: 13px;
-    
+    font: 14px;
+    position: relative;
 }
 .layui-tab-title .layui-this:after {
     top: auto;
     height: 1px;
-    bottom: 0;
+    bottom: -1px;
+}
+.layui-badge{
+    position: absolute;
+    max-height: 14px;
+    min-width: 6px;
+    max-width: 15px;
+    padding: 2px 4px;
+    font-size: 11px;
+    justify-content: center;
+    left: 62%!important;
+    top: -6px!important;
+    transform: translateX(5px);
+    display: inline-flex;
+    justify-items: center;
+    line-height: 11px;
+    height: 11px;
+    border-radius:7px;
+    zoom: 0.8;
+    background: #ec5048;
 }
 .layui-this.li1:before,.layui-this.li2:before {
     content: "";
@@ -98,11 +121,18 @@ textarea.ip{
     max-height: 74px;
     min-height: 74px;
 }
+
 textarea.portcontent{
     width:516px;
     max-height: 55px;
     min-height: 55px;
     margin-top: 15px;
+}
+.error{
+    position: absolute;
+    bottom: 0;
+    transform: translateY(calc(100% + 2px));
+    color: #EC5048;
 }
 textarea,input{
     color: var(--primaryFont-color);
@@ -175,8 +205,13 @@ input,textarea{
     width: 516px;
     overflow: hidden;
 }
-.taskname{
+.taskname,.timenode{
     height: 30px;
+    background: transparent;
+    min-width: 160px;
+}
+input.timenode::-webkit-input-placeholder{
+    color: var(--primaryFont-color);
 }
 .layui-badge-rim, .layui-colla-content, .layui-colla-item, .layui-collapse, .layui-elem-field, .layui-form-pane .layui-form-item[pane], .layui-form-pane .layui-form-label, .layui-input, .layui-layedit, .layui-layedit-tool, .layui-quote-nm, .layui-select, .layui-tab-bar, .layui-tab-card, .layui-textarea{
     border: 1px solid var(--primaryBorder-color)
@@ -184,7 +219,6 @@ input,textarea{
 .layui-input:focus,.layui-input:hover, .layui-textarea:focus,.layui-textarea:hover {
     border-color: var(--main-color)!important;
 }
-
 .layui-form-checkbox[lay-skin="primary"] i{
     border-color: var(--primaryBorder-color)!important;
     background: transparent;
@@ -224,7 +258,7 @@ input,textarea{
 }
 .head{
     background: var(--lv4Background-color);
-    border-bottom: 1px solid var(--primaryBorder-color);
+    /* border-bottom: 1px solid var(--primaryBorder-color); */
     overflow: hidden;
     position: sticky;
     top: 0;
@@ -237,12 +271,23 @@ input,textarea{
     top: 33px;
     bottom: 0;
     overflow: scroll;
+    box-sizing: border-box;
+    user-select:none;
+    display: none;
 }
 .con>div{
     border-bottom: 1px solid var(--secondaryBorder-color);
+    border-top: 1px solid transparent;
+    box-sizing: border-box;
 }
 .con>div:last-child{
-    border-width: 0;
+    border-color: transparent;
+}
+.con>div.xia{
+    border-bottom-color:var(--main-color) ;
+}
+.con>div.shang{
+    border-top-color: var(--main-color);
 }
 .head>div,.con>div>div.roughly{
     padding: 5px 10px;
@@ -261,7 +306,9 @@ input,textarea{
     position: relative;
 }
 .head>div:nth-child(1),.con>div>div:nth-child(1){
-    width: 28px;
+    position: relative;
+    width: 27px;
+    max-width: 27px;
 }
 .head>div:nth-child(2),.con>div>div:nth-child(2){
     width: 60px;
@@ -276,16 +323,16 @@ input,textarea{
     max-width: 58px;
 }
 .head>div:nth-child(5),.con>div>div:nth-child(5){
-    width: 160px;
-    max-width: 160px;
+    width: 130px;
+    max-width: 130px;
 }
 .head>div:nth-child(6),.con>div>div:nth-child(6){
-    width: 54px;
-    max-width: 54px;
+    width: 59px;
+    max-width: 59px;
 }
 .head>div:nth-child(7),.con>div>div:nth-child(7){
-    width: 48px;
-    max-width: 48px;
+    width: 63px;
+    max-width: 63px;
 }
 .detialpage{
     padding-left: 48px;
@@ -376,7 +423,7 @@ input,textarea{
 }
 .wancheng{
     animation: shan 2s linear 0s forwards;
-    background: rgba(241, 166, 0, 0.15);
+    background: rgba(241, 166, 0, 0.07);
 }
 @keyframes shan{
     0% {opacity: 1; }
@@ -390,9 +437,12 @@ input,textarea{
     width: 12px;
     height: 12px;
 }
-.change,.delete{
+.change,.delete,.start,.kongbai{
     color: var(--main-color);
     font-size: 14px!important;
+}
+.kongbai{
+    cursor: default!important;
 }
 .xiangao .layui-anim.layui-anim-upbit{
     height:252px ;
@@ -404,6 +454,245 @@ input,textarea{
     border-top-color:#C7D3E7;
 }
 .Operate{
-    text-indent: 5px;
     letter-spacing:2px;
+}
+.layui-form-checkbox{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    padding-left: 0!important;
+}
+.tuozhuai{
+    font-size: 10px;
+    color: var(--main-color);
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+#layui-laydate1{
+    /* left: 433px!important;
+    bottom: 110px!important;
+    top: auto!important; */
+    /* left: auto!important;
+    right: 0!important;
+    top: 25px!important;
+    zoom: 0.8; */
+    background-color: var(--lv3Background-color);
+    border-color: var(--primaryBorder-color);
+    border-radius: 4px;
+    font-size: 12px;
+}
+.layui-laydate-content th{
+    color: var(--level3Font-color)!important;
+}
+.layui-laydate td{
+    color:var(--primaryFont-color) ;
+}
+.layui-laydate td.layui-this{
+    background-color:var(--main-color)!important;
+}
+.layui-laydate li.layui-this {
+    background-color:var(--main-color)!important;
+    color: rgb(255, 255, 255) !important;
+}
+.layui-laydate-header i:hover, .layui-laydate-header span:hover {
+    color: var(--main-color)!important;
+}
+.layui-laydate-footer,.layui-laydate-main.laydate-main-list-0{
+    zoom: 0.9;
+}
+.layui-laydate-footer span[lay-type=date] {
+    color: var(--main-color)!important;
+}
+.layui-laydate-footer span:hover {
+    color: var(--main-color)!important;
+}
+.layui-laydate-list.laydate-time-list *::-webkit-scrollbar {
+    width: 0px;
+    /*竖向滚动条的宽度*/
+    height: 0px;
+    /*横向滚动条的高度*/
+}
+.layui-laydate td.laydate-disabled, .layui-laydate td.laydate-disabled:hover{
+    color: var(--level3Font-color)!important;
+}
+.laydate-day-next{
+    color: var(--primaryFont-color)!important;
+}
+.layui-laydate-content td:hover, .layui-laydate-list ol li:hover{
+    background-color: var(--main-color)!important;
+    color: #fff!important;
+}
+.layui-laydate-content{
+    background-color: var(--lv3Background-color)!important;
+}
+.layui-laydate-list{
+    background-color: var(--lv3Background-color)!important;
+}
+.laydate-footer-btns{
+    border-radius: 5px!important;
+    overflow: hidden;
+}
+.laydate-footer-btns span{
+    background-color: var(--main-color)!important;
+    color: #ffffff;
+    border: none!important;
+}
+.laydate-footer-btns span:hover{
+    color: #ffffff!important;
+}
+.date1{
+    position: relative;
+    background: transparent;
+    height: 100%;
+}
+.date1 input{
+    border: none;
+    background: transparent;
+    height: 100%;
+}
+.date{
+    width: 100%;
+    height: 100%;
+}
+
+.fenjie{
+    color: var(--level3Font-color);
+    height: 20px;
+    line-height: 27px;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+    padding: 15px 0 10px;
+}
+.fenjie.xia{
+    border-bottom-color:var(--main-color) ;
+}
+.fenjie.shang{
+    border-top-color:var(--main-color) ;
+}
+#showdate{
+    width: 161px;
+    height: 22px;
+    border: 1px solid var(--primaryBorder-color);
+    display: block;
+    position: relative;
+    line-height: 1;
+    float: left;
+    margin-right: 8px;
+    color: transparent;
+}
+#showdate{
+    color: var(--level3Font-color);
+    line-height: 22px;
+    /* text-indent: 9px; */
+    
+}
+#timeNode{
+    text-indent: 9px;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    outline: none;
+    cursor: pointer;
+    color: var(--primaryFont-color);
+}
+#timeNode::-webkit-input-placeholder{
+    color: var(--level3Font-color);
+}
+
+.qingkong{
+    position: absolute;
+    right: 10px;
+    top: 0;
+    font-size: 12px;
+    display: none;
+    cursor: pointer;
+}
+#showdate.showguanbi:hover  .qingkong{
+    display: block;
+}
+.dingshi{
+    font-size: 12px;
+    color: #1afa29;
+}
+.laydate-prev-y,.laydate-next-y{
+    display: none!important;
+}
+.laydate-prev-m,.laydate-next-m{
+    position: relative;
+    color: transparent!important;
+    position: relative;
+}
+.laydate-prev-m{
+    left: 16px!important;
+}
+.laydate-next-m{
+    right: 16px!important;
+}
+.layui-laydate-header,.layui-laydate-footer{
+    border-color: var(--primaryBorder-color)!important;
+    color:var(--level3Font-color) ;
+}
+.layui-laydate-header .laydate-prev-m:hover,.layui-laydate-header .laydate-next-m:hover{
+    color: transparent!important;
+}
+
+.laydate-prev-m::before{
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-right-color: var(--primaryBorder-color);
+    left: calc(50% - 6px);
+    top: calc(50% - 6px);
+    display: inline-block;
+}
+.laydate-next-m::before{
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-left-color: var(--primaryBorder-color);
+    left: calc(50% - 6px);
+    top: calc(50% - 6px);
+    display: inline-block;
+}
+.layui-unselect.layui-form-switch{
+    height: 10px;
+    line-height: 10px;
+    min-width:25px;
+    max-width: 25px;
+    border-left-width: 0;
+    border-right-width:0 ;
+    position: relative;
+    background-color: var(--level3Fonta-color);
+    border-color: transparent;
+}
+.layui-form-switch i{
+    left: 0;
+    top: 50%;
+    right: auto;
+    transform: translateY(-50%);
+    min-width: 20px;
+    width: 20px;
+    height: 20px;
+    background: var(--level3Font-color);
+}
+.layui-form-onswitch{
+   background-color:var(--maina-color) !important;
+}
+.layui-unselect.layui-form-switch.layui-form-onswitch i{
+    left: 100%;
+    right: 0;
+    background: var(--main-color);
+}
+.dingshitishi{
+    vertical-align: bottom;
+}
+.dingshitishi span{
+    margin-left: 5px;
 }

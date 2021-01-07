@@ -13,7 +13,7 @@
     <div class="layui-tab layui-tab-brief" lay-filter="tab1">
         <ul class="layui-tab-title">
           <li class="layui-this li1">Add Scan Task</li>
-          <li class="li2">Task</li>
+          <li class="li2"><span>Task</span><span class="layui-badge taskNum none"></span></li>
         </ul>
         <div class="layui-tab-content">
             <div class="layui-tab-item layui-show">
@@ -22,6 +22,7 @@
                         <label class="layui-form-label">IP/Domain</label>
                         <div class="layui-input-block">
                             <textarea name="ip" required lay-verify="required"  class="layui-textarea ip"></textarea>
+                            <p class="error ipError"></p>
                         </div>
                     </div>
                     <div class="layui-form-item xiangao">
@@ -31,6 +32,7 @@
                                 
                             </select>
                             <textarea name="port" required lay-verify="required"  class="layui-textarea portcontent"></textarea>
+                            <p class="error portError"></p>
                         </div>
                     </div>
                     <div style="overflow: hidden;">
@@ -58,9 +60,23 @@
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">Task name</label>
-                            <div class="layui-input-block" style="width: 516px;">
+                            <div class="layui-input-block">
                                 <input type="text" name="taskName" required  lay-verify="required"  autocomplete="off" class="layui-input taskname">
                             </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <!-- <label class="layui-form-label"></label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" name="isTimeNode" lay-skin="switch"> 定时
+                        </div> -->
+                        <label class="layui-form-label"></label>
+                        <div class="layui-input-block dingshitishi" style="width: 516px;">
+                            <input type="checkbox" name="isTimeNode"  lay-skin="switch"> <span class="dingshitishi">定时</span>
+                            <!-- <select name="isTimeNode" class="isTimeNode" lay-verify="required" lay-filter="isTimeNode">
+                                <option value = "0">Queue scan</option>
+                                <option value = "1">Timing scan</option>
+                            </select> -->
                         </div>
                     </div>
                     <div class="layui-form-item" style="margin-bottom: 0;">
@@ -72,7 +88,7 @@
                 </form>
             </div>
             <div class="layui-tab-item">
-                <form class="layui-form taskform" action="">
+                <form class="layui-form taskform" action="" lay-filter="form12">
                     <div class="box">
                         <div class="head">
                             <div class="div1">
@@ -86,7 +102,19 @@
                             <div>Operate</div>
                         </div>
                         <div class="con">
-                            
+                            <p class="fenjie">
+                                <!-- <input type="checkbox" name="timedTask" lay-filter="timedTask" class="timedTask" lay-skin="primary">
+                                <p class="date1">
+                                    <p class="selecttime"></p>
+                                    <input type="text" placeholder="如需定时请设置时间节点" name="timenode" required  lay-verify="required"  autocomplete="off" class="layui-input timenode">
+                                </p> -->
+                                <span id="showdate">
+                                    <!-- <span id="timeNode"></span> -->
+                                    <input type="text" id="timeNode" placeholder="请设置定时时间" readOnly="true">
+                                    <i class="iconfont icon-guanbi qingkong"></i>
+                                </span>
+                                <span class="timedDescribe">任务会在定时后立即进行扫描</span>
+                            </p>
                         </div>
                         <div class="foot">
                             No date
@@ -100,16 +128,25 @@
                 </form>
             </div>
         </div>
+        
+        <!-- <form class="layui-form form3" action="" lay-filter="form3">
+            <input type="checkbox" name="timedTask" lay-filter="timedTask" class="timedTask" lay-skin="primary">
+            <div class="date1">
+                <div class="selecttime"></div>
+                <input type="text" placeholder="如需定时请设置时间节点" name="timenode" required  lay-verify="required"  autocomplete="off" class="layui-input timenode">
+            </div>
+        </form> -->
     </div>  
 </body>
 <script src="./lib/layui/layui.js"></script>
 <script>
-    layui.use(['layer','jquery','table','form','element'],()=>{
+    layui.use(['layer','jquery','table','form','element','laydate'],()=>{
         var $ = layui.$,
         layer = layui.layer,
         table = layui.table,
         form = layui.form,
-        element = layui.element;
+        element = layui.element,
+        laydate = layui.laydate;
         $('head').prepend(`
             <style>
                 :root{
@@ -117,9 +154,19 @@
                     }
             </style>
         `)
+        document.documentElement.style.setProperty("--maina-color",getComputedStyle(document.body).getPropertyValue('--main-color')+'73' );
+        if(getComputedStyle(document.body).getPropertyValue('--level3Font-color').includes('rgba')){
+            document.documentElement.style.setProperty("--level3Fonta-color",getComputedStyle(document.body).getPropertyValue('--level3Font-color') );
+        }else{
+            document.documentElement.style.setProperty("--level3Fonta-color",getComputedStyle(document.body).getPropertyValue('--level3Font-color')+'73' );
+        }
+        
         let goby = parent.goby;
         let taskQueue = parent.taskQueue;
         var config={};
+        // init();
+        
+        //获取端口列表
         goby.getPortList().then((res)=>{
             config.port = res.data;
             let con = ``;
@@ -132,6 +179,7 @@
             form.render('select');
             $('.portcontent').val(res.data[0].value);
         })
+        //获取poc列表
         goby.getVulnerabilityList().then((res)=>{
             let con = ``;
             for(let i in res.data){
@@ -142,6 +190,7 @@
             $('.vulnerability').html(con);
             form.render('select');
         })
+        //获取扫描序列列表
         goby.getOrderList().then((res)=>{
             let con = ``;
             for(let i in res.data){
@@ -152,27 +201,111 @@
             $('.order').html(con);
             form.render('select');
         })
+
+        //端口选择时
         form.on('select(port)', function(data){
-            console.log(data.value);
             if(config.port){
                 $('.portcontent').val(config.port.filter(v=>v.type==data.value)[0].value);
             }
         });
+
+
+        //时间节点选择
+        var riqi = laydate.render({
+            elem: '#timeNode',
+            type: 'datetime',
+            trigger:'focus',
+            btns: ['confirm'],
+            min:new Date().getTime()+3600000,
+            // value:new Date(new Date().getTime()+3600000),
+            ready(date){
+                let nowDate = new Date(new Date().getTime()+3600000);
+                // this.value = nowDate,
+                this.min = {
+                    year:nowDate.getFullYear(),
+                    month:nowDate.getMonth(),
+                    date:nowDate.getDate(),
+                    hours:nowDate.getHours(),
+                    minutes:nowDate.getMinutes(),
+                    seconds:nowDate.getSeconds()
+                }
+            },
+            done(value,date){
+                if(!value){
+                    // $('.timenode').val(value);
+                    
+                    // if($('.timedTask').prop('checked')){
+                    //     $('.timedTask').prop('checked',false);
+                    //     taskQueue.changeTime();
+                    // }
+                    // form.render('checkbox');
+                    console.log(value);
+                }else{
+                    $('#timeNode').val(value);
+                    $('.timedDescribe').html(`任务将在${value}立即扫描`);
+                    $('.timedDescribe').show();
+                    $('#showdate').addClass('showguanbi');
+                    taskQueue.changeTime(value);
+                    init();
+                    // $('.timenode').val(value);
+                    // if($('.timedTask').prop('checked')){
+                    //     taskQueue.changeTime(value);
+                    // }
+                    
+                }
+            }
+        });
+        //清空定时时间
+        $('.qingkong').on('click',function(){
+            $('#timeNode').val('');
+            $('.timedDescribe').hide();
+            $('#showdate').removeClass('showguanbi');
+            taskQueue.changeTime();
+            init();
+        })
+        
+        timeNodeInit();
+        function timeNodeInit(){
+            let queue = taskQueue.getQueue();
+            if(queue.timeNode){
+                $('#timeNode').val(queue.timeNode);
+                $('.timedDescribe').html(`任务将在${queue.timeNode}立即扫描`);
+                $('.timedDescribe').show();
+                $('#showdate').addClass('showguanbi');
+            }else{
+                $('#timeNode').val('');
+                $('.timedDescribe').hide();
+                $('#showdate').removeClass('showguanbi');
+            }
+            init();
+        }
+        
+
+                
+        
+
+        //扫描开始事件
         goby.bindEvent('onStartScan',(res)=>{
             setTimeout(()=>{
                 init();
             },1000)
         })
+
+        //扫描结束事件
         goby.bindEvent('onEndScan',(res)=>{
             setTimeout(()=>{
                 init();
             },1000)
         })
+
+        //扫描暂停事件
         goby.bindEvent('onPauseScan',(res)=>{
             setTimeout(()=>{
                 init();
             },1000)
         })
+
+        //高级设置
         $('.Advanced').on('click',function(){
             $('.Advanced i').toggleClass('-xuan');
             if(!this.lock){
@@ -186,12 +319,74 @@
             type:0,//0 add 1 change
             id:'',
         };
+
+        //add task页面点击开始后
         $('.save').on('click',()=>{
             
             let data = form.val("form1");
             data.ip=data.ip.split(/[(\r\n)\r\n]+/);
-            console.log(data);
+            if(data.isTimeNode == ''){
+                data.isTimeNode = 0;
+            }
+            
+            if(data.isTimeNode=='on'){
+                data.isTimeNode = 1
+            }
+            if(!data.isTimeNode){
+                data.isTimeNode = 0;
+            }
+            $('.error').hide().html('');
+            if(!data.ip || !data.ip.join()){
+                $('.ipError').html('Please input IP').show();
+                return;
+            }
+            if(!data.port.trim()){
+                $('.portError').html('Please select port').show();
+                return;
+            }
+            //过滤敏感字符
+            let scan_ips = data.ip;
+            for (var i = 0; i < scan_ips.length; i++) {
+                let ips_reg = /^((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(\d{1,3}\/\d{1,2}|25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))$/;
+                let ipRanger = /^(?=(\b|\D))(((\d{1,2})|(1\d{1,2})|(2[0-4]\d)|(25[0-5]))\.){3}((\d{1,2})|(1\d{1,2})|(2[0-4]\d)|(25[0-5]))(?=(\b|\D))-(?=(\b|\D))(((\d{1,2})|(1\d{1,2})|(2[0-4]\d)|(25[0-5]))\.){3}((\d{1,2})|(1\d{1,2})|(2[0-4]\d)|(25[0-5]))(?=(\b|\D))$/;
+                let hostReg = /^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-_]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-_]*[A-Za-z0-9])$/;
+                if (!ips_reg.test(scan_ips[i]) && !ipRanger.test(scan_ips[i]) && !hostReg.test(scan_ips[i])) {
+                    // this.ipErrorMsg = scan_ips[i] + " " + this.ipError;
+                    // this.isIpError = true;
+                    $('.ipError').html(scan_ips[i] + " " + 'undefined').show();
+                    return;
+                }
+            }
+
+            // 判断端口是否大于65535
+            function removeCharts(source, chars) {
+                let reg = new RegExp(chars, "gi");
+                let result = source.replace(reg, "");
+                return result;
+            }
+
+            let source = data.port;
+            let reult = removeCharts(source, "U:");
+            let ports_arr = reult.split(',');
+            for (var i = 0; i < ports_arr.length; i++) {
+                let port_reg = /^[\d\,U:\-a-zA-Z]+$/;
+                if (!port_reg.test(ports_arr[i])) {
+                    // this.portErrorMsg = ports_arr[i] + " " + this.portError;
+                    // this.isPortError = true;
+                    $('.portError').html(ports_arr[i] + " " + 'undefined').show();
+                    return
+                }
+            }
+            if(!data.vulnerability){
+                data.vulnerability = 'General Poc'
+            }
+            if(!data.order){
+                data.order = 'Assets first'
+            }
+            
+            
             if(state.type==0){
+                //添加
                 taskQueue.add({
                     ...data,
                     state:2
@@ -200,10 +395,10 @@
                     setTimeout(()=>{
                         $('.li2').click();
                     },500)
-                    
                 })
             }
             if(state.type==1){
+                //修改
                 taskQueue.change({
                     ...data,
                     id:state.id,
@@ -220,6 +415,8 @@
                 })
             }
         })
+
+        //点击查看详情
         $('.con').delegate('.detial','click',function(){
             if(!this.lock){
                 $(this).parent().siblings('.detialpage').slideDown();
@@ -230,6 +427,7 @@
             this.lock = !this.lock;
         })
         
+        //点击修改
         $('.con').delegate('.change','click',function(){
             state={
                 type:1,
@@ -246,22 +444,57 @@
                 $('select[name=vulnerability]').val(data[0].vulnerability);
                 $('select[name=order]').val(data[0].order);
                 $('input[name=taskName]').val(data[0].taskName);
+                // $('select[name=isTimeNode]').val(data[0].isTimeNode);
+                $('input[name=isTimeNode]').prop('checked',data[0].isTimeNode);
                 form.render('select');
+                form.render('checkbox');
             }else{
 
             }
         })
+
+        //点击删除
         $('.con').delegate('.delete','click',function(){
             taskQueue.delete([$(this).parent().attr('queueId')]).then(()=>{
                 init();
             });
         })
+
+        //点击开始当前任务
+        $('.con').delegate('.start','click',function(){
+            
+            taskQueue.stopScan().then((res)=>{
+                if(res.statusCode==200){
+                    setTimeout(()=>{
+                        let queue = taskQueue.getQueue().data.map(v=>v.id);
+                        let index = queue.indexOf($(this).parent().attr('queueId'));
+                        if(index!=-1){
+                            queue.splice(index,1);
+                            queue.unshift($(this).parent().attr('queueId'));
+                            taskQueue.sort(queue).then(()=>{
+                                taskQueue.startScan($(this).parent().attr('queueId')).then((res)=>{
+                                    if(res.statusCode == 200){
+                                        init();
+                                    }
+                                })
+                            })
+                        }
+                        
+                    },1000)
+                }
+            }).catch();
+
+        })
+
+        //批量删除
         $('.batchesdelete').delegate('.xuan','click',function(){
             let data = Array.from(document.querySelectorAll(".box .con input[type='checkbox'].scan:checked"));
             taskQueue.delete(data.map(v=>$(v).attr('queueId'))).then(()=>{
                 init();
             });
         })
+
+        //取消选择
         $('.cancel1').on('click',function(){
             $('.box .con input[type="checkbox"]').each(function(){
                 $(this).prop('checked',false);
@@ -272,7 +505,8 @@
             selected();
             form.render('checkbox');
         })
-        init();
+        
+        //全选或全不选
         form.on('checkbox(allCheckbox)',function(data){
             let checked = $(this).prop('checked');
             $('.box .con input[type="checkbox"].scan').each(function(){
@@ -281,6 +515,8 @@
             selected();
             form.render('checkbox');
         })
+
+        //任务单个选择
         form.on('checkbox(checkbox)',function(data){
             if($(this).hasClass('scaning')) return;
             if(!$(this).prop('checked') && $('.allCheckbox').prop('checked')){
@@ -295,6 +531,8 @@
             }
             selected();
         })
+
+        //tab切换时触发
         element.on('tab(tab1)', function(data){
             switch (data.index) {
                 case 0:
@@ -315,18 +553,26 @@
             }
         });
         
+        //初始化渲染表格
         function init(){
             let queue = taskQueue.getQueue().data;
+            
+            let taskNum = queue.filter(v=>v.state==2).length;
+            taskNum>0 && $('.taskNum').html(Math.min(taskNum,99)).removeClass('none');
+            taskNum == 0 && $('.taskNum').html('').addClass('none');
+            $('.con>div').remove();
             if(queue.length>0){
                 $('.con').show();
                 $('.foot').hide();
-                let con = ``;
+                let conTop = ``;
+                let conBottom = ``;
                 var time = 0;
                 
-                queue.forEach((v,k)=>{
-                    con += `
-                        <div queueId="${v['id']}" class="${v.state==0?'wancheng':''}">
+                queue.filter(v=>v.isTimeNode=='0').forEach((v,k)=>{
+                    conTop += `
+                        <div queueId="${v['id']}" class="${v.state==0?'wancheng':''} ${v.state==2?'drap':''}"}>
                             <div class="roughly ">
+                                <i class="iconfont icon-Draganddrop- tuozhuai ${v.taskId?'none':''} " ${v.state==2?'drap':''}" ${v.state==2?'draggable=true':''}></i>
                                 <input type="checkbox" class="${v.taskId?'scaning':'scan'} " ${v.state!=2?'disabled':''} lay-filter="checkbox" queueId="${v['id']}"  lay-skin="primary">
                                 <i class="layui-icon detial">&#xe623;</i>
                             </div>
@@ -336,6 +582,7 @@
                             <div class="portContent roughly"><span>${v['port']}</span></div>
                             <div class="scanState roughly"><span>${scanstate(v['state'])}</span></div>
                             <div class="Operate roughly" queueId="${v['id']}">
+                                <i class="iconfont icon-qidong-01 start ${v.taskId?'none':''}"></i>
                                 <i class="iconfont icon-icon-edit change ${v.taskId?'none':''}"></i>
                                 <i class="iconfont icon-lajitong- delete ${v.taskId?'none':''}"></i>
                             </div>
@@ -369,9 +616,64 @@
                         
                     `;
                 })
-                $('.con').html(con);
+                $('.con').prepend($(conTop))
+                if(queue.filter(v=>v.isTimeNode=='1').length==0){
+                    $('.fenjie').hide();
+                }else{
+                    $('.fenjie').show();
+                }
+                queue.filter(v=>v.isTimeNode=='1').forEach((v,k)=>{
+                    conBottom += `
+                        <div queueId="${v['id']}" class="${v.state==0?'wancheng':''} ${v.state==2?'drap':''}"}>
+                            <div class="roughly ">
+                                <i class="iconfont icon-Draganddrop- tuozhuai ${v.taskId?'none':''} " ${v.state==2?'drap':''}" ${v.state==2?'draggable=true':''}></i>
+                                <input type="checkbox" class="${v.taskId?'scaning':'scan'} " ${v.state!=2?'disabled':''} lay-filter="checkbox" queueId="${v['id']}"  lay-skin="primary">
+                                <i class="layui-icon detial">&#xe623;</i>
+                            </div>
+                            <div class="taskName roughly" queueId="${v['id']}"><span>${v.taskName?v.taskName:'-'}</span></div>
+                            <div class="ips roughly"><span>${v['ip'].join(',')}</span></div>
+                            <div class="portType roughly"><span>${v['portType']}</span></div>
+                            <div class="portContent roughly"><span>${v['port']}</span></div>
+                            <div class="scanState roughly"><span>${getDate($('#timeNode').val())}</span></div>
+                            <div class="Operate roughly" queueId="${v['id']}">
+                                <i class="iconfont icon-kongbai kongbai  ${v.taskId?'none':''}"></i>
+                                <i class="iconfont icon-icon-edit change ${v.taskId?'none':''}"></i>
+                                <i class="iconfont icon-lajitong- delete ${v.taskId?'none':''}"></i>
+                            </div>
+                            <div class="detialpage">
+                                <p>
+                                    <span>IP/Domain：</span>    
+                                    <span>${v['ip'].join(',')}</span>
+                                </p>
+                                <p>
+                                    <span>ProtType：</span>
+                                    <span>${v['portType']}</span>
+                                </p>
+                                <p>
+                                    <span>Prot：</span>
+                                    <span>${v['port']}</span>
+                                </p>
+                                <p>
+                                    <span>Vulnerability：</span>  
+                                    <span>${v['vulnerability']}</span>  
+                                </p>
+                                <p>
+                                    <span>Order：</span>
+                                    <span>${v['order']}</span>    
+                                </p>
+                                <p>
+                                    <span>Task name：</span>    
+                                    <span>${v['taskName']}</span>
+                                </p>
+                            </div>
+                        </div>
+                        
+                    `;
+                })
+                $('.con').append($(conBottom));
                 form.render('checkbox');
                 selected();
+
                 if(Array.from(document.querySelectorAll('.wancheng')).map(v=>$(v).attr('queueId')).length>0){
                     setTimeout(()=>{
                         taskQueue.delete(Array.from(document.querySelectorAll('.wancheng')).map(v=>$(v).attr('queueId')))
@@ -386,6 +688,13 @@
             }
             
         }
+        function getDate(time){
+            if(!time.trim()){
+                return '';
+            }
+            let date = new Date(time);
+            return `<i class="iconfont icon-dingshi dingshi"></i> ${date.getMonth()+1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+        }
         function selected(){
             if(document.querySelectorAll(".box .con input[type='checkbox'].scan:checked").length>0){
                 document.querySelector('.batchesremove').classList.add('xuan');
@@ -394,10 +703,11 @@
             }
             $('.selected').html(`Selected(${document.querySelectorAll(".box .con input[type='checkbox'].scan:checked").length})`);
         }
+        //状态
         function scanstate(state){
             switch (state) {
                 case 0:
-                    return `<svg class="xiao" t="1607492404499" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="9866" width="32" height="32"><path d="M512 0C230.4 0 0 230.4 0 512s230.4 512 512 512 512-230.4 512-512S793.6 0 512 0z m0 927.744c-230.4 0-415.744-185.344-415.744-415.744S281.6 96.256 512 96.256 927.744 281.6 927.744 512 742.4 927.744 512 927.744z" p-id="9867" fill="#1afa29"></path><path d="M444.928 588.8L307.2 454.656l-89.6 89.088 137.728 137.728 89.6 89.6L806.4 409.6 716.8 316.928z" p-id="9868" fill="#1afa29"></path></svg>`
+                    return `<svg class="icon xiao" t="1607492404499" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="9866" width="32" height="32"><path d="M512 0C230.4 0 0 230.4 0 512s230.4 512 512 512 512-230.4 512-512S793.6 0 512 0z m0 927.744c-230.4 0-415.744-185.344-415.744-415.744S281.6 96.256 512 96.256 927.744 281.6 927.744 512 742.4 927.744 512 927.744z" p-id="9867" fill="#1afa29"></path><path d="M444.928 588.8L307.2 454.656l-89.6 89.088 137.728 137.728 89.6 89.6L806.4 409.6 716.8 316.928z" p-id="9868" fill="#1afa29"></path></svg>`
                     break;
                 case 1:
                     return 'Scanning'
@@ -409,6 +719,252 @@
                     break;
             }
         }
+        
+        //拖拽事件
+        var node = document.querySelector(".con");
+        var draging = null;
+        
+        
+        $('.con').delegate('.drap .tuozhuai','dragstart',function(event){
+            event.originalEvent.dataTransfer.setData("location", _index(this.parentNode.parentNode)<_index(document.querySelector('.fenjie')));
+            event.originalEvent.dataTransfer.setDragImage(this.parentNode.parentNode,'100px','100px')
+            draging = this.parentNode.parentNode;
+        })
+        $('.con').delegate('.drap','dragenter',function(event){
+            if(!draging) return;
+            event.preventDefault();
+        })
+        $('.con').delegate('.drap','dragover',function(event){
+            if(!draging) return;
+            event.preventDefault();
+            $('.con>.fenjie').removeClass('xia').removeClass('shang');
+            if (this !== draging) {
+                $('.con>div').removeClass('xia').removeClass('shang');
+                if (_index(draging) < _index(this)) {
+                    $(this).addClass('xia')
+                } else {
+                    $(this).addClass('shang');
+                }
+            }else{
+                $('.con>div').removeClass('xia').removeClass('shang');
+            }
+        })
+        $('.con').delegate('.fenjie','dragover',function(event){
+            if(!draging) return;
+            event.preventDefault();
+            $('.con>div').removeClass('xia').removeClass('shang');
+            if (this !== draging) {
+                $('.con>.fenjie').removeClass('xia').removeClass('shang');
+                if (_index(draging) < _index(this)) {
+                    $(this).addClass('xia')
+                } else {
+                    $(this).addClass('shang');
+                }
+            }else{
+                $('.con>.fenjie').removeClass('xia').removeClass('shang');
+            }
+        })
+        $('.con').delegate('.drap','drop',function(event){
+            if(!draging) return;
+            event.preventDefault();
+            if (this !== draging) {
+                var thisRect = this.getBoundingClientRect();
+                var dragingRect = draging.getBoundingClientRect();
+                if (this) {
+                    if (this.animated) {
+                        return;
+                    }
+                }
+                
+                if (_index(draging) < _index(this)) {
+                    this.parentNode.insertBefore(draging, this.nextSibling);
+                } else {
+                    this.parentNode.insertBefore(draging, this);
+                }
+                if(event.originalEvent.dataTransfer.getData("location") == (_index(this)<_index(document.querySelector('.fenjie'))).toString()){
+                    taskQueue.sort(Array.from(document.querySelectorAll('.con>div')).map((v,k)=>{
+                        return $(v).attr('queueId');
+                    })).then(()=>{
+                        setTimeout(init,400);
+                    }).catch((err)=>{
+                        console.log('失败');
+                        init();
+                    });
+                }else{
+                    let task = taskQueue.getQueue().data.filter(v=>v.id==$(draging).attr('queueId'));
+                    if(task.length>0){
+                        task[0].isTimeNode = task[0].isTimeNode==0?1:0;
+                        taskQueue.change({
+                            ...task[0]
+                        }).then(()=>{
+                            taskQueue.sort(Array.from(document.querySelectorAll('.con>div')).map((v,k)=>{
+                                return $(v).attr('queueId');
+                            })).then(()=>{
+                                setTimeout(init,400);
+                            }).catch((err)=>{
+                                console.log('失败');
+                                init();
+                            });
+                        }).catch(()=>{
+                            init();
+                        })
+                    }
+
+
+                }
+                    
+                _animate(dragingRect, draging);
+                _animate(thisRect, this);
+            }else{
+                $('.con>div').removeClass('xia').removeClass('shang');
+            }
+        })
+        $('.con').delegate('.fenjie','drop',function(event){
+            $('.con>.fenjie').removeClass('xia').removeClass('shang');
+            if(!draging) return;
+            event.preventDefault();
+            if (this !== draging) {
+                var thisRect = this.getBoundingClientRect();
+                var dragingRect = draging.getBoundingClientRect();
+                if (this) {
+                    if (this.animated) {
+                        return;
+                    }
+                }
+                if (_index(draging) < _index(this)) {
+                    this.parentNode.insertBefore(draging, this.nextSibling);
+                } else {
+                    this.parentNode.insertBefore(draging, this);
+                }
+                if((_index(this)==_index(document.querySelector('.fenjie'))).toString()){
+                    let task = taskQueue.getQueue().data.filter(v=>v.id==$(draging).attr('queueId'));
+                    if(task.length>0){
+                        task[0].isTimeNode = task[0].isTimeNode==0?1:0;
+                        taskQueue.change({
+                            ...task[0]
+                        }).then(()=>{
+                            taskQueue.sort(Array.from(document.querySelectorAll('.con>div')).map((v,k)=>{
+                                return $(v).attr('queueId');
+                            })).then(()=>{
+                                setTimeout(init,400);
+                            }).catch((err)=>{
+                                console.log('失败');
+                                init();
+                            });
+                        }).catch(()=>{
+                            init();
+                        })
+                    }
+                }else{
+                    taskQueue.sort(Array.from(document.querySelectorAll('.con>div')).map((v,k)=>{
+                        return $(v).attr('queueId');
+                    })).then(()=>{
+                        setTimeout(init,400);
+                    }).catch((err)=>{
+                        console.log('失败');
+                        init();
+                    });
+                }
+                    
+                _animate(dragingRect, draging);
+                _animate(thisRect, this);
+            }else{
+                $('.con>.fenjie').removeClass('xia').removeClass('shang');
+            }
+        })
+        //当离开可移动区域时
+        $('.con').delegate('.drap','dragleave',function(event){
+            if(!draging) return;
+            $('.con>div').removeClass('xia').removeClass('shang');  
+        })
+        $('.con').delegate('.fenjie','dragleave',function(event){
+            if(!draging) return;
+            $('.con>.fenjie').removeClass('xia').removeClass('shang');  
+        })
+        $('.con').delegate('.drap','dragend',function(event){
+            if(!draging) return;
+            $('.con>div').removeClass('xia').removeClass('shang'); 
+        })
+        $('.con').delegate('.fenjie','dragend',function(event){
+            if(!draging) return;
+            $('.con>.fenjie').removeClass('xia').removeClass('shang'); 
+        })
+        $('body').on('click',function(event){
+            draging = null;
+        })
+
+        //拖拽动画实现
+        //获取元素在父元素中的index
+        function _index(el) {
+            var index = 0;
+
+            if (!el || !el.parentNode) {
+                return -1;
+            }
+
+            while (el && (el = el.previousElementSibling)) {
+                
+                index++;
+            }
+
+            return index;
+        }
+        function _animate(prevRect, target) {
+            var ms = 300;
+
+            if (ms) {
+                var currentRect = target.getBoundingClientRect();
+
+                if (prevRect.nodeType === 1) {
+                    prevRect = prevRect.getBoundingClientRect();
+                }
+
+                _css(target, 'transition', 'none');
+                _css(target, 'transform', 'translate3d(' +
+                    (prevRect.left - currentRect.left) + 'px,' +
+                    (prevRect.top - currentRect.top) + 'px,0)'
+                );
+
+                target.offsetWidth; // 触发重绘
+                //放在timeout里面也可以
+                // setTimeout(function() {
+                //     _css(target, 'transition', 'all ' + ms + 'ms');
+                //     _css(target, 'transform', 'translate3d(0,0,0)');
+                // }, 0);
+                _css(target, 'transition', 'all ' + ms + 'ms');
+                _css(target, 'transform', 'translate3d(0,0,0)');
+
+                clearTimeout(target.animated);
+                target.animated = setTimeout(function() {
+                    _css(target, 'transition', '');
+                    _css(target, 'transform', '');
+                    target.animated = false;
+                }, ms);
+            }
+        }
+        //给元素添加style
+        function _css(el, prop, val) {
+            var style = el && el.style;
+
+            if (style) {
+                if (val === void 0) {
+                    if (document.defaultView && document.defaultView.getComputedStyle) {
+                        val = document.defaultView.getComputedStyle(el, '');
+                    } else if (el.currentStyle) {
+                        val = el.currentStyle;
+                    }
+
+                    return prop === void 0 ? val : val[prop];
+                } else {
+                    if (!(prop in style)) {
+                        prop = '-webkit-' + prop;
+                    }
+
+                    style[prop] = val + (typeof val === 'string' ? '' : 'px');
+                }
+            }
+        }
     })
 </script>
 </html>
+
