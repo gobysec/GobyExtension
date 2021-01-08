@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="./css/index.css">
+</head>
+<body>
+    <div id="app" v-cloak>
+        <el-form ref="form" label-position="left">
+            <el-form-item label="字典类型" label-width="100px">
+                <el-select class="el-select1" v-model="value" placeholder="请选择" size="small">
+                    <el-option
+                    v-for="(item,index) in category"
+                    :key="index"
+                    :label="item.value"
+                    :value="item">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+             
+            <div v-show="value.label == 3" class="radioSelect">
+                <el-form-item v-for="(item,index) in dictionaries" :key="index"  label=" " label-width="102px">
+                    <span class="protocolName">{{index}}</span>
+                    <el-radio-group v-model="radios[index]" size="small" class="zhengti">
+                        <el-radio v-for="(value,key) in item" :key="key" :label="key" @click.native.prevent="click(key,index)">{{value.value}}</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+            </div>
+            <el-form-item label="" class="anniu" label-width="102px">
+                <el-button type="primary" class="save" @click="save" size="small">Save</el-button>
+                <span v-html="state" :class="{'state':true,'success':fail.length==0 && prepareReplaceDictionarieNum!=0,'fail':fail.length!=0}"></span>
+            </el-form-item>
+        </el-form>
+    </div>
+</body>
+<script src="./js/vue.js"></script>
+<script src="./element-ui/lib/index.js"></script>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            goby:parent.goby,
+            path:parent.require('path'),
+            fs:parent.require('fs'),
+            value:"",
+            category:[
+                {
+                    value:'精简',
+                    label:0,
+                    model:'mini'
+                },
+                {
+                    value:'中等',
+                    label:1,
+                    model:'medium'
+                },
+                {
+                    value:'复杂',
+                    label:2,
+                    model:'big'
+                },
+                {
+                    value:'自定义',
+                    label:3,
+                    model:'userDefined'
+                }
+            ],
+            dictionaries:{
+                "FTP":{
+                    "mini":{
+                        "model":0,
+                        "value":"精简",
+                        "fileName":'ftp_user_pass_mini.dict'
+                    },
+                    "medium":{
+                        "model":1,
+                        "value":"中等",
+                        "fileName":'ftp_user_pass_medium.dict'
+                    },
+                    "big":{
+                        "model":2,
+                        "value":"复杂",
+                        "fileName":'ftp_user_pass_big.dict'
+                    }
+                },
+                "MYSQL":{
+                    "mini":{
+                        "model":0,
+                        "value":"精简",
+                        "fileName":'mysql_user_pass_mini.dict'
+                    },
+                    "medium":{
+                        "model":1,
+                        "value":"中等",
+                        "fileName":'mysql_user_pass_medium.dict'
+                    },
+                    "big":{
+                        "model":2,
+                        "value":"复杂",
+                        "fileName":'mysql_user_pass_big.dict'
+                    }
+                },
+                "POSTGRES":{
+                    "mini":{
+                        "model":0,
+                        "value":"精简",
+                        "fileName":"postgres_user_pass_mini.dict"
+                    },
+                    "medium":{
+                        "model":1,
+                        "value":"中等",
+                        "fileName":"postgres_user_pass_medium.dict"
+                    },
+                    "big":{
+                        "model":2,
+                        "value":"复杂",
+                        "fileName":"postgres_user_pass_big.dict"
+                    }
+                },
+                "RDP":{
+                    "mini":{
+                        "model":0,
+                        "value":"精简",
+                        "fileName":'rdp_user_pass_mini.dict'
+                    },
+                    "medium":{
+                        "model":1,
+                        "value":"中等",
+                        "fileName":'rdp_user_pass_medium.dict'
+                    },
+                    "big":{
+                        "model":2,
+                        "value":"复杂",
+                        "fileName":'rdp_user_pass_big.dict'
+                    }
+                },
+                "SMB":{
+                    "mini":{
+                        "model":0,
+                        "value":"精简",
+                        "fileName":"smb_user_pass_mini.dict"
+                    },
+                    "medium":{
+                        "model":1,
+                        "value":"中等",
+                        "fileName":"smb_user_pass_medium.dict"
+                    },
+                    "big":{
+                        "model":2,
+                        "value":"复杂",
+                        "fileName":"smb_user_pass_big.dict"
+                    }
+                },
+                "SNMP":{
+                    "mini":{
+                        "model":0,
+                        "value":"精简",
+                        "fileName":"snmp_pass_mini.dict"
+                    },
+                    "medium":{
+                        "model":1,
+                        "value":"中等",
+                        "fileName":"snmp_pass_medium.dict"
+                    },
+                    "big":{
+                        "model":2,
+                        "value":"复杂",
+                        "fileName":"snmp_pass_big.dict"
+                    }
+                },
+                "SSH":{
+                    "mini":{
+                        "model":0,
+                        "value":"精简",
+                        "fileName":"ssh_user_pass_mini.dict"
+                    },
+                    "medium":{
+                        "model":1,
+                        "value":"中等",
+                        "fileName":"ssh_user_pass_medium.dict"
+                    },
+                    "big":{
+                        "model":2,
+                        "value":"复杂",
+                        "fileName":"ssh_user_pass_big.dict"
+                    }
+                },
+                "TOMCAT":{
+                    "mini":{
+                        "model":0,
+                        "value":"精简",
+                        "fileName":"tomcat_user_pass_mini.dict"
+                    },
+                    "medium":{
+                        "model":1,
+                        "value":"中等",
+                        "fileName":"tomcat_user_pass_medium.dict"
+                    },
+                    "big":{
+                        "model":2,
+                        "value":"复杂",
+                        "fileName":"tomcat_user_pass_big.dict"
+                    }
+                }
+            },
+            radios:{
+                "FTP":"",
+                "MYSQL":"",
+                "POSTGRES":"",
+                "RDP":"",
+                "SMB":"",
+                "SNMP":"",
+                "SSH":"",
+                "TOMCAT":""
+            },
+            prepareReplaceDictionarieNum:0,
+            fail:[]
+        },
+        methods:{
+            click(key,name){
+                if(this.radios[name]==key){
+                    this.$set(this.radios,name,'');
+                }else{
+                    this.$set(this.radios,name,key);
+                }
+            },
+            save(){
+                this.fail = [];
+                switch (this.value.label) {
+                    case 3:
+                        this.userDefined();
+                        break;
+                
+                    default:
+                        this.preset();
+                        break;
+                }
+            },
+            preset(){
+                // let dictionariesFile = this.fs.readdirSync(this.path.join(this.__dirname,'/assets/dictionaries',this.value.model));
+                // dictionariesFile = dictionariesFile.filter((v,k)=>{
+                //     let fileStat = this.fs.statSync(this.path.join(this.__dirname,'/assets/dictionaries',this.value.model,v));
+                //     return  !fileStat.isDirectory() && this.path.extname(this.path.join(this.__dirname,'/assets/dictionaries',this.value.model,v)) == '.dict'
+                // })
+                // dictionariesFile.forEach((v,k) => {
+                //     this.replace(this.path.join(this.__dirname,'/assets/dictionaries',this.value.model,v));
+                // });
+                this.prepareReplaceDictionarieNum = Object.values(this.dictionaries).length;
+                for(let i in this.dictionaries){
+                    this.replace(this.path.join(this.__dirname,'/assets/dictionaries',this.value.model,this.dictionaries[i][this.value.model]['fileName']),i);
+                }
+            },
+            userDefined(){
+                this.prepareReplaceDictionarieNum = Object.values(this.radios).filter(v=>v.trim()).length;
+                if(this.prepareReplaceDictionarieNum==0){
+                    this.goby.showInformationMessage('请至少选择一种协议的字典进行配置');
+                    return;
+                }
+                for(let i in this.radios){
+                    if(this.radios[i]){
+                        this.replace(this.path.join(this.__dirname,'/assets/dictionaries',this.radios[i],this.dictionaries[i][this.radios[i]]['fileName']),i)
+                    } 
+                }
+            },
+            replace(url,name){
+                this.fs.readFile(url,'utf-8',(err,data)=>{
+                    if(err){
+                        this.fail.push(name);
+                        return;
+                    }
+                    this.fs.writeFile(this.dictionariesPath[name],data,(error)=>{
+                        if(error){
+                            this.fail.push(name);
+                            return;
+                        }
+                    })
+                })
+            },
+            init(){
+                let style = document.createElement('style');
+                style.innerHTML = `
+                    :root{
+                        ${parent.document.querySelector('html').style.cssText}
+                    }
+                `;
+                document.querySelector('head').insertBefore(style,document.querySelector('meta'));
+            }
+        },
+        computed:{
+            __dirname(){
+                var reg = new RegExp("(^|&)" + "url" + "=([^&]*)(&|$)"); // 构造一个含有目标参数的正则表达式对象
+		        var r = window.location.search.substr(1).match(reg);  // 匹配目标参数
+		        if (r != null) return unescape(r[2]); return null; // 返回参数值
+            },
+            dictionariesPath(){
+                let url = this.path.join(parent.rootPathData,'/golib');
+                return {
+                    "FTP":this.path.join(url,'/ftp_user_pass.dict'),
+                    "MYSQL":this.path.join(url,'/mysql_user_pass.dict'),
+                    "POSTGRES":this.path.join(url,'/postgres_user_pass.dict'),
+                    "RDP":this.path.join(url,'/rdp_user_pass.dict'),
+                    "SMB":this.path.join(url,'/smb_user_pass.dict'),
+                    "SNMP":this.path.join(url,'/snmp_pass.dict'),
+                    "SSH":this.path.join(url,'/ssh_user_pass.dict'),
+                    "TOMCAT":this.path.join(url,'/tomcat_user_pass.dict')
+                }
+            },
+            state(){
+                if(this.prepareReplaceDictionarieNum!=0 && this.fail.length == 0){
+                    return  'Success';
+                }
+                if(this.prepareReplaceDictionarieNum!=0 && this.fail.length != 0){
+                    return  `${this.fail.join('、')} Fail`;
+                }
+            }
+        },
+        mounted(){
+            this.init();
+            this.value = this.category[0];
+        }
+    })
+</script>
+</html>

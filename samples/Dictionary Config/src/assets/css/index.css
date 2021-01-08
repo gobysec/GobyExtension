@@ -1,0 +1,184 @@
+[v-cloak]{
+    display: none;
+}
+/* 滚动条样式 */
+*::-webkit-scrollbar {
+    width: 5px;
+    /*竖向滚动条的宽度*/
+    height: 5px;
+    /*横向滚动条的高度*/
+}
+
+/* 滚动条轨道的样式 */
+*::-webkit-scrollbar-track {
+    background-color: transparent;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+}
+
+/* 滚动条轨道内滑块的样式 */
+*::-webkit-scrollbar-thumb {
+    border-radius: 0;
+    background-color: var(--lv4Background-color);
+}
+
+/* 当焦点不在当前区域滑块的状态 */
+*::-webkit-scrollbar-thumb:window-inactive {
+    background-color: var(--secondaryBorder-color);
+    -webkit-border-radius: 0;
+    border-radius: 0;
+}
+body{
+    font-size: 12px;
+    font-family: "San Francisco Pro","Roboto","Helvetica","PingFang SC","\82F9\65B9","Microsoft Yahei","\5FAE\8F6F\96C5\9ED1","Source Han Sans CN","\601D\6E90\9ED1\4F53","SimHei","\9ED1\4F53","SimSun","\5B8B\4F53",sans-serif;
+    color:var(--primaryFont-color);
+    user-select: none;
+}
+label{
+    font-size: 12px;
+    color:var(--primaryFont-color)!important;
+}
+.el-form-item__label{
+    font-size: 12px;
+}
+input.el-input__inner{
+    /* height: 30px; */
+    font-size: 12px;
+    color: var(--level3Font-color);
+    border: solid 1px var(--primaryBorder-color)!important;
+    background-color: var(--lv3Background-color);
+}
+input.el-input__inner:hover {
+    border-color: var(--primaryBorder-color)!important;
+}
+input.el-input__inner::-webkit-input-placeholder{
+    color: var(--level3Font-color)!important;
+}
+.el-select .el-input.is-focus input.el-input__inner{
+    border-color: var(--primaryBorder-color)!important;
+}
+.el-select-dropdown{
+    border-color: var(--primaryBorder-color)!important;
+    overflow: hidden;
+    background: transparent;
+    /* transform: translateY(-8px); */
+}
+.el-scrollbar{
+    border-color: var(--primaryBorder-color)!important;
+    background-color: var(--lv3Background-color)!important;
+}
+.popper__arrow{
+    /* display: none!important; */
+    border-bottom-color: var(--primaryBorder-color)!important;
+}
+.el-select-dropdown__wrap.el-scrollbar__wrap .el-select-dropdown__item{
+    color: var(--primaryFont-color);
+    font-size: 12px;
+}
+.el-select-dropdown__item.hover{
+    background-color: var(--lv4Background-color);
+    color: var(--primaryFont-color);
+}
+.el-select-dropdown__item.selected{
+    font-weight: 600;
+}
+.el-popper[x-placement^=bottom] .popper__arrow::after{
+    border-bottom-color: var(--lv3Background-color);
+}
+.el-select .el-input__inner:focus{
+    border-color: var(--primaryBorder-color)!important;
+}
+.el-form-item{
+    margin-bottom: 14px;
+}
+.el-form-item__label,.el-form-item__content{
+    line-height: 30px;
+}
+.el-input__suffix{
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+}
+.el-select1{
+    display: block;
+}
+.el-radio__inner{
+    background-color: transparent;
+    border-color: var(--primaryBorder-color)!important;
+    width: 12px;
+    height: 12px;
+}
+.el-radio__input.is-checked .el-radio__inner{
+    background-color: var(--main-color);
+    border-color: var(--main-color)!important;
+}
+.el-radio__input.is-checked+.el-radio__label{
+    color: var(--main-color);
+}
+.el-radio:focus:not(.is-focus):not(:active):not(.is-disabled) .el-radio__inner{
+    box-shadow: 0 0 2px 2px transparent;
+}
+.el-button--primary{
+    background-color: var(--main-color)!important;
+    border-color: transparent!important;
+}
+.el-button--primary:hover{
+    background-color: var(--main-color)!important;
+    border-color: transparent!important;
+}
+.el-radio, .el-radio--medium.is-bordered .el-radio__label{
+    font-size: 12px;
+}
+.el-radio__label{
+    font-size: 12px;
+}
+/* .el-radio__inner::after{
+    width: 6px;
+    height: 6px;
+} */
+.el-icon-arrow-up:before{
+    content: "\e78f";
+}
+.radioSelect .el-form-item__content{
+    display: flex;
+}
+.protocolName{
+    display: block;
+    width: 100px;
+}
+.zhengti{
+    flex: 1;
+    display: flex;
+    justify-content: start;
+}
+.el-radio{
+    line-height: 30px;
+    width: 30%;
+}
+.success{
+    color: #1afa29;
+}   
+.fail{
+    color:#EC5048;
+}
+.anniu .el-form-item__content{
+    display: flex;
+    flex-wrap:nowrap;
+} 
+.save{
+    flex: 0;
+    flex-shrink:0;
+}
+.state{
+    flex-shrink:1;
+    padding: 0 5px;
+    flex: 1;
+    display: block;
+    line-height: 32px;
+    white-space: nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+.el-button--small{
+    padding: 9px 20px;
+}
