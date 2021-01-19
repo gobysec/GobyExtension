@@ -2,7 +2,7 @@
 	"name": "FOFA",
 	"publisher": "GobySec",
 	"description": "将通过FOFA查询的IP和端口，快速导入goby进行扫描。",
-	"version": "0.1.11",
+	"version": "0.1.12",
 	"icon": "src/assets/img/fofa.png",
 	"engines": "1.6.170",
 	"initEvents": "",
