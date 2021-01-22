@@ -276,7 +276,7 @@ goby提供了一些方法，供插件扩展goby本身的能力。但是有的时
 一个插件最基本应该具备：使用goby.registerCommand注册命令。
 
 ### 视图入口点
-用户可以自定义扫描弹窗顶部按钮，也可以自定义扫描页更多下拉的菜单内容。目前goby支持的视图入口点并不多，你可以在contributes.views中查看更多内容。
+用户可以自定义扫描弹窗顶部按钮，也可以自定义工具栏插件按钮。目前goby支持的视图入口点并不多，你可以在contributes.views中查看更多内容。
 
 ### 自定义视图
 很多时候，只配置视图入口点是不能满足开发需求的，比如说你想实现点击扫描弹窗自定义的按钮后，显示一个自定义的可搜索的列表页面，让用户自己操作、选择，这时候就需要用到自定义视图。目前goby提供了以下API来显示自定义页面：
@@ -306,13 +306,13 @@ goby提供了一些方法，供插件扩展goby本身的能力。但是有的时
 
  - 扫描弹窗页 - scanDia
  - 扫描结果页 - scanRes
- - 更多下拉菜单 - moreOptions
+ - 更多下拉菜单 - moreOptions (废弃于： v 1.8.237)
  - ip详情页 - ipDetail
  -  banner列表的标题栏 - bannerTop
  - 漏洞列表页 - vulList
  - Webfinder页 - webfinder
- - 左侧导航页 - leftNav
- - toolbar - toolbar
+ - 左侧导航页 - leftNav (新增于：v 1.8.225   废弃于： v 1.8.237)
+ - toolbar - toolbar (新增于：v 1.8.230  )
 
 ## 扫描弹窗页 - **scanDia**
 在插件清单中配置contributes.views.scanDia，就可以给扫描弹窗顶部添加自定义的组件。具体位置如图：
@@ -323,6 +323,8 @@ goby提供了一些方法，供插件扩展goby本身的能力。但是有的时
 
 ## 扫描结果页 - **scanRes**
 ###### 更多下拉菜单 - moreOptions
+废弃于： v 1.8.237
+
 在插件清单中配置contributes.views.scanRes.moreOptions，就可以给扫描结果的下拉菜单添加自定义的组件，同时资产列表、漏洞列表页的下拉菜单也会出现相同组件。具体位置如图：
 
 ![](./img/moreOptions.png)
@@ -357,6 +359,8 @@ banner列表的标题栏 - bannerTop
 同时关于webfinder的具体使用，也有一个简单的例子可供学习，具体见webfinder页。
 
 ## 左侧导航页 - **leftNav**
+**新增于：1.8.225 废弃于： v 1.8.237**
+
 在插件清单中配置contributes.views.leftNav，就可以给左侧导航栏添加自定义的组件。具体位置如图：
 
 ![](./img/leftNav.png)
@@ -364,6 +368,8 @@ banner列表的标题栏 - bannerTop
 同时关于LeftNav的具体使用，也有一个简单的例子可供学习，具体见左侧导航页。
 
 ## toolbar - **toolbar**
+**新增于：1.8.230**
+
 在插件清单中配置contributes.views.toolbar，就可以给工具栏添加自定义的组件。具体位置如图：
 ![](./img/toolbar.jpg)
 
@@ -486,6 +492,8 @@ banner列表的标题栏 - bannerTop
 ![](./img/ex-fofa.gif)
 
 ## 扫描结果页 - scanRes.moreOptions
+废弃于： v 1.8.237
+
 扫描结果页的配置，使得用户可以对扫描后的结果进行自定义的处理和操作，下面我们看一个简单的例子。这个例子主要是在扫描结果页更多下拉框里，新增一个按钮，点击可以选择导出不同字段的csv文件的功能。
 
 ### 下载链接
@@ -787,6 +795,8 @@ webfinder页，使得用户可以对扫描出的web列表，进行自定义的�
 ![](./img/ex-webfinder.gif)
 
 ## 左侧导航页 - leftNav
+**新增于：v 1.8.225   废弃于： v 1.8.237**
+
 左侧导航页，使得用户可以全局执行插件，对扫描过程中的数据进行自定义的处理和操作，下面我们看一个简单的例子。这个例子主要是在左侧导航页面，点击按钮调用showPage API，在自定义页面调用bindEvent API获取扫描数据进行过滤输出。
 
 ### 下载链接
@@ -877,6 +887,8 @@ webfinder页，使得用户可以对扫描出的web列表，进行自定义的�
 ![](./img/ex-Database%20Asset.gif)
 
 ## toolbar - toolbar
+**新增于：v 1.8.230**
+
 工具栏的配置，使得用户可以全局执行插件，下面我们看一个简单的例子。这个例子主要是在工具栏新增按钮，点击操作生成任务队列。
 
 ### 下载链接
@@ -940,6 +952,8 @@ goby API是goby提供给插件开发者使用的一系列Javascript API。以下
 #### registerCommand
 注册命令，不同插件的命令名称可以相同
 
+[观看本节视频讲解](https://www.bilibili.com/video/BV1u54y147PF?p=6)
+
 **请求**
 
 参数|类型|默认值|必填|说明
@@ -952,7 +966,8 @@ callback(content)|Function| | 是|命令的回调函数，回调函数返回的c
 views(视图入口点)|是否存在|类型|示例|说明
 --|:--|:--|:--|:--
 scanDia|否	|	|	|
-scanRes.moreOptions|否	|	|	|
+scanRes.moreOptions|否	|	|	|废弃于： v 1.8.237
+toolbar|	|	|	|
 ipDetail.bannerTop|是|Object	|{ hostinfo: "80.241.214.220:25", port: "25", protocol: "smtp" }|hostinfo: host信息；port: 端口；protocol: 协议
 vulList|是|Object|{ "hostinfo":"127.0.0.1", "name":"Eternalblue/DOUBLEPULSAR MS17-010 SMB RCE", "filename":"smb_ms17_010.json", "level":"3", "vulurl":"", "keymemo":"", "hasexp":false }|hostinfo: host信息；name: 漏洞名称；filename: 漏洞文件名；level: 漏洞等级；vulurl: 漏洞地址
 
@@ -976,7 +991,7 @@ height|Number|auto|否|iframe的高度，最大高度为500，超过显示滚动
 
 #### showPage
 
-**1.8.225+ 新增** 
+**新增于：1.8.225** 
 
 显示自定义页面
 
@@ -993,7 +1008,7 @@ background|Boolean|false  |否 |打开的页面是否后台运行，如果为tru
 
 #### openExternal
 
-**1.8.225+ 新增** 
+**新增于：1.8.225** 
 
 在浏览器打开给定的url链接
 
@@ -1009,7 +1024,7 @@ url | String  |   | 是  |浏览器打开页面的url链接，链接中需要带
 
 #### changeBadge
 
-**1.8.225+ 新增**
+**新增于：1.8.225**
 
 修改按钮、图标旁的数字或状态标记
 
@@ -1019,7 +1034,7 @@ url | String  |   | 是  |浏览器打开页面的url链接，链接中需要带
 
 参数|类型|默认值|必填|说明
 --|:--|:--|:--|:--
-placement|String| |是|标记的位置，目前仅支持leftNav
+placement|String| |是|标记的位置，v 1.8.225 - v 1.8.230 仅支持leftNav，v 1.8.237+ 仅支持toolbar
 command|String| |是|标记位置对应的command，如果是插件入口点的标记，则command为插件入口绑定的command
 content|<img width=200/><br> String｜Number <br><img width=200/>|  |否|标记显示的内容，支持Number与String,String可传html片段，默认为空，不显示
 
@@ -1101,7 +1116,7 @@ taskId|String|当前任务的id
 
 #### getScanState
 
-**1.8.230+ 新增**
+**新增于：1.8.230**
 
 获取当前扫描状态
 
@@ -1218,7 +1233,7 @@ type|Number	|	|是|添加的方式，0是追加，1是覆盖
 
 #### getPortList
 
-**1.8.230+ 新增**
+**新增于：1.8.230**
 
 获取goby内置及自定义端口列表
 
@@ -1248,7 +1263,7 @@ portList|Promise|是一个Promise对象，可以通过then、catch分别捕获�
 ```
 #### getVulnerabilityList
 
-**1.8.230+ 新增**
+**新增于：1.8.230**
 
 获取goby内置及自定义漏洞列表
 
@@ -1277,7 +1292,7 @@ vulnerabilityList|Promise|是一个Promise对象，可以通过then、catch分�
 ```
 #### getOrderList
 
-**1.8.230+ 新增**
+**新增于：1.8.230**
 
 获取扫描序列列表
 
@@ -1301,7 +1316,7 @@ orderList|Promise|是一个Promise对象，可以通过then、catch分别捕获�
 ```
 #### startScan
 
-**1.8.230+ 新增**
+**新增于：1.8.230**
 
 开启一个新扫描任务
 
@@ -1341,7 +1356,7 @@ data|Promise|开启扫描返回的信息，是一个Promise对象，可以通过
 
 #### stopScan
 
-**1.8.230+ 新增**
+**新增于：1.8.230**
 
 停止当前扫描任务
 
@@ -1367,7 +1382,7 @@ data|Promise|停止扫描返回的信息，是一个Promise对象，可以通过
 
 #### bindEvent
 
-**1.8.225+ 新增**
+**新增于：1.8.225**
 
 绑定事件通知
 
@@ -1504,13 +1519,13 @@ views即用户可配置的自定义视图入口点，目前可配置的UI部分�
 
  - 扫描弹窗页 - scanDia
  - 扫描结果页 - scanRes
- - 更多下拉菜单 - moreOptions
+ - 更多下拉菜单 - moreOptions (废弃于： v 1.8.237)
  - ip详情页 - ipDetail
  - banner列表的标题栏 - bannerTop
  - 漏洞列表页 - vulList
  - Webfinder页 - webfinder
- - 左侧导航页 - leftNav
- - toolbar - toolbar
+ - 左侧导航页 - leftNav (新增于：v 1.8.225   废弃于： v 1.8.237 )
+ - toolbar - toolbar (新增于：v 1.8.230   )
 
 **配置字段说明**
 
@@ -1573,7 +1588,7 @@ engines|Y|String|插件依赖的最低goby版本，比如1.6.170
 version|Y|String|插件的版本号，插件每次更新时，版本号都必须比之前高
 main|Y|String|插件主入口文件
 description|Y|String|简单地描述一下插件的功能
-initEvents	|	|String|初始化事件，插件安装后自动执行的命令
+initEvents	|	|String｜Array|初始化事件，插件安装后自动执行的命令
 icon	|	|String|插件的logo，建议使用32 * 32的尺寸
 contributes|Y|Object|插件自定义组件的入口和配置等
 scripts	|	|Object|等同于npm的scripts
