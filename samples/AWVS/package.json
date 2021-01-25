@@ -1,0 +1,55 @@
+{
+    "name": "AWVS",
+    "publisher": "GobySec",
+    "description": "联动awvs对goby扫出的web页面进行扫描，可以生成awvs的报告。",
+    "version": "0.1.1",
+    "icon": "./src/assets/img/awvs.png",
+    "engines": "1.6.170",
+    "initEvents": "",
+    "main": "./src/extension.js",
+    "contributes": {
+        "configuration": {
+            "API Key": {
+                "type": "string",
+                "default": "",
+                "description": "请输入AWVS的API Key"
+            },
+            "AWVS Web Address":{
+                "type": "string",
+                "default": "",
+                "description": "请输入AWVS的Web Address"
+            }
+        },
+        "views": {
+            "ipDetail":{
+                "bannerTop":[
+                    {
+                        "command": "awvs",
+                        "title": "awvs",
+                        "icon": "./src/assets/img/awvs.png",
+                        "visible":"isShow"
+                    }
+                ]
+            },
+            "webfinder": [
+                {
+                    "command": "awvs",
+                    "title": "awvs",
+                    "icon": "./src/assets/img/awvs.png"
+                }
+            ],
+            "toolbar":[
+                {
+                    "command": "showData",
+                    "title": "awvs",
+                    "icon": "./src/assets/img/awvs.png"
+                }
+            ]
+        }
+    },
+    "scripts": {},
+    "devDependencies": {},
+    "dependencies": {
+        "request": "^2.88.2"
+    }
+}

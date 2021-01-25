@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="./css/index.css">
+</head>
+<body>
+    <div id="app" v-cloak>
+        <a :href="downloadLink" :download="downloadLink"  v-show="false" ref="link"></a>
+        <el-table
+            :data="AllScanInfo"
+            style="width: 100%"
+            max-height="440"
+        >
+            <el-table-column
+                prop='target.address'
+                label='Target'
+                width="200"
+            >
+            </el-table-column>
+            <el-table-column
+                label='Vulnerabilities'
+                width="140"
+            >
+                <template slot-scope="scope">
+                    <div class="Vulnerabilities">
+                        <span class="severity-high">{{scope.row.current_session.severity_counts.high}}</span>
+                        <span class="severity-medium">{{scope.row.current_session.severity_counts.medium}}</span>
+                        <span class="severity-low">{{scope.row.current_session.severity_counts.low}}</span>
+                        <span class="severity-info">{{scope.row.current_session.severity_counts.info}}</span>
+                    </div>
+                </template>
+            </el-table-column>
+            <el-table-column
+                prop='current_session.status'
+                label='Status'  
+                width="100" 
+            >
+            </el-table-column>
+            <el-table-column
+                label=" Generate Report "
+                width="290"
+                class="454545456"
+            >
+                <template slot-scope="scope">
+                    <!-- <el-button type="primary" size="mini" :disabled="scope.row.current_session.status!='completed'" @click="generateReports(scope.row,$event)">Generate</el-button> -->
+                    <!-- <el-button type="primary" size="mini" :disabled="scope.row.current_session.status!='completed' || !(scope.row.report.status && scope.row.report.status=='completed')" @click="exportReports(scope.row,$event)">Export</el-button> -->
+                    <!-- <el-button type="primary" size="mini" :disabled="scope.row.current_session.status!='completed'" @click="isShowSelectTemplate(0,scope.row)">Generate</el-button> -->
+                    <!-- <el-button type="primary" size="mini" :disabled="scope.row.current_session.status!='completed' || !(scope.row.report.status && scope.row.report.status=='completed')" @click="isShowSelectFormat(0,scope.row)">Export</el-button> -->
+                    <div style="display:flex">
+                        <el-select v-model="reportTemplates[scope.row.scan_id]" placeholder="please select" size="mini">
+                            <el-option
+                            v-for="item in templates"
+                            :key="item.template_id"
+                            :label="item.name"
+                            :value="item.template_id">
+                            </el-option>
+                        </el-select>
+                        <el-button type="primary" size="mini" class="Generate" :disabled="scope.row.current_session.status!='completed' || (scope.row.report&&(scope.row.report.status=='processing'||scope.row.report.status=='queued'))" @click="generateReports(scope.row)">
+                            <i class="el-icon-loading" v-if="scope.row.report&&(scope.row.report.status=='processing'||scope.row.report.status=='queued')"></i>
+                            <!-- <i class="el-icon-loading"></i> -->
+                            Generate
+                        </el-button>
+                    </div>
+                        
+                </template>
+            </el-table-column>
+            <el-table-column
+                label="Export Report"
+            >
+            <template slot-scope="scope">
+                <el-dropdown trigger="click">
+                    <el-button type="primary" :disabled="scope.row.current_session.status!='completed' || !(scope.row.report.status && scope.row.report.status=='completed')" size="mini" class="Export">
+                        Export<i class="el-icon-caret-bottom el-icon--right"></i>
+                      </el-button>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item @click.native="exportReports(scope.row,0)">HTML</el-dropdown-item>
+                      <el-dropdown-item @click.native="exportReports(scope.row,1)">PDF</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </el-dropdown>
+                <!-- <el-button type="primary" size="mini" :disabled="scope.row.current_session.status!='completed' || !(scope.row.report.status && scope.row.report.status=='completed')" @click="exportReports(scope.row,0)">HTML</el-button> -->
+                <!-- <el-button type="primary" size="mini" :disabled="scope.row.current_session.status!='completed' || !(scope.row.report.status && scope.row.report.status=='completed')" @click="exportReports(scope.row,1)">PDF</el-button> -->
+            </template>
+            </el-table-column>
+        </el-table>
+    </div>
+</body>
+<script src="./js/vue.js"></script>
+<script src="./element-ui/lib/index.js"></script>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data(){
+            return {
+                goby:parent.goby,
+                awvs:parent.awvs,
+                AllScanInfo:[],
+                templates:[],
+                format:[
+                    {
+                        value:0,
+                        label:'HTML'
+                    },
+                    {
+                        value:1,
+                        label:'PDF'
+                    }
+                ],
+                downloadLink:'',
+                time:null,
+                reportTemplates:{}
+            }
+        },
+        methods:{
+            init(isRscript){
+                this.awvs.getAllScanInfo({
+                    callback:(res)=>{
+                        this.awvs.getAllReports({
+                            callback:(result)=>{
+                                this.AllScanInfo = res.map((v,k)=>{
+                                    let data = result.reports.find(value=> value.source['id_list'].length == 1 && value.source['id_list'][0] == v['scan_id']);
+                                    if(data){
+                                        return {
+                                            ...v,
+                                            report:data
+                                        }
+                                    }else{
+                                        return {
+                                            ...v,
+                                            report:{}
+                                        }; 
+                                    }
+                                })
+                                console.log(this.AllScanInfo);
+                                this.AllScanInfo.forEach((v,k) => {
+                                    if(!this.reportTemplates[v.scan_id]){
+                                        this.$set(this.reportTemplates,v.scan_id,'');
+                                    }
+                                });
+                                if(isRscript){
+                                    setTimeout(()=>{
+                                        this.init(1);
+                                    },2000)
+                                }else{
+                                    console.log(1);
+                                }
+                                
+                            }
+                        })
+                    }
+                })
+            },
+            generateReports(item){
+                if(!this.reportTemplates[item.scan_id]) return;
+                this.awvs.generateReports({
+                    template_id:this.reportTemplates[item.scan_id],
+                    id_list:[item.scan_id],
+                    callback:(res)=>{
+                        if(res.status=='queued'||res.status=='processing'){
+                            goby.showInformationMessage('正在生成报告');
+                        }
+                        this.init();
+                    }
+                })
+            },
+            exportReports(item,format){
+                this.awvs.getAllReports({
+                    callback:(res)=>{
+                        let data = res.reports.filter((v,k)=>{
+                            return v.source['id_list'].length == 1 && v.source['id_list'][0] == item['scan_id'];
+                        });
+                        console.log(data);
+                        if(data.length==0){
+                            goby.showInformationMessage('报告还没有生成');
+                        }else{
+                            if(data[0].status=='completed'){
+                                this.downloadLink =this.awvs.api+ data[0].download[format];
+                                setTimeout(()=>{
+                                    this.$refs.link.click();
+                                },100)
+                            }else{
+                                goby.showInformationMessage('报告正在生成，请稍后在尝试');
+                            }
+                        }
+                    }
+                })
+                
+            },
+            isShowSelectTemplate(type,item){
+                if(type==0){
+                    if(this.templates.length>0){
+                        this.reportTemplates = '';
+                        this.operable=item;
+                        this.selectReportsTemplate = true;
+                    }
+                }
+                if(type==1){
+                    this.selectReportsTemplate = false;
+                    this.operable={};
+                }
+                if(type==2){
+                    if(this.reportTemplates!=''){
+                        this.generateReports(this.operable);
+                    }
+                    this.selectReportsTemplate = false;
+                    this.operable={};
+                }
+            },
+            isShowSelectFormat(type,item){
+                if(type==0){
+                    this.operable = item;
+                    this.reportFormat=''
+                    this.selectReportsFormat = true;
+                }
+                if(type==1){
+                    this.selectReportsFormat = false;
+                    this.operable={};
+                }
+                if(type==2){
+                    console.log(this.reportFormat);
+                    if(this.reportFormat==0 || this.reportFormat==1){
+                        this.exportReports(this.operable);
+                    }
+                    this.selectReportsFormat = false;
+                    this.operable={};
+                }
+            }
+        },
+        mounted(){
+            let style = document.createElement('style');
+            style.innerHTML = `
+                :root{
+                    ${parent.document.querySelector('html').style.cssText}
+                }
+            `;
+            document.querySelector('head').insertBefore(style,document.querySelector('meta'));
+            
+            this.init(1);
+            this.awvs.getReportTemplates({callback:(res)=>{
+                this.templates = res.templates;
+                console.log(this.templates);
+            }})
+        }
+    })
+</script>
+</html>
