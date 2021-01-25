@@ -72,7 +72,7 @@
                         </div> -->
                         <label class="layui-form-label"></label>
                         <div class="layui-input-block dingshitishi" style="width: 516px;">
-                            <input type="checkbox" name="isTimeNode"  lay-skin="switch"> <span class="dingshitishi">定时</span>
+                            <input type="checkbox" name="isTimeNode"  lay-skin="switch"> <span class="dingshitishi">Timing</span>
                             <!-- <select name="isTimeNode" class="isTimeNode" lay-verify="required" lay-filter="isTimeNode">
                                 <option value = "0">Queue scan</option>
                                 <option value = "1">Timing scan</option>
@@ -110,10 +110,10 @@
                                 </p> -->
                                 <span id="showdate">
                                     <!-- <span id="timeNode"></span> -->
-                                    <input type="text" id="timeNode" placeholder="请设置定时时间" readOnly="true">
+                                    <input type="text" id="timeNode" placeholder="Set the timing time" readOnly="true">
                                     <i class="iconfont icon-guanbi qingkong"></i>
                                 </span>
-                                <span class="timedDescribe">任务会在定时后立即进行扫描</span>
+                                <span class="timedDescribe">Tasks will be scanned at</span>
                             </p>
                         </div>
                         <div class="foot">
@@ -242,7 +242,7 @@
                     console.log(value);
                 }else{
                     $('#timeNode').val(value);
-                    $('.timedDescribe').html(`任务将在${value}立即扫描`);
+                    $('.timedDescribe').html(`Tasks will be scanned at ${value}.`);
                     $('.timedDescribe').show();
                     $('#showdate').addClass('showguanbi');
                     taskQueue.changeTime(value);
@@ -269,7 +269,7 @@
             let queue = taskQueue.getQueue();
             if(queue.timeNode){
                 $('#timeNode').val(queue.timeNode);
-                $('.timedDescribe').html(`任务将在${queue.timeNode}立即扫描`);
+                $('.timedDescribe').html(`Tasks will be scanned at ${queue.timeNode}.`);
                 $('.timedDescribe').show();
                 $('#showdate').addClass('showguanbi');
             }else{
