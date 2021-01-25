@@ -103,6 +103,23 @@
                         "fileName":'mysql_user_pass_big.dict'
                     }
                 },
+                "MSSQL":{
+                    "mini":{
+                        "model":0,
+                        "value":"精简",
+                        "fileName":'mssql_user_pass_mini.dict'
+                    },
+                    "medium":{
+                        "model":1,
+                        "value":"中等",
+                        "fileName":'mssql_user_pass_medium.dict'
+                    },
+                    "big":{
+                        "model":2,
+                        "value":"复杂",
+                        "fileName":'mssql_user_pass_big.dict'
+                    }
+                },
                 "POSTGRES":{
                     "mini":{
                         "model":0,
@@ -299,6 +316,7 @@
                 let url = this.path.join(parent.rootPathData,'/golib');
                 return {
                     "FTP":this.path.join(url,'/ftp_user_pass.dict'),
+                    "MSSQL":this.path.join(url,'/mssql_user_pass.dict'),
                     "MYSQL":this.path.join(url,'/mysql_user_pass.dict'),
                     "POSTGRES":this.path.join(url,'/postgres_user_pass.dict'),
                     "RDP":this.path.join(url,'/rdp_user_pass.dict'),

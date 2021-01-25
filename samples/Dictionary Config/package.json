@@ -2,9 +2,9 @@
     "name": "Dictionary Config",
     "publisher": "GobySec",
     "description": "对Goby内置的暴力破解漏洞进行字典替换，可批量替换与自定义替换。",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "icon": "./src/assets/img/dictionaries.png",
-    "engines": "1.8.230",
+    "engines": "1.8.237",
     "initEvents": "",
     "main": "./src/extension.js",
     "contributes": {

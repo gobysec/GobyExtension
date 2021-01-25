@@ -6,10 +6,10 @@
 
 2.1 批量替换
 
-![](https://gobies.org/DictionaryConfig_batch.gif)
+![](https://gobies.org/DictionaryConfig_batch_1.gif)
 
 2.2 自定义替换
 
-![](https://gobies.org/DictionaryConfig_userDefined.gif)
+![](https://gobies.org/DictionaryConfig_userDefined_1.gif)
 
 3.Github: [https://github.com/gobysec/GobyExtension/tree/master/samples/Dictionary Config](https://github.com/gobysec/GobyExtension/tree/master/samples/Dictionary%20Config)，也可以从git上下载插件，手动放入到 /extensions 目录，然后重启Goby

@@ -89,7 +89,7 @@ input.el-input__inner::-webkit-input-placeholder{
     border-color: var(--primaryBorder-color)!important;
 }
 .el-form-item{
-    margin-bottom: 14px;
+    margin-bottom: 10px;
 }
 .el-form-item__label,.el-form-item__content{
     line-height: 30px;
