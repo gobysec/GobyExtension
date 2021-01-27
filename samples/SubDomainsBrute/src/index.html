@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>子域名爆破</title>
+  <link rel="icon" href="./assets/img/logo.png" type="image/x-icon">
   <link rel="stylesheet" href="assets/lib/layui/css/layui.css">
   <link rel="stylesheet" href="assets/css/base.css">
   <link rel="stylesheet" href="assets/font/iconfont.css">
@@ -17,9 +18,22 @@
         class="layui-input">
       <span class="fofa-search"><i class="iconfont iconfangdajing"></i></span>
     </div>
-    <button class="layui-btn export-ip fr" lay-submit lay-filter="formDemo">导入子域名</button>
+    
+    <div class="daorudaochu">
+      <div>
+        <button class="layui-btn aa fr" lay-submit lay-filter="formDemo">导入 / 导出</button>
+        <i class="layui-edge"></i> 
+      </div>
+      <ul class="nav">
+        <li class="export-ip">子域名导入Goby</li>
+        <li class="export-file">子域名导出</li>
+      </ul>
+    </div>
   </div>
   <p class="progress-info"><span class="num">0</span>/<span class="total">3000</span></p>
+  <div class="loading">
+    <i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop"></i>
+  </div>
   <div class="layui-form layui-form-item">
     <select lay-filter="dict" id="dictType">
       <option value="0" selected>默认</option>
@@ -39,157 +53,337 @@
       </tbody>
     </table>
   </div>
-
-  <script src="assets/js/jquery-3.3.1.min.js"></script>
-  <script src="assets/js/jquery.base64.js"></script>
-  <script src="assets/lib/layui/layui.all.js"></script>
+  <script src="./assets/lib/layui/layui.all.js"></script>
   <script>
-    let goby = parent.goby; // 获取GobyAPi
-    let results = []; // 定义搜索结果数组
-    let userDictFilePath = parent.goby.getConfiguration("dictFilePath");
-    let isFinish = true;
-
-    // 获取iframe的参数
-    function GetIframeQueryString(name, id) {
-      var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
-      var r = window.parent.document.getElementById(id).contentWindow.location.search.substr(1).match(reg);
-      if (r != null) {
-        return decodeURI(r[2]);
+    layui.use(['layer','jquery','element'],()=>{
+      var $ = layui.$,
+        layer = layui.layer,
+        element = layui.element;
+      let fs = require('fs');
+      
+      //let goby = parent.goby; // 获取GobyAPi
+      let results = []; // 定义搜索结果数组
+      // let userDictFilePath = parent.goby.getConfiguration("dictFilePath");
+      let userDictFilePath = ()=>{
+        return new Promise((resolve,reject)=>{
+          opener.postMessage({
+            target:'subDomainsBrute',
+            api:'getConfiguration',
+            val:['dictFilePath']
+          })
+          window.addEventListener('message',(event)=>{
+            if(event.data.target=='getConfiguration'){
+              resolve(event.data);
+            }else{
+              reject()
+            }
+          },false)
+        })
+          
       }
-      return null;
-    }
+      let isFinish = true;
+      let dictSize = 0;
+      
+      // 获取iframe的参数
+      function GetIframeQueryString(name, id) {
+        var reg = new RegExp("(^|&)" + "url" + "=([^&]*)(&|$)"); // 构造一个含有目标参数的正则表达式对象
+        var r = window.location.search.substr(1).match(reg);  // 匹配目标参数
+        if (r != null) return decodeURI(r[2]); return null; // 返回参数值
+      }
 
-    // 监听select事件
-    $("#dictType").on("change", function() {
-      readDict();
-    });
+      // 监听select事件
+      $("#dictType").on("change", function() {
+        readDict();
+      });
 
-    // 读取字典内容
-    function readDict() {
-      let dictType = $("#dictType").val();
-      if (dictType == 0) {
-        // 获取__dirname
-        let dirname = GetIframeQueryString("curDirname", "goby-iframe");
-        var dict = parent.fs.readFileSync(dirname + "/dict.txt", 'utf-8');
-      } else {
-        if (userDictFilePath) {
-          var dict = parent.fs.readFileSync(userDictFilePath, 'utf-8');
+      // 读取字典内容
+      async function readDict() {
+        let dictType = $("#dictType").val();
+        if (dictType == 0) {
+          // 获取__dirname
+          let dirname = __dirname;
+          var dict = fs.readFileSync(dirname + "/dict.txt", 'utf-8');
+          dictSize = dictSizeFn(dirname + "/dict.txt");
+          var dictArr = dict.split("\n");
+          return dictArr;
         } else {
-          goby.showConfigurationDia();
-          goby.closeIframeDia();
+          let path = await userDictFilePath();
+          if (path.info){
+            var dict = fs.readFileSync(path.info, 'utf-8');
+            dictSize = dictSizeFn(path.info);
+            var dictArr = dict.split("\n");
+            return dictArr;
+          } else {
+            // goby.showConfigurationDia();
+            // goby.closeIframeDia();
+            opener.postMessage({
+                target:'subDomainsBrute',
+                api:'showConfigurationDia',
+                val:[]
+            })
+            // opener.postMessage({
+            //     target:'subDomainsBrute',
+            //     api:'closeIframeDia',
+            //     val:[]
+            // })
+            return false;
+          }
         }
       }
-      var dictArr = dict.split("\n");
-      $(".total").html(dictArr.length);
-      return dictArr;
-    }
 
-    // 请求某个二级域名是否存在
-    function isAlive(domain) {
-      let ajaxIns = $.ajax({
-        type: "get",
-        timeout: 120000,
-        url: "http://" + domain,
-        contentType: 'application/x-www-form-urlencoded;charset=utf-8',
-        dataType: "json",
-        success(res) {
-          if (res.status == 200) {
-            let html = `
-            <tr>
-              <td>${domain}</td>
-            </tr>
-            `;
-            results.push(domain);
-            $("#ip-table tbody").append(html);
+      // 字典大小限制
+      function dictSizeFn(path) {
+        var stat = fs.statSync(path);
+        return stat.size;
+      }
+
+      // 爆破
+      async function subDomain() {
+        if (isFinish) {
+          let dictArr = await readDict().then(res=>res).then(err=>err);
+          if(!dictArr){
+            window.close();
+            return;
           }
-        },
-        error(err) {
-          if (err.status == 200) {
-            let html = `
-            <tr>
-              <td>${domain}</td>
-            </tr>
-            `;
-            results.push(domain);
-            $("#ip-table tbody").append(html);
+          let domain = $("#fofa-input").val();
+          if (dictSize <= 50000000) {
+            if (domain.trim()) {
+              results=[];
+              $(".loading").show();
+              $(".total").html(dictArr.length);
+              $(".num").html(0);
+              $("#ip-table tbody").html("");
+              isFinish = false;
+              dictArr.forEach((v, k) => {
+                v = v.trim();
+                dictArr[k] = v + "." + domain;
+              })
+              $(".loading").hide();
+              pipRequest(dictArr, function (res) {
+              })
+            } else {
+              // goby.showInformationMessage("请输入根域名");
+              opener.postMessage({
+                target:'subDomainsBrute',
+                api:'showInformationMessage',
+                val:['请输入根域名']
+              })
+            }
+          } else {
+            // goby.showInformationMessage("字典大小不能超过50M");
+            opener.postMessage({
+                target:'subDomainsBrute',
+                api:'showInformationMessage',
+                val:['字典大小不能超过50M']
+            })
           }
-        },
-        complete: function (XMLHttpRequest, status) { // 当请求完成时调用函数
-          let num = Number($(".num").html()) + 1;
-          $(".num").html(num);
-          if (status == 'timeout') {
-            console.log(domain, ajaxIns, "ajaxIns");
-            ajaxIns.abort(); // 取消请求
+        } else {
+          // goby.showInformationMessage("正在爆破中，请稍等");
+          opener.postMessage({
+              target:'subDomainsBrute',
+              api:'showInformationMessage',
+              val:['正在爆破中，请稍等']
+          })
+        }
+      }
+
+      // 最多同时发送400个请求
+      const pipRequest = (idsarr, callback) => {
+          const start = Date.now();
+
+          const len = idsarr.length;
+          const result = []; // 结果集
+          const ajaxMax = 400; // 最多允许同时执行的ajax次数
+          let ajaxNum = 0; // 当前有多少ajax正在执行
+
+          const ajax = (domain) => new Promise((resolve, reject) => {
+            let ajaxIns = $.ajax({
+              type: "get",
+              timeout: 60000,
+              url: "http://" + domain,
+              contentType: 'application/x-www-form-urlencoded;charset=utf-8',
+              dataType: "json",
+              success(res) {
+                console.log(res);
+                if (res.status == 200) {
+                  let html = `
+                <tr>
+                  <td>${domain}</td>
+                </tr>
+                `;
+                  results.push(domain);
+                  $("#ip-table tbody").append(html);
+                }
+              },
+              error(err) {
+                if (err.status == 200) {
+                  let html = `
+                <tr>
+                  <td>${domain}</td>
+                </tr>
+                `;
+                  results.push(domain);
+                  $("#ip-table tbody").append(html);
+                }
+              },
+              complete: function (XMLHttpRequest, status) { // 当请求完成时调用函数
+                let num = Number($(".num").html()) + 1;
+                $(".num").html(num);
+                resolve(domain);
+                if (status == 'timeout') {
+                  ajaxIns.abort(); // 取消请求
+                }
+                if (num == $(".total").html()) {
+                  isFinish = true;
+                  // goby.showSuccessMessage("爆破结束");
+                  opener.postMessage({
+                      target:'subDomainsBrute',
+                      api:'showSuccessMessage',
+                      val:['爆破结束']
+                  })
+                }
+              }
+            });
+          })
+
+          const main = (ids) => {
+            while (ajaxNum <= ajaxMax && ids.length > 0) { // 只要有位置就发请求
+              ajaxNum++;
+              const now = ids.shift() // 发了一个请求
+              ajax(now).then(res => {
+                result.push(res);
+                main(ids);
+              }).catch((_) => {
+                ids.push(now); // 失败的请求重新加入队列
+              }).finally(() => {
+                ajaxNum--;
+                (
+                  result.length === len
+                  && typeof callback === 'function'
+                  && callback(result)
+                );
+              })
+
+            }
           }
-          if (num == $(".total").html()) {
-            // thrDomain();
-            isFinish = true;
-            goby.showSuccessMessage("爆破结束");
-          }
+
+          main(idsarr);
+      }
+
+      // 回车搜索
+      $("#fofa-input").keydown(function(e) {
+        if(e.keyCode == 13) {  
+          subDomain();
         }
       });
-    }
 
-    // 爆破
-    function subDomain() {
-      if (isFinish) {
-        isFinish = false;
-        $(".num").html(0);
-        $("#ip-table tbody").html("");
-        let dictArr = readDict();
-        let domain = $("#fofa-input").val();
-        if (domain.trim()) {
-          for(var i = 0; i < dictArr.length; i++) {
-            $(function(i) {
-              isAlive(dictArr[i]+"."+domain);
-            }(i))
-          }
+      // 按钮搜索
+      $(".fofa-search").click(function() {
+        subDomain();
+      });
+
+      // 导出Ip和端口
+      $(".export-ip").on("click", function() {
+        
+        if (results && results.length > 0) {
+          let ips = [];
+          results.forEach((v, k) => {
+            ips.push(v);
+          })
+          
+          // goby.addScanIps(ips, 0);
+          // goby.showSuccessMessage("导入扫描对象成功");
+          // goby.closeIframeDia();
+          opener.postMessage({
+              target:'subDomainsBrute',
+              api:'addScanIps',
+              val:[ips,0]
+          })
+          opener.postMessage({
+              target:'subDomainsBrute',
+              api:'showSuccessMessage',
+              val:['导入扫描对象成功']
+          })
+          // opener.postMessage({
+          //     target:'subDomainsBrute',
+          //     api:'closeIframeDia',
+          //     val:[]
+          // })
         } else {
-          goby.showInformationMessage("请输入根域名");
-        }
-      } else {
-        goby.showInformationMessage("正在爆破中，请稍等");
-      }
-    }
-
-    // 三级域名爆破
-    function thrDomain() {
-      let dictArr = readDict();
-      results.forEach((v, k) => {
-        for(var i = 0; i < dictArr.length; i++) {
-          $(function(i) {
-            isAlive(dictArr[i]+"."+v);
-          }(i))
+          // goby.showInformationMessage("导入对象不能为空");
+          opener.postMessage({
+              target:'subDomainsBrute',
+              api:'showInformationMessage',
+              val:['导入对象不能为空']
+          })
         }
       })
-    }
-    
-    // 回车搜索
-    $("#fofa-input").keydown(function(e) {
-      if(e.keyCode == 13) {  
-        subDomain();
+      $('.export-file').on('click',function(){
+        if (results && results.length > 0) {
+          let ips = [];
+          results.forEach((v, k) => {
+            ips.push(v);
+          })
+          exportRaw('subdomain.txt',ips.join('\n'));
+        }else{
+          opener.postMessage({
+              target:'subDomainsBrute',
+              api:'showInformationMessage',
+              val:['导出对象不能为空']
+          })
+        }
+        
+      })
+      $('.daorudaochu>div').on('click',function(){
+          if(!this.lock){
+            $('.daorudaochu > div > .layui-edge').css({
+              transform: 'rotate(180deg)'
+            })
+            $('.aa').focus();
+            $('.nav').show();
+            $('.nav').addClass('hh');
+            this.lock=true;
+            return false;
+          }else{
+            $('.daorudaochu > div > .layui-edge').css({
+              transform: 'rotate(0deg)'
+            })
+            $('.nav').remove('hh');
+            $('.nav').hide();
+            this.lock=false;
+            return false;
+          }
+          
+          
+      })
+      $('.aa').on('blur',function(){
+        setTimeout(()=>{
+          $('.daorudaochu > div > .layui-edge').css({
+              transform: 'rotate(0deg)'
+            })
+          $('.nav').remove('hh');
+          $('.nav').hide();
+          this.parentNode.lock=false;
+        },200)
+        return false;
+      })
+      
+      function fakeClick(obj) {
+        var ev = document.createEvent("MouseEvents");
+        ev.initMouseEvent("click", true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+        obj.dispatchEvent(ev);
       }
-    });
 
-    // 按钮搜索
-    $(".fofa-search").click(function() {
-      subDomain();
-    });
-
-    // 导出Ip和端口
-    $(".export-ip").on("click", function() {
-      if (results && results.length > 0) {
-        let ips = [];
-        results.forEach((v, k) => {
-          ips.push(v);
-        })
-        goby.addScanIps(ips, 0);
-        goby.showSuccessMessage("导入扫描对象成功");
-        goby.closeIframeDia();
-      } else {
-        goby.showInformationMessage("导入对象不能为空");
+      function exportRaw(name, data) {
+        var urlObject = window.URL || window.webkitURL || window;
+        var export_blob = new Blob([data]);
+        var save_link = document.createElementNS("http://www.w3.org/1999/xhtml", "a");
+        save_link.href = urlObject.createObjectURL(export_blob);
+        save_link.download = name;
+        fakeClick(save_link);
       }
     })
+    
   </script>
 </body>
 

@@ -9,6 +9,8 @@
 
   *** 需要注意：自定义字典必须为txt文件，换行分割 ***
 
+  *** 自定义字典最大为50M ***
+
 ![](static/img/extension/ex-subdomain1.gif)
 
 4.Github: [https://github.com/gobysec/GobyExtension/tree/master/samples/SubDomainsBrute](https://github.com/gobysec/GobyExtension/tree/master/samples/SubDomainsBrute)，也可以从git上下载插件，手动放入到 /extensions 目录，然后重启Goby
