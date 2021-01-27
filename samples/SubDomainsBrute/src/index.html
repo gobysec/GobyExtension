@@ -356,17 +356,14 @@
           
           
       })
-      $('.aa').on('blur',function(){
-        setTimeout(()=>{
-          $('.daorudaochu > div > .layui-edge').css({
+      window.addEventListener('click',function(){
+        $('.daorudaochu > div > .layui-edge').css({
               transform: 'rotate(0deg)'
-            })
-          $('.nav').remove('hh');
-          $('.nav').hide();
-          this.parentNode.lock=false;
-        },200)
-        return false;
-      })
+        })
+        $('.nav').remove('hh');
+        $('.nav').hide();
+        document.querySelector('.daorudaochu>div').lock = false;
+      },false)
       
       function fakeClick(obj) {
         var ev = document.createEvent("MouseEvents");
