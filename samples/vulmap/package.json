@@ -1,6 +1,6 @@
 {
     "name": "vulmap",
-    "publisher": "zhzyker(之乎者也)",
+    "publisher": "zhzyker",
     "description": "Vulmap - Web 漏洞扫描和验证工具(填补goby的poc)",
     "version": "0.1.0",
     "icon": "./src/assets/vulmap-logo.png",
