@@ -1,0 +1,54 @@
+{
+    "name": "SendMail",
+    "publisher": "GobySec",
+    "description": "当扫描任务结束后，给用户发送邮件通知用户扫描完成，并且将资产和漏洞分别生成excel文件发给用户",
+    "version": "0.1.0",
+    "icon": "./src/email.png",
+    "engines": "1.6.170",
+    "initEvents": "",
+    "main": "./src/extension.js",
+    "contributes": {
+        "configuration": {
+            " Smtp ": {
+                "type": "string",
+                "default": "",
+                "description": "请输入邮箱SMTP服务器地址"
+            },
+            " Port ": {
+                "type": "string",
+                "default": "",
+                "description": "请输入邮箱SMTP服务器的端口"
+            },
+            " Email ": {
+                "type": "string",
+                "default": "",
+                "description": "请输入邮箱地址"
+            },
+            " Auth Code ": {
+                "type": "string",
+                "default": "",
+                "description": "请输入邮箱的授权码"
+            },
+            " Switch ": {
+                "type": "string",
+                "default": "on",
+                "description": "请输入on / off 来开启或关闭SendMail插件"
+            }
+        },
+        "views":{
+            "toolbar": [
+                {
+                    "command": "test",
+                    "title": "SendMail",
+                    "icon": "./src/email.png"
+                }
+            ]
+        }
+    },
+    "scripts": {},
+    "devDependencies": {},
+    "dependencies": {
+        "nodemailer": "^6.5.0",
+        "xlsx": "^0.16.9"
+    }
+}
