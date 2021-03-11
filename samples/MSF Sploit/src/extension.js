@@ -38,7 +38,9 @@ function activate(content) {
             cp.exec(cmd)
         } else if (os.type() == 'Linux') {
             //Linux
-            cp.exec(`bash -c "${url}"`)
+            //cp.exec(`bash -c "${url}"`)
+            cp.exec(`echo '${url}' > msf_sploit.sh`)
+            cp.exec(`x-terminal-emulator -e sh msf_sploit.sh`)
         }
     });
 

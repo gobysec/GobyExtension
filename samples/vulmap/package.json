@@ -1,0 +1,47 @@
+{
+    "name": "vulmap",
+    "publisher": "zhzyker",
+    "description": "Vulmap - Web 漏洞扫描和验证工具(填补goby的poc)",
+    "version": "0.1.0",
+    "icon": "./src/assets/vulmap-logo.png",
+    "engines": "1.8.230",
+    "initEvents": "",
+    "main": "./src/extension.js",
+    "contributes": {
+      "configuration": {
+        "vulmap.py 位置": {
+          "type": "string",
+          "default": "",
+          "description": "请输入vulmap.py的位置(示例:/home/zhzy/vulmap.py)",
+          "fromDialog": true
+        },
+        "python3 命令或位置": {
+          "type": "string",
+          "default": "python3",
+          "description": "请输入在当前环境下的Python3的命令或位置，也可以是绝对路径(示例:python3 or /usr/bin/python3)"
+        }
+      },
+        "views": {
+            "ipDetail": {
+              "bannerTop": [
+                {
+                  "command": "vulmap_scan",
+                  "title": "vulmap",
+                  "icon": "./src/assets/vulmap-logo.png",
+                  "visible": "VulmapCheck"
+                }
+              ]
+            },
+            "webfinder": [
+                {
+                    "command": "vulmap_scan",
+                    "icon": "./src/assets/vulmap-logo.png",
+                    "title": "vulmap"
+                }
+            ]
+        }
+    },
+    "scripts": {},
+    "devDependencies": {},
+    "dependencies": {}
+}
