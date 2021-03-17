@@ -1,0 +1,25 @@
+{
+    "name": "Debug",
+    "publisher": "GobySec",
+    "description": "打开Goby的Debug窗口，开发插件不用再下载开发版。",
+    "version": "0.1.0",
+    "icon": "./src/debug.png",
+    "engines": "1.6.170",
+    "initEvents": "",
+    "main": "./src/extension.js",
+    "contributes": {
+        "views": {
+            "toolbar":[
+                {
+                    "command":"openDevTools",
+                    "title":"Debug",
+                    "icon":"./src/debug.png",
+                    "tips":"Debug"
+                }
+            ]
+        }
+    },
+    "scripts": {},
+    "devDependencies": {},
+    "dependencies": {}
+}
