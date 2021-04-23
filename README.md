@@ -1672,6 +1672,9 @@ devDependencies	| |Object	|等同于npm的devDependencies
             "dependencies": {}
           }
 ```
+
+## 主题开发规范
+
 <table>
 	  	<tr>
 			<th ><img width=200/><br>名称<br><img width=200/></th>
