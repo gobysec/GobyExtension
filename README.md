@@ -2209,3 +2209,5 @@ devDependencies	| |Object	|等同于npm的devDependencies
 			</td>
 		</tr>
 	  </table>
+	  
+![theme.png](https://gobies.org/static_front/img/themeDoc.png)
