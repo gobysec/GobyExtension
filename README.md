@@ -1688,7 +1688,7 @@ devDependencies	| |Object	|等同于npm的devDependencies
 				</div>
 				<div>
 					<span class="bold">1.背景色</span>
-					<ul>
+					<div>
 						<li>
 							<span >
 								1) 启动页背景
@@ -1735,7 +1735,7 @@ devDependencies	| |Object	|等同于npm的devDependencies
 								7) IP库：导航栏
 							</span>
 						</li>
-					</ul>
+					</div>
 				</div>
 				<div>
 					<span class="bold">2.按钮</span>
