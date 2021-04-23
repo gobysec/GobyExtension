@@ -1672,9 +1672,9 @@ devDependencies	| |Object	|等同于npm的devDependencies
             "dependencies": {}
           }
 ```
-<table class="theme_table">
+<table>
 	  	<tr>
-			<th style="width: 118px;"><img width=200/><br>名称<br><img width=200/></th>
+			<th ><img width=200/><br>名称<br><img width=200/></th>
 			<th>变量</th>
 			<th>使用场景</th>
 		</tr>
@@ -1683,11 +1683,11 @@ devDependencies	| |Object	|等同于npm的devDependencies
 			<td>main</td>
 			<td>
 				<div>
-					<span class="bold">品牌色：</span>
+					<span>品牌色：</span>
 					<span>网站全局使用； 用于：页面模块背景色/可点击或部分提亮文字/按钮/线条选中状态</span>
 				</div>
 				<div>
-					<span class="bold">1.背景色</span>
+					<span>1.背景色</span>
 					<ul>
 						<li>
 							<span >
@@ -1738,7 +1738,7 @@ devDependencies	| |Object	|等同于npm的devDependencies
 					</ul>
 				</div>
 				<div>
-					<span class="bold">2.按钮</span>
+					<span>2.按钮</span>
 					<ul>
 						<li>
 							<span>
@@ -1816,7 +1816,7 @@ devDependencies	| |Object	|等同于npm的devDependencies
 					</ul>
 				</div>
 				<div>
-					<span class="bold">3.文字</span>
+					<span>3.文字</span>
 					<ul>
 						<li>
 							<span>
@@ -1861,7 +1861,7 @@ devDependencies	| |Object	|等同于npm的devDependencies
 					</ul>
 				</div>
 				<div>
-					<span class="bold">
+					<span>
 						4.线条选中
 					</span>
 					<ul>
@@ -1884,11 +1884,11 @@ devDependencies	| |Object	|等同于npm的devDependencies
 			<td>primaryFont</td>
 			<td>
 				<div>
-					<span class="bold">一级字体色：</span>
+					<span>一级字体色：</span>
 					<span>: 用于界面中重量级文字信息</span>
 				</div>
 				<div>
-					<span class="bold">1.文字</span>
+					<span>1.文字</span>
 					<ul>
 						<li>
 							<span>
@@ -1938,7 +1938,7 @@ devDependencies	| |Object	|等同于npm的devDependencies
 					</ul>
 				</div>
 				<div>
-					<span class="bold">2.按钮</span>
+					<span>2.按钮</span>
 					<ul>
 						<li>
 							<span>
@@ -1954,11 +1954,11 @@ devDependencies	| |Object	|等同于npm的devDependencies
 			<td>secondaryFont</td>
 			<td>
 				<div>
-					<span class="bold">二级字体色：</span>
+					<span>二级字体色：</span>
 					<span>用于界面中普通级文字信息，标题文字色</span>
 				</div>
 				<div>
-					<span class="bold">1.文字</span>
+					<span>1.文字</span>
 					<ul>
 						<li>
 							<span>
@@ -2009,11 +2009,11 @@ devDependencies	| |Object	|等同于npm的devDependencies
 			<td>level3Font</td>
 			<td>
 				<div>
-					<span class="bold">三级字体色：</span>
+					<span>三级字体色：</span>
 					<span>用于界面中辅助次要文字信息</span>
 				</div>
 				<div>
-					<span class="bold">1.文字</span>
+					<span>1.文字</span>
 					<ul>
 						<li>
 							<span>
@@ -2053,7 +2053,7 @@ devDependencies	| |Object	|等同于npm的devDependencies
 					</ul>
 				</div>
 				<div>
-					<span class="bold">2.按钮</span>
+					<span>2.按钮</span>
 					<ul>
 						<li>
 							<span>
@@ -2069,7 +2069,7 @@ devDependencies	| |Object	|等同于npm的devDependencies
 			<td>primaryBorder</td>
 			<td>
 				<div>
-					<span class="bold">一级边框颜色：</span>
+					<span>一级边框颜色：</span>
 					<span>表单边框默认色</span>
 				</div>
 			</td>
@@ -2079,7 +2079,7 @@ devDependencies	| |Object	|等同于npm的devDependencies
 			<td>secondaryBorder</td>
 			<td>
 				<div>
-					<span class="bold">二级边框颜色：</span>
+					<span>二级边框颜色：</span>
 					<span>表单边框hover色</span>
 				</div>
 			</td>
@@ -2089,7 +2089,7 @@ devDependencies	| |Object	|等同于npm的devDependencies
 			<td>PrimaryBackground</td>
 			<td>
 				<div>
-					<span class="bold">一级背景色：</span>
+					<span>一级背景色：</span>
 					<span>页面整体背景色</span>
 				</div>
 			</td>
@@ -2099,7 +2099,7 @@ devDependencies	| |Object	|等同于npm的devDependencies
 			<td>Secondarybackground</td>
 			<td>
 				<div>
-					<span class="bold">二级背景色：</span>
+					<span>二级背景色：</span>
 					<span>内容模块背景色</span>
 				</div>
 			</td>
@@ -2109,7 +2109,7 @@ devDependencies	| |Object	|等同于npm的devDependencies
 			<td>Level3background</td>
 			<td>
 				<div>
-					<span class="bold">三级背景色：</span>
+					<span>三级背景色：</span>
 					<span>弹窗、下拉背景颜色</span>
 				</div>
 			</td>
@@ -2119,7 +2119,7 @@ devDependencies	| |Object	|等同于npm的devDependencies
 			<td>Level4background</td>
 			<td>
 				<div>
-					<span class="bold">四级背景色：</span>
+					<span>四级背景色：</span>
 					<span>下拉选项背景hover/统计图背景色/tab表格头</span>
 				</div>
 			</td>
