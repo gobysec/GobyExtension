@@ -1672,6 +1672,7 @@ devDependencies	| |Object	|等同于npm的devDependencies
             "dependencies": {}
           }
 ```
+<table>
 <tr>
 			<th style="width: 118px;">名称</th>
 			<th>变量</th>
@@ -1878,3 +1879,4 @@ devDependencies	| |Object	|等同于npm的devDependencies
 				</div>
 			</td>
 		</tr>
+</table>
