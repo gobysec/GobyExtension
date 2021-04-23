@@ -1672,3 +1672,209 @@ devDependencies	| |Object	|等同于npm的devDependencies
             "dependencies": {}
           }
 ```
+<tr>
+			<th style="width: 118px;">名称</th>
+			<th>变量</th>
+			<th>使用场景</th>
+		</tr>
+	  	<tr>
+			<td>主色</td>
+			<td>main</td>
+			<td>
+				<div>
+					<span class="bold">品牌色：</span>
+					<span>网站全局使用； 用于：页面模块背景色/可点击或部分提亮文字/按钮/线条选中状态</span>
+				</div>
+				<div>
+					<span class="bold">1.背景色</span>
+					<ul>
+						<li>
+							<span >
+								1) 启动页背景
+							</span>
+						</li>
+						<li>
+							<span>
+								2) 扫描结果页面：
+							</span>
+							<ol>
+								<li><span class="theme_dian">•</span> 主导航栏背景</li>
+								<li><span class="theme_dian">•</span> 右侧上部：（资产，IP...）4个模块背景色</li>
+								<li><span class="theme_dian">•</span> 右侧中间：饼形统计图背景色 </li>
+							</ol>
+						</li>
+						<li>
+							<span>
+								3) 报告页面+预览页面：
+							</span>
+							<ol>
+								<li><span class="theme_dian">•</span> 任务信息模块：数据统计背景色</li>
+								<li><span class="theme_dian">•</span> 资产分析模块：饼状图颜色</li>
+								<li><span class="theme_dian">•</span> 预览页面：封面背景</li>
+								<li><span class="theme_dian">•</span> 菜单展开弹窗顶部背景颜色</li>
+							</ol>
+						</li>
+						<li>
+							<span>
+								4) IP详情页面：IP banner （端口：协议）
+							</span>
+						</li>
+						<li>
+							<span>
+								5) 功能区：新建扫描入口+子分类的图标
+							</span>
+						</li>
+						<li>
+							<span>
+								6) 版本更新弹窗：顶部标题栏
+							</span>
+						</li>
+						<li>
+							<span>
+								7) IP库：导航栏
+							</span>
+						</li>
+					</ul>
+				</div>
+				<div>
+					<span class="bold">2.按钮</span>
+					<ul>
+						<li>
+							<span>
+								1) 翻页选中
+							</span>
+						</li>
+						<li>
+							<span>
+								2) 开始扫描
+							</span>
+						</li>
+						<li>
+							<span>
+								3) 报告页面
+							</span>
+							<ol>
+								<li><span class="theme_dian">•</span> 菜单按钮背景色</li>
+								<li><span class="theme_dian">•</span> 编辑</li>
+							</ol>
+						</li>
+						<li>
+							<span>
+								4) 搜索按钮hover
+							</span>
+						</li>
+						<li>
+							<span>
+								5) 确认/扫描/开始按钮/保存/新建扫描/漏扫/扫描配置自定义/端口/提示/报错
+							</span>
+						</li>
+						<li>
+							<span>
+								6) IP详情页面：
+							</span>
+							<ol>
+								<li><span class="theme_dian">•</span> IP banner 链接</li>
+								<li><span class="theme_dian">•</span> 添加证书</li>
+								<li><span class="theme_dian">•</span> 问题反馈</li>
+							</ol>
+						</li>
+						<li>
+							<span>
+								7) 扫描配置自定义端口下拉：自定义列表 - 编辑+删除
+							</span>
+						</li>
+						<li>
+							<span>
+								8) web finder：
+							</span>
+							<ol>
+								<li><span class="theme_dian">•</span> 导出按钮</li>
+								<li><span class="theme_dian">•</span> 网站截图图标+链接图标</li>
+							</ol>
+						</li>
+						<li>
+							<span>
+								9) 申请license：复制
+							</span>
+						</li>
+						<li>
+							<span>
+								10) 漏洞列表：筛选
+							</span>
+						</li>
+						<li>
+							<span>
+								11) IP库：start+展示形式+更新+下载
+							</span>
+						</li>
+						<li>
+							<span>
+								12) 报错日志-更新、以后、修复、安装
+							</span>
+						</li>
+					</ul>
+				</div>
+				<div>
+					<span class="bold">3.文字</span>
+					<ul>
+						<li>
+							<span>
+								1) 可点击 - 返回back
+							</span>
+						</li>
+						<li>
+							<span>
+								2) 可点击 - 资产列表-总资产
+							</span>
+						</li>
+						<li>
+							<span>
+								3) 可点击 - tab切换选中颜色文字+下划线
+							</span>
+						</li>
+						<li>
+							<span>
+								4) 可点击 - 扫描首页：历史任务hover
+							</span>
+						</li>
+						<li>
+							<span>
+								5) 提亮：关于goby：@人名
+							</span>
+						</li>
+						<li>
+							<span>
+								6) 可点击 - 扫描配置页：高级配置折叠
+							</span>
+						</li>
+						<li>
+							<span>
+								7) 可点击 - 申请license (申请/导入)
+							</span>
+						</li>
+						<li>
+							<span>
+								8) 漏洞更新： 漏洞名称
+							</span>
+						</li>
+					</ul>
+				</div>
+				<div>
+					<span class="bold">
+						4.线条选中
+					</span>
+					<ul>
+						<li>
+							<span>
+								1) 搜索框选中
+							</span>
+						</li>
+						<li>
+							<span>
+								2) 新建/设置/添加poc/添加字典/申请license表单等页面表单边框选中
+							</span>
+						</li>
+					</ul>
+				</div>
+			</td>
+		</tr>
