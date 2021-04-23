@@ -1674,7 +1674,7 @@ devDependencies	| |Object	|等同于npm的devDependencies
 ```
 <table class="theme_table">
 	  	<tr>
-			<th style="width: 118px;">名称</th>
+			<th style="width: 118px;"><img width=200/><br>名称<br><img width=200/></th>
 			<th>变量</th>
 			<th>使用场景</th>
 		</tr>
