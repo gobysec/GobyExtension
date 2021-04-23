@@ -1689,11 +1689,11 @@ devDependencies	| |Object	|等同于npm的devDependencies
 				<div>
 					<span class="bold">1.背景色</span>
 					<div>
-						<li>
+						<p>
 							<span >
 								1) 启动页背景
 							</span>
-						</li>
+						</p>
 						<li>
 							<span>
 								2) 扫描结果页面：
