@@ -1265,7 +1265,7 @@ type|Number	|	|是|添加的方式，0是追加，1是覆盖
 
 返回|类型|说明
 --|:--|:--
-portList|Promise|是一个Promise对象，可以通过then、catch分别捕获成功与失败的数据，也可以通过es7的async、await来获取其数据
+portList|Promise|是一个Promise对象，可以通过then、catch分别捕获成功与失败的数据，也可以通过es8的async、await来获取其数据
 
 **返回Promise对象数据示例(部分)**
 
@@ -1295,7 +1295,7 @@ portList|Promise|是一个Promise对象，可以通过then、catch分别捕获�
 
 返回|类型|说明
 --|:--|:--
-vulnerabilityList|Promise|是一个Promise对象，可以通过then、catch分别捕获成功与失败的数据，也可以通过es7的async、await来获取其数据
+vulnerabilityList|Promise|是一个Promise对象，可以通过then、catch分别捕获成功与失败的数据，也可以通过es8的async、await来获取其数据
 
 **返回Promise对象数据示例(部分)**
 
@@ -1365,7 +1365,7 @@ vulnerabilityList|Promise|是一个Promise对象，可以通过then、catch分�
 
 返回|类型|说明
 --|:--|:--
-orderList|Promise|是一个Promise对象，可以通过then、catch分别捕获成功与失败的数据，也可以通过es7的async、await来获取其数据
+orderList|Promise|是一个Promise对象，可以通过then、catch分别捕获成功与失败的数据，也可以通过es8的async、await来获取其数据
 
 **返回Promise对象数据示例**
 
@@ -1413,7 +1413,7 @@ vulnerability|Object|{}|否|当vulnerabilityType为3时，该参数有效，参�
 
 返回|类型|说明
 --|:--|:--
-data|Promise|开启扫描返回的信息，是一个Promise对象，可以通过then、catch分别捕获成功与失败的数据，也可以通过es7的async、await来获取其数据
+data|Promise|开启扫描返回的信息，是一个Promise对象，可以通过then、catch分别捕获成功与失败的数据，也可以通过es8的async、await来获取其数据
 
 **返回Promise对象数据示例**
 
@@ -1437,7 +1437,7 @@ data|Promise|开启扫描返回的信息，是一个Promise对象，可以通过
 
 返回|类型|说明
 --|:--|:--
-data|Promise|停止扫描返回的信息，是一个Promise对象，可以通过then、catch分别捕获成功与失败的数据，也可以通过es7的async、await来获取其数据
+data|Promise|停止扫描返回的信息，是一个Promise对象，可以通过then、catch分别捕获成功与失败的数据，也可以通过es8的async、await来获取其数据
 
 **返回Promise对象数据示例**
 
