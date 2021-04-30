@@ -48,9 +48,10 @@ body{
 .layui-tab-title{
     height: auto;
     position: fixed;
-    top: 6px;
+    top: 0px;
     left: 0;
     right: 0;
+    padding-top: 6px;
     background: var(--lv3Background-color);
     z-index: 10;
     border-color: var(--secondaryBorder-color);
@@ -695,4 +696,146 @@ input.timenode::-webkit-input-placeholder{
 }
 .dingshitishi span{
     margin-left: 5px;
+}
+xm-select{
+    border-color: var(--primaryBorder-color)!important;
+    background: transparent!important;
+    line-height: 30px!important;
+    height: 30px!important;
+    box-sizing: border-box;
+    transition: all .3s;
+}
+xm-select:hover{
+    border-color: var(--main-color)!important;
+}
+xm-select > .xm-icon{
+    border-top-color: #C7D3E7!important;
+}
+xm-select > .xm-tips{
+    color: var(--level3Font-color)!important;
+    font-size: 12px!important;
+}
+xm-select > .xm-body{
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%!important;
+    background: var(--lv3Background-color)!important;
+}
+xm-select > .xm-body .scroll-body::-webkit-scrollbar {
+    width: 5px!important;
+    /*竖向滚动条的宽度*/
+    height: 5px!important;
+    /*横向滚动条的高度*/
+}
+
+xm-select > .xm-body .scroll-body::-webkit-scrollbar-track {
+    background-color: transparent!important;
+    -webkit-border-radius: 0!important;
+    border-radius: 0!important;
+}
+xm-select > .xm-body .scroll-body::-webkit-scrollbar-thumb {
+    border-radius: 0!important;
+    background-color:var(--lv4Background-color)!important;
+}
+xm-select > .xm-body .scroll-body::-webkit-scrollbar-thumb:window-inactive {
+    background-color: var(--secondaryBorder-color)!important;
+    -webkit-border-radius: 0!important;
+    border-radius: 0!important;
+}
+xm-select > .xm-body .scroll-body > .xm-option{
+    background: transparent!important;
+}
+xm-select > .xm-body .scroll-body > .xm-option:hover{
+    background: var(--lv4Background-color)!important;
+}
+xm-select > .xm-body .scroll-body > .xm-option i{
+   display: none;
+   border-color: var(--primaryBorder-color)!important;
+   position: relative;
+   transition: all .3s;
+}
+xm-select > .xm-body .scroll-body > .xm-option i::before{
+    content:" "!important;
+    display: block;
+    box-sizing: content-box;
+    border: 1px solid #FFF;
+    border-left: 0;
+    border-top: 0;
+    height: 7px;
+    left: 5px;
+    position: absolute;
+    top: 1px;
+    transform-origin: center;
+    transform: rotate(45deg) scaleY(0);
+    width: 3px;
+}
+xm-select > .xm-body .scroll-body > .selected i::before{
+    content:" "!important;
+    display: block;
+    box-sizing: content-box;
+    border: 1px solid #fff;
+    border-left: 0;
+    border-top: 0;
+    height: 7px;
+    left: 5px;
+    position: absolute;
+    top: 1px;
+    transform-origin: center;
+    transform: rotate(45deg) scaleY(1);
+    width: 3px;
+}
+xm-select > .xm-body .scroll-body > .selected i{
+    border: 1px solid transparent!important;
+    background: var(--main-color);
+}
+xm-select > .xm-body .scroll-body > .xm-group ~ .xm-option i{
+    display: block;
+}
+xm-select > .xm-body .scroll-body > .xm-option > .xm-option-content{
+    font-size: 12px;
+    color: var(--primaryFont-color);
+}
+xm-select > .xm-body .scroll-body > .selected > .xm-option-content{
+    font-weight: 600;
+    color: var(--main-color);
+}
+xm-select > .xm-label .xm-label-block{
+    padding: 0px!important;
+    /* background: var(--primaryBackground-color)!important; */
+    border-radius: 2px;
+    background: transparent!important;
+}
+xm-select .xm-label .scroll .label-content .xm-label-block > span{
+    width: 100%;
+    color: var(--level3Font-color)!important;
+    font-size: 12px!important;
+    white-space: nowrap;
+}
+xm-select .xm-label .scroll .label-content .xm-label-block > i::before{
+    display: none;
+}
+xm-select .xm-label .scroll .label-content[title *= ","] .xm-label-block{
+    background: var(--primaryBackground-color)!important;
+    padding: 0 5px!important;
+}
+xm-select .xm-label .scroll .label-content[title *= ","] .xm-label-block > span{
+    width: 75px!important;
+    display: block!important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--level3Font-color)!important;
+    font-size: 12px;
+}
+xm-select .xm-label .scroll .label-content[title *= ","] .xm-label-block i{
+    color: var(--level3Font-color)!important;
+}
+xm-select .xm-label .scroll .label-content[title *= ","] .xm-label-block i::before{
+    display: block;
+}
+xm-select > .xm-body .xm-group{
+    height: 0;
+    width: 487px;
+    margin: 0 auto;
+    border-bottom: 1px solid var(--level3Font-color);
 }

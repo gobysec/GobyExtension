@@ -44,12 +44,13 @@
                     <div class="Advanced1">
                         <div class="layui-form-item xiangao">
                             <label class="layui-form-label">Vulnerability</label>
-                            <div class="layui-input-block" style="width: 516px;">
-                                <select name="vulnerability" class="vulnerability" lay-verify="required" style="width: 516px;">
+                            <div class="layui-input-block" id="vulnerability" style="width: 516px;">
+                                <!-- <select name="vulnerability" class="vulnerability" lay-verify="required" style="width: 516px;">
                                     
-                                </select>
+                                </select> -->
                             </div>
                         </div>
+                        
                         <div class="layui-form-item">
                             <label class="layui-form-label">Order</label>
                             <div class="layui-input-block" style="width: 516px;">
@@ -121,7 +122,7 @@
                         </div>
                     </div>
                     <div class="batchesdelete">
-                        <span class="selected">Selected(0)</span>
+                        <span class="selected1">Selected(0)</span>
                         <span class="cancel1">Cancel</span>
                         <i class="iconfont icon-lajitong- batchesremove"></i>
                     </div>
@@ -139,6 +140,7 @@
     </div>  
 </body>
 <script src="./lib/layui/layui.js"></script>
+<script src="./lib/layui/xm-select.js"></script>
 <script>
     layui.use(['layer','jquery','table','form','element','laydate'],()=>{
         var $ = layui.$,
@@ -180,15 +182,76 @@
             $('.portcontent').val(res.data[0].value);
         })
         //获取poc列表
+        var demo1 = xmSelect.render({
+            el: '#vulnerability', 
+            tips:"Select vulnerability",
+            data:[],
+            name:'vulnerability',
+            size:'small',
+            theme:{
+                color:"var(--primaryBackground-color)"
+            },
+        })
         goby.getVulnerabilityList().then((res)=>{
-            let con = ``;
-            for(let i in res.data){
-                con += `
-                    <option value="${res.data[i]}">${res.data[i]}</option>
-                `;
-            }
-            $('.vulnerability').html(con);
-            form.render('select');
+            // let con = ``;
+            // for(let i in res.data){
+            //     con += `
+            //         <option value="${res.data[i]}">${res.data[i].name}</option>
+            //     `;
+                
+            // }
+            // $('.vulnerability').html(con);
+            // form.render('select');
+            let data = [{
+                name: '',
+                optgroup: true,
+                children:[
+
+                ]
+            }];
+            res.data.forEach((v,k)=>{
+                if(v.vulnerabilityType==3){
+                    data[0].children.push({
+                        name:v.name,
+                        value:v.name,
+                        vulnerabilityType:v.vulnerabilityType
+                    })
+                }else{
+                    data.push({
+                        name:v.name,
+                        value:v.name,
+                        vulnerabilityType:v.vulnerabilityType,
+                        selected:v.vulnerabilityType==0?true:false
+                    })
+                }
+            })
+            data.push(data.shift());
+            
+            demo1.update({
+                    data,
+                    on(result){
+                        if(result.arr.length==0){
+                            return [{
+                                ...data[0],
+                                selected:true
+                            }];
+                        }
+                        if(result.isAdd){
+                            if(result.change[0].vulnerabilityType!=3){
+                                return result.change;
+                            }else{
+                                if(result.arr.filter(v=>v.vulnerabilityType!=3).length>0){
+                                    return result.change;
+                                }else{
+                                    return result.arr;
+                                }
+                                
+                            }
+                        }else{
+                            return result.arr;
+                        }
+                    }
+            })
         })
         //获取扫描序列列表
         goby.getOrderList().then((res)=>{
@@ -377,13 +440,26 @@
                     return
                 }
             }
-            if(!data.vulnerability){
-                data.vulnerability = 'General Poc'
+            function vulnerability(arr){
+                let obj = {};
+                arr = arr.split(',');
+                arr.forEach((v,k)=>{
+                    obj[v] = null;
+                })
+                return obj;
+            }
+            data.vulnerability = vulnerability(data.vulnerability?data.vulnerability:[]);
+            data.vulnerabilityType = demo1.getValue()[0].vulnerabilityType;
+            if(!Object.keys(data.vulnerability)){
+                data.vulnerability = {
+                    'General Poc' : null
+                }
             }
             if(!data.order){
                 data.order = 'Assets first'
             }
             
+            console.log(data);
             
             if(state.type==0){
                 //添加
@@ -441,7 +517,8 @@
                 $('textarea[name=ip]').val(data[0].ip.join('\r'));
                 $('select[name=portType]').val(data[0].portType);
                 $('textarea[name=port]').val(data[0].port);
-                $('select[name=vulnerability]').val(data[0].vulnerability);
+                // $('select[name=vulnerability]').val(data[0].vulnerability);
+                demo1.setValue(Object.keys(data[0].vulnerability));
                 $('select[name=order]').val(data[0].order);
                 $('input[name=taskName]').val(data[0].taskName);
                 // $('select[name=isTimeNode]').val(data[0].isTimeNode);
@@ -449,7 +526,7 @@
                 form.render('select');
                 form.render('checkbox');
             }else{
-
+                
             }
         })
 
@@ -601,7 +678,7 @@
                                 </p>
                                 <p>
                                     <span>Vulnerability：</span>  
-                                    <span>${v['vulnerability']}</span>  
+                                    <span>${Object.keys(v['vulnerability']).length>1?'<br>' + Object.keys(v['vulnerability']).join('<br>'):Object.keys(v['vulnerability']).join()}</span>  
                                 </p>
                                 <p>
                                     <span>Order：</span>
@@ -655,7 +732,7 @@
                                 </p>
                                 <p>
                                     <span>Vulnerability：</span>  
-                                    <span>${v['vulnerability']}</span>  
+                                    <span>${Object.keys(v['vulnerability']).length>1?'<br>' + Object.keys(v['vulnerability']).join('<br>'):Object.keys(v['vulnerability']).join()}</span>  
                                 </p>
                                 <p>
                                     <span>Order：</span>
@@ -701,7 +778,7 @@
             }else{
                 document.querySelector('.batchesremove').classList.remove('xuan');
             }
-            $('.selected').html(`Selected(${document.querySelectorAll(".box .con input[type='checkbox'].scan:checked").length})`);
+            $('.selected1').html(`Selected(${document.querySelectorAll(".box .con input[type='checkbox'].scan:checked").length})`);
         }
         //状态
         function scanstate(state){

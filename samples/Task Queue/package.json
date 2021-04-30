@@ -2,9 +2,9 @@
 	"name": "Task Queue",
 	"publisher": "GobySec",
 	"description": "自定义任务队列,当前任务完成后自动开启下一个任务。同时支持拖拽排序与定时任务",
-	"version": "0.1.995",
+	"version": "0.2.0",
 	"icon": "src/assets/img/logo2.png",
-	"engines": "1.8.230",
+	"engines": "1.8.261",
 	"initEvents": "",
 	"main": "./src/extension.js",
 	"contributes": {

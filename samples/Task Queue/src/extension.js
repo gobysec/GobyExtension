@@ -23,6 +23,7 @@ function activate(content) {
 						if(timeNode){
 							clearInterval(this.timed);
 							this.timed = setInterval(()=>{
+								console.log(45465);
 								let  queue = this.getQueue();
 								
 								if(!this.timeNode) return;
@@ -73,13 +74,38 @@ function activate(content) {
 			})
 		}
 		init(){
-			fs.writeFile(this.filePath,JSON.stringify({"data":[],"timeNode":"","isImmediatelyScan":true}, null, 6),(err)=>{
-				if(err){
-					this.init();
+			this.fs.exists(this.filePath,(exists)=>{
+				if(!exists){
+					this.fs.writeFile(this.filePath,JSON.stringify({"data":[],"timeNode":"","isImmediatelyScan":true}, null, 6),(err)=>{
+						if(err){
+							this.init();
+						}
+						this.timed=null;
+						this.timeNode = null;
+					})
 				}else{
-					
+					let data = this.getQueue();
+					if(data.timeNode){
+						if(new Date().getTime() >= new Date(data.timeNode).getTime()){
+							data.timeNode=null;
+							this.timed=null;
+							this.timeNode = null;
+						}else{
+							this.timeNode = data.timeNode;
+						}
+					}
+					data.data=data.data.filter(((v,k)=>v.state==2 && !v.taskId));
+					this.fs.writeFile(this.filePath,JSON.stringify(data, null, 6),(err)=>{
+						if(err){
+							this.init();
+						}
+						if(this.timeNode){
+							this.changeTime(this.timeNode);
+						}
+					})
 				}
 			})
+				
 		}
 		getQueue(){
 			delete require.cache[require.resolve(this.filePath)];
@@ -282,7 +308,7 @@ function activate(content) {
 		window.taskQueue = new taskQueue();
 		window.taskQueue.init();
 	}
-	
+
 	
 	goby.registerCommand('addTask', function (content) {
 		let path = require('path');
@@ -423,7 +449,7 @@ function activate(content) {
 			}
 		}
 		
-		return 0
+		return 0;
 	}
 
 }
