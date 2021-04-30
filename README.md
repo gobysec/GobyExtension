@@ -1269,7 +1269,7 @@ portList|Promise|是一个Promise对象，可以通过then、catch分别捕获�
 
 **返回Promise对象数据示例(部分)**
 
-``` 
+``` json
   {
     statusCode:200, //状态码，200为正常
     message:"",     //状态相关信息
@@ -1299,7 +1299,7 @@ vulnerabilityList|Promise|是一个Promise对象，可以通过then、catch分�
 
 **返回Promise对象数据示例(部分)**
 
-``` 
+``` json
   {
     statusCode:200,         //状态码，200为正常
     message:"",             //状态相关信息
@@ -1313,6 +1313,47 @@ vulnerabilityList|Promise|是一个Promise对象，可以通过then、catch分�
       "ACME mini_httpd Arbitrary File Read (CVE-2018-18778)"
     ]
   }
+```
+
+**In v 1.8.268+，更新Promise对象的 data 数据**
+
+返回Promise对象数据示例(部分)
+``` json
+	{
+		statusCode:200,	        //状态码，200为正常
+		message:"",		//状态相关信息
+		data:[
+			{
+				"name":"General Poc",		//通用poc
+				"vulnerabilityType":"0"		//漏洞扫描类型
+			},
+			{
+				"name":"Brute Force",		//暴力破解
+				"vulnerabilityType":"1"		//漏洞扫描类型
+			},
+			{
+				"name":"Web Application Vulnerability",	//Web应用漏洞
+				"vulnerabilityType":"4"			//漏洞扫描类型
+			},
+			{
+				"name":"Application Vulnerability",	//应用程序漏洞
+				"vulnerabilityType":"5"			//漏洞扫描类型
+			},
+			{
+				"name":"All",			//全部漏洞
+				"vulnerabilityType":"2" 	//漏洞扫描类型
+			},
+			{
+				"name":"Disabled",		//禁用
+				"vulnerabilityType":"-1" 	//漏洞扫描类型
+			},
+			{
+				"name":"ACME mini_httpd Arbitrary File Read (CVE-2018-18778)",
+				"vulnerabilityType":"3"
+			}
+		]
+	}
+
 ```
 #### getOrderList
 
@@ -1328,7 +1369,7 @@ orderList|Promise|是一个Promise对象，可以通过then、catch分别捕获�
 
 **返回Promise对象数据示例**
 
-``` 
+``` json
   {
     statusCode:200,     //状态码，200为正常
     message:"",         //状态相关信息
@@ -1360,6 +1401,14 @@ vulnerability|String|General Poc|否|扫描任务的漏洞
 order|String|Assets first|否|扫描任务的扫描序列
 taskName|String| |否|扫描任务的名称
 
+**In v 1.8.268+ Options 新增 vulnerabilityType 与更新 vulnerability**
+
+**Options**
+属性|类型|默认值|必填|说明
+--|:--|:--|:--|:--
+vulnerabilityType|Number|0|是|扫描漏洞的类型
+vulnerability|Object|{}|否|当vulnerabilityType为3时，该参数有效，参数中的漏洞可多选，例如:{"Elasticsearch unauthorized":null,"Harbor Default Credentials":null}，值当前仅为null
+
 **返回**
 
 返回|类型|说明
@@ -1368,7 +1417,7 @@ data|Promise|开启扫描返回的信息，是一个Promise对象，可以通过
 
 **返回Promise对象数据示例**
 
-``` 
+``` json
   {
     statusCode:200, //状态码，200为正常
     messages:"",    //状态相关信息
@@ -1392,14 +1441,14 @@ data|Promise|停止扫描返回的信息，是一个Promise对象，可以通过
 
 **返回Promise对象数据示例**
 
-``` 
-  {
-    statusCode:200, //状态码，200为正常
-    messages:"",    //状态相关信息
-    data:{
-      taskId:"20201207192026"
-    }
-}
+``` json
+	{
+		statusCode:200, //状态码，200为正常
+		messages:"",    //状态相关信息
+		data:{
+			taskId:"20201207192026"
+		}
+	}
 ```
 
 ### 事件通知
@@ -1584,13 +1633,13 @@ visible|	String|	默认显示|	否	|控制自定义组件是否显示的命令�
      
 
 ``` scilab
-     function activate (content) {
+    function activate (content) {
             goby.registerCommand('hello', function (content) {
               goby.showInformationMessage("helloWorld");
             });
-            }
+	}
           
-          exports.activate = activate;
+	exports.activate = activate;
 ```
         
       
