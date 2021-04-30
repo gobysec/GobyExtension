@@ -1,0 +1,30 @@
+{
+  "id": "2518374",
+  "name": "自定义主题",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "20307536",
+      "name": "copy-01",
+      "font_class": "copy-01",
+      "unicode": "e6fe",
+      "unicode_decimal": 59134
+    },
+    {
+      "icon_id": "18311262",
+      "name": "删 除",
+      "font_class": "shanchu1",
+      "unicode": "e63c",
+      "unicode_decimal": 58940
+    },
+    {
+      "icon_id": "21312564",
+      "name": "upload-01",
+      "font_class": "upload-011",
+      "unicode": "e70e",
+      "unicode_decimal": 59150
+    }
+  ]
+}

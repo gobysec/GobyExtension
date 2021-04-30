@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom theme</title>
+    <link rel="stylesheet" href="./assets/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="./assets/css/font/iconfont.css">
+    <link rel="stylesheet" href="../node_modules/mavon-editor/dist/css/index.css">
+    <link rel="stylesheet" href="./assets/css/index.css">
+</head>
+<body>
+    <div id="app" v-cloak>
+        <p class="title">Color scheme</p>
+        <div class="color">
+            <div>
+                <div class="color-item">
+                    <el-color-picker v-model="theme.main" :class="{active:activeColorPicker=='main'}"  show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'main')" @change="addRecentlyUse($event,'--main-color','main')" @active-change="colorChange($event,'--main-color','main')" >
+                        <div class="user-defined" slot="head">
+                            <p class="color-picker-title">Recently used colors</p>
+                            <div class="recentlyUse">
+                                <p v-if="recentlyUse.length==0">No Data</p>
+                                <span  v-for="(item,index) in recentlyUse" :key="index" :style="{background:item}" @click="colorChange(item,'--main-color','main',true)" >
+                                    <i class="el-icon-check" v-if="item==activeColor || item == theme.main"></i>
+                                </span>
+                            </div>
+                            <p class="color-picker-title">Color palette</p>
+                        </div>
+                        <i class="iconfont copy" slot="copy" @click="copyColor(theme.main)">&#xe6fe;</i>
+                    </el-color-picker>
+                    <p class="color-name">main</p>
+                </div>
+                <div class="color-item">
+                    <el-color-picker v-model="theme.primaryFont" :class="{active:activeColorPicker=='primaryFont'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'primaryFont')" @change="addRecentlyUse($event,'--primaryFont-color','primaryFont')" @active-change="colorChange($event,'--primaryFont-color','primaryFont')" >
+                        <div class="user-defined" slot="head">
+                            <p class="color-picker-title">Recently used colors</p>
+                            <div class="recentlyUse">
+                                <p v-if="recentlyUse.length==0">No Data</p>
+                                <span  v-for="(item,index) in recentlyUse" :key="index" :class={active:item==activeColor} :style="{background:item}" @click="colorChange(item,'--primaryFont-color','primaryFont',true)" >
+                                    <i class="el-icon-check" v-if="item==activeColor || item == theme.primaryFont"></i>
+                                </span>
+                            </div>
+                            <p class="color-picker-title">Color palette</p>
+                        </div>
+                        <i class="iconfont copy" slot="copy" @click="copyColor(theme.primaryFont)">&#xe6fe;</i>
+                    </el-color-picker>
+                    <p class="color-name">primaryFont</p>
+                </div>
+                <div class="color-item">
+                    <el-color-picker v-model="theme.secondaryFont" :class="{active:activeColorPicker=='secondaryFont'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'secondaryFont')" @change="addRecentlyUse($event,'--secondaryFont-color','secondaryFont')" @active-change="colorChange($event,'--secondaryFont-color','secondaryFont')" >
+                        <div class="user-defined" slot="head">
+                            <p class="color-picker-title">Recently used colors</p>
+                            <div class="recentlyUse">
+                                <p v-if="recentlyUse.length==0">No Data</p>
+                                <span  v-for="(item,index) in recentlyUse" :key="index" :class={active:item==activeColor} :style="{background:item}" @click="colorChange(item,'--secondaryFont-color','secondaryFont',true)" >
+                                    <i class="el-icon-check" v-if="item==activeColor || item == theme.secondaryFont"></i>
+                                </span>
+                            </div>
+                            <p class="color-picker-title">Color palette</p>
+                        </div>
+                        <i class="iconfont copy" slot="copy" @click="copyColor(theme.secondaryFont)">&#xe6fe;</i>
+                    </el-color-picker>
+                    <p class="color-name">secondaryFont</p>
+                </div>
+                <div class="color-item">
+                    <el-color-picker v-model="theme.level3Font" :class="{active:activeColorPicker=='level3Font'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'level3Font')" @change="addRecentlyUse($event,'--level3Font-color','level3Font')" @active-change="colorChange($event,'--level3Font-color','level3Font')" >
+                        <div class="user-defined" slot="head">
+                            <p class="color-picker-title">Recently used colors</p>
+                            <div class="recentlyUse">
+                                <p v-if="recentlyUse.length==0">No Data</p>
+                                <span  v-for="(item,index) in recentlyUse" :key="index" :class={active:item==activeColor} :style="{background:item}" @click="colorChange(item,'--level3Font-color','level3Font',true)" >
+                                    <i class="el-icon-check" v-if="item==activeColor || item == theme.level3Font"></i>
+                                </span>
+                            </div>
+                            <p class="color-picker-title">Color palette</p>
+                        </div>
+                        <i class="iconfont copy" slot="copy" @click="copyColor(theme.level3Font)">&#xe6fe;</i>
+                    </el-color-picker>
+                    <p class="color-name">level3Font</p>
+                </div>
+                <div class="color-item">
+                    <el-color-picker v-model="theme.primaryBorder" :class="{active:activeColorPicker=='primaryBorder'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'primaryBorder')" @change="addRecentlyUse($event,'--primaryBorder-color','primaryBorder')" @active-change="colorChange($event,'--primaryBorder-color','primaryBorder')" >
+                        <div class="user-defined" slot="head">
+                            <p class="color-picker-title">Recently used colors</p>
+                            <div class="recentlyUse">
+                                <p v-if="recentlyUse.length==0">No Data</p>
+                                <span  v-for="(item,index) in recentlyUse" :key="index" :class={active:item==activeColor} :style="{background:item}" @click="colorChange(item,'--primaryBorder-color','primaryBorder',true)" >
+                                    <i class="el-icon-check" v-if="item==activeColor || item == theme.primaryBorder"></i>
+                                </span>
+                            </div>
+                            <p class="color-picker-title">Color palette</p>
+                        </div>
+                        <i class="iconfont copy" slot="copy" @click="copyColor(theme.primaryBorder)">&#xe6fe;</i>
+                    </el-color-picker>
+                    <p class="color-name">primaryBorder</p>
+                    <p class="demonstration">
+                </div>
+            </div>
+            <div>
+                <div class="color-item">
+                    <el-color-picker v-model="theme.secondaryBorder" :class="{active:activeColorPicker=='secondaryBorder'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'secondaryBorder')" @change="addRecentlyUse($event,'--secondaryBorder-color','secondaryBorder')" @active-change="colorChange($event,'--secondaryBorder-color','secondaryBorder')" >
+                        <div class="user-defined" slot="head">
+                            <p class="color-picker-title">Recently used colors</p>
+                            <div class="recentlyUse">
+                                <p v-if="recentlyUse.length==0">No Data</p>
+                                <span  v-for="(item,index) in recentlyUse" :key="index" :class={active:item==activeColor} :style="{background:item}" @click="colorChange(item,'--secondaryBorder-color','secondaryBorder',true)" >
+                                    <i class="el-icon-check" v-if="item==activeColor || item == theme.secondaryBorder"></i>
+                                </span>
+                            </div>
+                            <p class="color-picker-title">Color palette</p>
+                        </div>
+                        <i class="iconfont copy" slot="copy" @click="copyColor(theme.secondaryBorder)">&#xe6fe;</i>
+                    </el-color-picker>
+                    <p class="color-name">secondaryBorder</p>
+                </div>
+                <div class="color-item">
+                    <el-color-picker v-model="theme.primaryBackground" :class="{active:activeColorPicker=='primaryBackground'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'primaryBackground')" @change="addRecentlyUse($event,'--primaryBackground-color','primaryBackground')" @active-change="colorChange($event,'--primaryBackground-color','primaryBackground')" >
+                        <div class="user-defined" slot="head">
+                            <p class="color-picker-title">Recently used colors</p>
+                            <div class="recentlyUse">
+                                <p v-if="recentlyUse.length==0">No Data</p>
+                                <span  v-for="(item,index) in recentlyUse" :key="index" :class={active:item==activeColor} :style="{background:item}" @click="colorChange(item,'--primaryBackground-color','primaryBackground',true)" >
+                                    <i class="el-icon-check" v-if="item==activeColor || item == theme.secondaryBorder"></i>
+                                </span>
+                            </div>
+                            <p class="color-picker-title">Color palette</p>
+                        </div>
+                        <i class="iconfont copy" slot="copy" @click="copyColor(theme.secondaryBorder)">&#xe6fe;</i>
+                    </el-color-picker>
+                    <p class="color-name">primaryBackground</p>
+                </div>
+                <div class="color-item">
+                    <el-color-picker v-model="theme.secondaryBackground" :class="{active:activeColorPicker=='secondaryBackground'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'secondaryBackground')" @change="addRecentlyUse($event,'--secondaryBackground-color','secondaryBackground')" @active-change="colorChange($event,'--secondaryBackground-color','secondaryBackground')" >
+                        <div class="user-defined" slot="head">
+                            <p class="color-picker-title">Recently used colors</p>
+                            <div class="recentlyUse">
+                                <p v-if="recentlyUse.length==0">No Data</p>
+                                <span  v-for="(item,index) in recentlyUse" :key="index" :class={active:item==activeColor} :style="{background:item}" @click="colorChange(item,'--secondaryBackground-color','secondaryBackground',true)" >
+                                    <i class="el-icon-check" v-if="item==activeColor || item == theme.secondaryBackground"></i>
+                                </span>
+                            </div>
+                            <p class="color-picker-title">Color palette</p>
+                        </div>
+                        <i class="iconfont copy" slot="copy" @click="copyColor(theme.secondaryBackground)">&#xe6fe;</i>
+                    </el-color-picker>
+                    <p class="color-name">secondaryBackground</p>
+                </div>
+                <div class="color-item">
+                    <el-color-picker v-model="theme.lv3Background" :class="{active:activeColorPicker=='lv3Background'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'lv3Background')" @change="addRecentlyUse($event,'--lv3Background-color','lv3Background')" @active-change="colorChange($event,'--lv3Background-color','lv3Background')" >
+                        <div class="user-defined" slot="head">
+                            <p class="color-picker-title">Recently used colors</p>
+                            <div class="recentlyUse">
+                                <p v-if="recentlyUse.length==0">No Data</p>
+                                <span  v-for="(item,index) in recentlyUse" :key="index" :class={active:item==activeColor} :style="{background:item}" @click="colorChange(item,'--lv3Background-color','lv3Background',true)" >
+                                    <i class="el-icon-check" v-if="item==activeColor || item==theme.lv3Background"></i>
+                                </span>
+                            </div>
+                            <p class="color-picker-title">Color palette</p>
+                        </div>
+                        <i class="iconfont copy" slot="copy" @click="copyColor(theme.lv3Background)">&#xe6fe;</i>
+                    </el-color-picker>
+                    <p class="color-name">lv3Background</p>
+                </div>
+                <div class="color-item">
+                    <el-color-picker v-model="theme.lv4Background" :class="{active:activeColorPicker=='lv4Background'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'lv4Background')" @change="addRecentlyUse($event,'--lv4Background-color','lv4Background')" @active-change="colorChange($event,'--lv4Background-color','lv4Background')" >
+                        <div class="user-defined" slot="head">
+                            <p class="color-picker-title">Recently used colors</p>
+                            <div class="recentlyUse">
+                                <p v-if="recentlyUse.length==0">No Data</p>
+                                <span  v-for="(item,index) in recentlyUse" :key="index" :class={active:item==activeColor} :style="{background:item}" @click="colorChange(item,'--lv4Background-color','lv4Background',true)" >
+                                    <i class="el-icon-check" v-if="item==activeColor || item == theme.lv4Background"></i>
+                                </span>
+                            </div>
+                            <p class="color-picker-title">Color palette</p>
+                        </div>
+                        <i class="iconfont copy" slot="copy" @click="copyColor(theme.lv4Background)">&#xe6fe;</i>
+                    </el-color-picker>
+                    <p class="color-name">lv4Background</p>
+                </div>
+            </div>
+            <div>
+                <div class="color-item">
+                    <el-color-picker v-model="theme.navBackground" :class="{active:activeColorPicker=='navBackground'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'navBackground')" @change="addRecentlyUse($event,'--navBackground-color','navBackground')" @active-change="colorChange($event,'--navBackground-color','navBackground')" >
+                        <div class="user-defined" slot="head">
+                            <p class="color-picker-title">Recently used colors</p>
+                            <div class="recentlyUse">
+                                <p v-if="recentlyUse.length==0">No Data</p>
+                                <span  v-for="(item,index) in recentlyUse" :key="index" :class={active:item==activeColor} :style="{background:item}" @click="colorChange(item,'--navBackground-color','navBackground',true)" >
+                                    <i class="el-icon-check" v-if="item==activeColor || item == theme.navBackground"></i>
+                                </span>
+                            </div>
+                            <p class="color-picker-title">Color palette</p>
+                        </div>
+                        <i class="iconfont copy" slot="copy" @click="copyColor(theme.navBackground)">&#xe6fe;</i>
+                    </el-color-picker>
+                    <p class="color-name">navBackground</p>
+                </div>
+                <div class="color-item">
+                    <el-color-picker v-model="theme.navFont" :class="{active:activeColorPicker=='navFont'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'navFont')" @change="addRecentlyUse($event,'--navFont-color','navFont')" @active-change="colorChange($event,'--navFont-color','navFont')" >
+                        <div class="user-defined" slot="head">
+                            <p class="color-picker-title">Recently used colors</p>
+                            <div class="recentlyUse">
+                                <p v-if="recentlyUse.length==0">No Data</p>
+                                <span  v-for="(item,index) in recentlyUse" :key="index" :class={active:item==activeColor} :style="{background:item}" @click="colorChange(item,'--navFont-color','navFont',true)" >
+                                    <i class="el-icon-check" v-if="item==activeColor || item == theme.navFont"></i>
+                                </span>
+                            </div>
+                            <p class="color-picker-title">Color palette</p>
+                        </div>
+                        <i class="iconfont copy" slot="copy" @click="copyColor(theme.navFont)">&#xe6fe;</i>
+                    </el-color-picker>
+                    <p class="color-name">navFont</p>
+                </div>
+                <div class="color-item">
+                    <el-color-picker v-model="theme.navHoverFont" :class="{active:activeColorPicker=='navHoverFont'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'navHoverFont')" @change="addRecentlyUse($event,'--navHoverFont-color','navHoverFont')" @active-change="colorChange($event,'--navHoverFont-color','navHoverFont')" >
+                        <div class="user-defined" slot="head">
+                            <p class="color-picker-title">Recently used colors</p>
+                            <div class="recentlyUse">
+                                <p v-if="recentlyUse.length==0">No Data</p>
+                                <span  v-for="(item,index) in recentlyUse" :key="index" :class={active:item==activeColor} :style="{background:item}" @click="colorChange(item,'--navHoverFont-color','navHoverFont',true)" >
+                                    <i class="el-icon-check" v-if="item==activeColor || item == theme.navHoverFont"></i>
+                                </span>
+                            </div>
+                            <p class="color-picker-title">Color palette</p>
+                        </div>
+                        <i class="iconfont copy" slot="copy" @click="copyColor(theme.navHoverFont)">&#xe6fe;</i>
+                    </el-color-picker>
+                    <p class="color-name">navHoverFont</p>
+                </div>
+                <div class="color-item">
+                    <el-color-picker v-model="theme.scanResTopMainFont" :class="{active:activeColorPicker=='scanResTopMainFont'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'scanResTopMainFont')" @change="addRecentlyUse($event,'--scanResTopMainFont-color','scanResTopMainFont')" @active-change="colorChange($event,'--scanResTopMainFont-color','scanResTopMainFont')" >
+                        <div class="user-defined" slot="head">
+                            <p class="color-picker-title">Recently used colors</p>
+                            <div class="recentlyUse">
+                                <p v-if="recentlyUse.length==0">No Data</p>
+                                <span  v-for="(item,index) in recentlyUse" :key="index" :class={active:item==activeColor} :style="{background:item}" @click="colorChange(item,'--scanResTopMainFont-color','scanResTopMainFont',true)" >
+                                    <i class="el-icon-check" v-if="item==activeColor || item == theme.scanResTopMainFont"></i>
+                                </span>
+                            </div>
+                            <p class="color-picker-title">Color palette</p>
+                        </div>
+                        <i class="iconfont copy" slot="copy" @click="copyColor(theme.scanResTopMainFont)">&#xe6fe;</i>
+                    </el-color-picker>
+                    <p class="color-name">scanResTopMainFont</p>
+                </div>
+                <div class="color-item">
+                    <el-color-picker v-model="theme.scanResTopSubFont" :class="{active:activeColorPicker=='scanResTopSubFont'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'scanResTopSubFont')" @change="addRecentlyUse($event,'--scanResTopSubFont-color','scanResTopSubFont')" @active-change="colorChange($event,'--scanResTopSubFont-color','scanResTopSubFont')" >
+                        <div class="user-defined" slot="head">
+                            <p class="color-picker-title">Recently used colors</p>
+                            <div class="recentlyUse">
+                                <p v-if="recentlyUse.length==0">No Data</p>
+                                <span  v-for="(item,index) in recentlyUse" :key="index" :class={active:item==activeColor} :style="{background:item}" @click="colorChange(item,'--scanResTopSubFont-color','scanResTopSubFont',true)" >
+                                    <i class="el-icon-check" v-if="item==activeColor || item == theme.scanResTopSubFont"></i>
+                                </span>
+                            </div>
+                            <p class="color-picker-title">Color palette</p>
+                        </div>
+                        <i class="iconfont copy" slot="copy" @click="copyColor(theme.scanResTopSubFont)">&#xe6fe;</i>
+                    </el-color-picker>
+                    <p class="color-name">scanResTopSubFont</p>
+                    </p>
+                </div>
+            </div>
+            <div>
+                <div class="color-item">
+                    <el-color-picker v-model="theme.scanResTopIcon" :class="{active:activeColorPicker=='scanResTopIcon'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'scanResTopIcon')" @change="addRecentlyUse($event,'--scanResTopIcon-color','scanResTopIcon')" @active-change="colorChange($event,'--scanResTopIcon-color','scanResTopIcon')" >
+                        <div class="user-defined" slot="head">
+                            <p class="color-picker-title">Recently used colors</p>
+                            <div class="recentlyUse">
+                                <p v-if="recentlyUse.length==0">No Data</p>
+                                <span  v-for="(item,index) in recentlyUse" :key="index" :class={active:item==activeColor} :style="{background:item}" @click="colorChange(item,'--scanResTopIcon-color','scanResTopIcon',true)" >
+                                    <i class="el-icon-check" v-if="item==activeColor || item == theme.scanResTopIcon"></i>
+                                </span>
+                            </div>
+                            <p class="color-picker-title">Color palette</p>
+                        </div>
+                        <i class="iconfont copy" slot="copy" @click="copyColor(theme.scanResTopIcon)">&#xe6fe;</i>
+                    </el-color-picker>
+                    <p class="color-name">scanResTopIcon</p>
+                </div>
+                <div class="color-item">
+                    <el-color-picker v-model="theme.navOtherFont" :class="{active:activeColorPicker=='navOtherFont'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'navOtherFont')" @change="addRecentlyUse($event,'--navOtherFont-color','navOtherFont')" @active-change="colorChange($event,'--navOtherFont-color','navOtherFont')" >
+                        <div class="user-defined" slot="head">
+                            <p class="color-picker-title">Recently used colors</p>
+                            <div class="recentlyUse">
+                                <p v-if="recentlyUse.length==0">No Data</p>
+                                <span  v-for="(item,index) in recentlyUse" :key="index" :class={active:item==activeColor} :style="{background:item}" @click="colorChange(item,'--navOtherFont-color','navOtherFont',true)" >
+                                    <i class="el-icon-check" v-if="item==activeColor || item == theme.navOtherFont"></i>
+                                </span>
+                            </div>
+                            <p class="color-picker-title">Color palette</p>
+                        </div>
+                        <i class="iconfont copy" slot="copy" @click="copyColor(theme.navOtherFont)">&#xe6fe;</i>
+                    </el-color-picker>
+                    <p class="color-name">navOtherFont</p>
+                </div>
+                <div class="color-item">
+                    <el-color-picker v-model="theme.primaryIcon" :class="{active:activeColorPicker=='primaryIcon'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'primaryIcon')" @change="addRecentlyUse($event,'--primaryIcon-color','primaryIcon')" @active-change="colorChange($event,'--primaryIcon-color','primaryIcon')" >
+                        <div class="user-defined" slot="head">
+                            <p class="color-picker-title">Recently used colors</p>
+                            <div class="recentlyUse">
+                                <p v-if="recentlyUse.length==0">No Data</p>
+                                <span  v-for="(item,index) in recentlyUse" :key="index" :class={active:item==activeColor} :style="{background:item}" @click="colorChange(item,'--primaryIcon-color','primaryIcon',true)" >
+                                    <i class="el-icon-check" v-if="item==activeColor || item == theme.primaryIcon"></i>
+                                </span>
+                            </div>
+                            <p class="color-picker-title">Color palette</p>
+                        </div>
+                        <i class="iconfont copy" slot="copy" @click="copyColor(theme.primaryIcon)">&#xe6fe;</i>
+                    </el-color-picker>
+                    <p class="color-name">primaryIcon</p>
+                    <p class="demonstration">
+                </div>
+                <div class="color-item">
+                    <el-color-picker v-model="theme.navSelectBackground" :class="{active:activeColorPicker=='navSelectBackground'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'navSelectBackground')" @change="addRecentlyUse($event,'--navSelectBackground-color','navSelectBackground')" @active-change="colorChange($event,'--navSelectBackground-color','navSelectBackground')" >
+                        <div class="user-defined" slot="head">
+                            <p class="color-picker-title">Recently used colors</p>
+                            <div class="recentlyUse">
+                                <p v-if="recentlyUse.length==0">No Data</p>
+                                <span  v-for="(item,index) in recentlyUse" :key="index" :class={active:item==activeColor} :style="{background:item}" @click="colorChange(item,'--navSelectBackground-color','navSelectBackground',true)" >
+                                    <i class="el-icon-check" v-if="item==activeColor || item == theme.navSelectBackground"></i>
+                                </span>
+                            </div>
+                            <p class="color-picker-title">Color palette</p>
+                        </div>
+                        <i class="iconfont copy" slot="copy" @click="copyColor(theme.navSelectBackground)">&#xe6fe;</i>
+                    </el-color-picker>
+                    <p class="color-name">navSelectBackground</p>
+                </div>
+                <div class="color-item"></div>
+            </div>
+                
+        </div>
+        <p class="title">IMG（Only supports uploading jpg / png / gif files）</p>
+        <div class="img">
+            <div class="img-item">
+                <div class="upload" v-show="!theme.leftNavBgImg" @click="getPath('leftNavBgImg')">
+                    <p>
+                        <i class="iconfont">&#xe70e;</i>
+                        <br>
+                        <span>Click to upload</span>
+                    </p>
+                </div>
+                <div class="img-item-show" v-show="theme.leftNavBgImg">
+                    <div>
+                        <img :src="theme.leftNavBgImg" alt="leftNavBgImg" class="img">
+                        <span class="img-name">
+                            {{theme.leftNavBgImg?imgName(theme.leftNavBgImg):''}}
+                            <i class="iconfont" @click="deleteImg('leftNavBgImg','--leftNavBg-img')">&#xe63c;</i>
+                        </span>
+                    </div>
+                    
+                    
+                </div>
+                <img v-show="theme.leftNavBgImg" class="success" src="./assets/img/success.png" alt="success">
+            </div>
+            <p class="img-item-name">leftNavBgImg</p>
+            <div class="img-item">
+                <div class="upload" v-show="!theme.rightBgImg" @click="getPath('rightBgImg')">
+                    <p>
+                        <i class="iconfont">&#xe70e;</i>
+                        <br>
+                        <span>Click to upload</span>
+                    </p>
+                </div>
+                <div class="img-item-show" v-show="theme.rightBgImg">
+                    <div>
+                       <img :src="theme.rightBgImg" alt="rightBgImg" class="img">
+                        <span class="img-name">
+                            {{theme.rightBgImg?imgName(theme.rightBgImg):''}}
+                            <i class="iconfont" @click="deleteImg('rightBgImg','--rightBg-img')">&#xe63c;</i>
+                        </span> 
+                    </div>
+                    
+                </div>
+                <img v-show="theme.rightBgImg" class="success" src="./assets/img/success.png" alt="success">
+            </div>
+            <p class="img-item-name">rightBgImg</p>
+            <div class="img-item">
+                <div class="upload" v-show="!theme.entranceImg" @click="getPath('entranceImg')">
+                    <p>
+                        <i class="iconfont">&#xe70e;</i>
+                        <br>
+                        <span>Click to upload</span>
+                    </p>
+                </div>
+                <div class="img-item-show" v-show="theme.entranceImg">
+                    <div>
+                        <img :src="theme.entranceImg" alt="entranceImg" class="img">
+                        <span class="img-name">
+                            {{theme.entranceImg?imgName(theme.entranceImg):''}}
+                            <i class="iconfont" @click="deleteImg('entranceImg')">&#xe63c;</i>
+                        </span>
+                    </div>
+                </div>
+                <img v-show="theme.entranceImg" class="success" src="./assets/img/success.png" alt="success">
+            </div>
+            <p class="img-item-name">entranceImg</p>
+        </div>
+        <p class="title extension-detail">Plugin details</p>
+        <div class="detail">
+            <mavon-editor v-model="readme" 
+                :subfield = "false" 
+                defaultOpen='preview'
+                placeholder="The detailed description of the plugin..."
+                :ishljs = "true"
+                :tabSize="true"
+                :toolbars="markdownToolbars"
+                :autofocus="false"
+            />
+        </div>
+        <p class="title extension-changelog">Update log</p>
+        <div class="changelog">
+            <mavon-editor v-model="changelog" 
+                :subfield = "false" 
+                defaultOpen='preview'
+                placeholder="Update log..."
+                :ishljs = "true"
+                :tabSize="true"
+                :toolbars="markdownToolbars"
+                :autofocus="false"
+            />
+        </div>
+        <div class="br"></div>
+        <div class="generate">
+            <button class="build" @click="getConfig">Generate</button>
+            <button class="cencel" @click="exit">Cancel</button>
+        </div>
+    </div>
+</body>
+<script src="./assets/js/vue.js"></script>
+<script src="./assets/element-ui/lib/index.js"></script>
+<script>
+    // require('electron').remote.getCurrentWindow().openDevTools();
+    Vue.use(require('mavon-editor'))
+    var app = new Vue({
+        el: '#app',
+        data: {
+            fs:require('fs'),
+            path:require('path'),
+            opener:opener,
+            color:require('color'),
+            rgb_hex:require('rgb-hex'),
+            dialog:require('electron').remote.dialog,
+            package:require('./template/package.json'),
+            build:require('./assets/js/index.js'),
+            recentlyUse:[],
+            activeColor:'',
+            activeColorPicker:'',
+            theme:{
+                main:'',
+                primaryFont:'',
+                secondaryFont:'',
+                level3Font:'',
+                primaryBorder:'',
+                secondaryBorder:'',
+                primaryBackground:'',
+                secondaryBackground:'',
+                lv3Background:'',
+                lv4Background:'',
+                navBackground:'',
+                navFont:'',
+                navHoverFont:'',
+                scanResTopMainFont:'',
+                scanResTopSubFont:'',
+                scanResTopIcon:'',
+                navOtherFont:'',
+                primaryIcon:'',
+                chartColors:[
+                    '',
+                    '',
+                    '',
+                    '',
+                    ''
+                ],
+                leftNavBgImg:'',
+                rightBgImg:'',
+                navSelectBackground:'',
+                entranceImg:''
+            },
+            mappingTable:{
+                main:'--main-color',
+                primaryFont:'--primaryFont-color',
+                secondaryFont:'--secondaryFont-color',
+                level3Font:'--level3Font-color',
+                primaryBorder:'--primaryBorder-color',
+                secondaryBorder:'--secondaryBorder-color',
+                primaryBackground:'--primaryBackground-color',
+                secondaryBackground:'--secondaryBackground-color',
+                lv3Background:'--lv3Background-color',
+                lv4Background:'--lv4Background-color',
+                navBackground:'--navBackground-color',
+                navFont:'--navFont-color',
+                navHoverFont:'--navHoverFont-color',
+                scanResTopMainFont:'--scanResTopMainFont-color',
+                scanResTopSubFont:'--scanResTopSubFont-color',
+                scanResTopIcon:'--scanResTopIcon-color',
+                navOtherFont:'--navOtherFont-color',
+                primaryIcon:'--primaryIcon-color',
+                chartColors:null,
+                leftNavBgImg:'--leftNavBg-img',
+                rightBgImg:'--rightBg-img',
+                navSelectBackground:'--navSelectBackground-color',
+                entranceImg:null
+            },
+            imgFormat:[
+                'jpg',
+                'png',
+                'gif',
+                'jpeg',
+                'webp',
+                'ico'
+            ],
+            readme:'',
+            changelog:'',
+            package:{
+                
+            },
+            oldTheme:{
+
+            },
+            markdownToolbars:{
+                bold: true, // 粗体
+                italic: true, // 斜体
+                underline: true, // 下划线
+                strikethrough: true, // 中划线
+                ul: true, // 无序列表
+                ol: true, // 有序列表
+                preview: true, // 预览
+            },
+            loading:false
+        },
+        methods:{
+            init(){
+                this.delDir(this.path.join(__dirname,'./Theme/Theme'));
+                this.mkdirs(this.path.join(__dirname,'./Theme/Theme/src/img'));
+            },
+            delDir(path){
+                if(this.fs.existsSync(path)){
+                    let files = this.fs.readdirSync(path);
+                    files.forEach((file, index) => {
+                        let curPath = path + "/" + file;
+                        if(this.fs.statSync(curPath).isDirectory()){
+                            this.delDir(curPath); //递归删除文件夹
+                        } else {
+                            this.fs.unlinkSync(curPath); //删除文件
+                        }
+                    });
+                    this.fs.rmdirSync(path);
+                }
+            },
+            mkdirs(dirname){
+                if (this.fs.existsSync(dirname)) {  
+                    return true;  
+                } else {  
+                    if (this.mkdirs(this.path.dirname(dirname))) {  
+                        this.fs.mkdirSync(dirname);  
+                        return true;  
+                    }  
+                }
+            },
+            colorChange(color,key,key1,lock){
+                this.$set(this.theme,key1,color);
+                if(lock){
+                    this.activeColor = color;
+                }
+                if(key1=='main'){
+                    this.$set(this.theme,'chartColors',[
+                        this.color(color).alpha(1).rgb().string(),
+                        this.color(color).alpha(0.6).rgb().string(),
+                        this.color(color).alpha(0.4).rgb().string(),
+                        this.color(color).alpha(0.2).rgb().string(),
+                        this.color(color).alpha(0.1).rgb().string()
+                    ])
+                }
+                this.opener.postMessage({
+                    target:'ThemeDevelop',
+                    operate:'setColor',
+                    key,
+                    color
+                })
+            },
+            addRecentlyUse(color,key,key1){
+                if(color){
+                    this.recentlyUse.unshift(color);
+                    this.recentlyUse.splice(13,1);
+                    this.recentlyUse = Array.from(new Set(this.recentlyUse));
+                    this.activeColor = "";
+                }else{
+                    if(key1=='main'){
+                        this.$set(this.theme,'chartColors',[
+                            this.color(color).alpha(1).rgb().string(),
+                            this.color(color).alpha(0.6).rgb().string(),
+                            this.color(color).alpha(0.4).rgb().string(),
+                            this.color(color).alpha(0.2).rgb().string(),
+                            this.color(color).alpha(0.1).rgb().string()
+                        ])
+                    }
+                    this.opener.postMessage({
+                        target:'ThemeDevelop',
+                        operate:'setColor',
+                        key,
+                        color:this.oldTheme[key1]
+                    })
+                }
+                
+            },
+            async generate(){
+                let loading  = this.$loading({           // 声明一个loading对象
+                    lock: true,                             // 是否锁屏
+                    text: '打包中',                     // 加载动画的文字
+                    spinner: 'el-icon-loading',             // 引入的loading图标
+                    background: 'rgba(0, 0, 0, 0.8)',       // 背景颜色
+                    target: 'body',                    // 需要遮罩的区域
+                    body: true,                              
+                    customClass: 'mask'                     // 遮罩层新增类名
+                })
+                this.delDir(this.path.join(__dirname,'./Theme/Theme'));
+                this.mkdirs(this.path.join(__dirname,'./Theme/Theme/src/img'));
+
+                //验证theme是否完整
+                for(let i in this.theme){
+                    if(i!='leftNavBgImg' && i!='rightBgImg'){
+                        if(!this.theme[i]){
+                            this.$message({
+                                message: `No ${i}`,
+                                type: 'error'
+                            });
+                            loading.close();
+                            return;
+                            break;
+                        }
+                    }
+                }
+                //验证插件package.json中字段是否设置
+                console.log('正在验证package.json');
+                loading.setText('verify package.json');
+                for(let i in this.package){
+                    if(!this.package[i] || !this.package[i].trim()){
+                        this.$message({
+                            message: `No ${i}`,
+                            type: 'error'
+                        });
+                        loading.close();
+                        return;
+                        break;
+                    }
+                }
+                
+                //复制图片文件
+                console.log('正在打包图片');
+                loading.setText('img');
+                if(!this.theme.entranceImg){
+                    this.$message({
+                        message: 'entranceImg error',
+                        type: 'error'
+                    });
+                    loading.close();
+                    return;
+                }
+                loading.setText('img');
+                let img = await this.build.img([
+                    {
+                        name:'leftNavBgImg',
+                        path:this.theme.leftNavBgImg
+                    },
+                    {
+                        name:'rightBgImg',
+                        path:this.theme.rightBgImg
+                    },
+                    {
+                        name:'entranceImg',
+                        path:this.theme.entranceImg
+                    },
+                    {
+                        name:'icon',
+                        path:this.package.icon
+                    }
+                ]).then(res=>res).catch(err=>err);
+                
+                if(img.code == 500){
+                    this.$message({
+                        message: img.message,
+                        type: 'error'
+                    });
+                    loading.close();
+                    return;
+                }
+                // return;
+                //生成package.json文件
+                console.log('正在打包package.json');
+                loading.setText('package.json');
+                let package = await this.build.package({
+                    ...this.package,
+                    icon:'src/img/' + img[3].data
+                }).then(res=>res).catch(err=>err);
+                if(package.code!=200){
+                    this.$message({
+                        message: package.message,
+                        type: 'error'
+                    });
+                    loading.close();
+                    return;
+                }
+
+                //生成readme.md文件
+                console.log('正在打包readme');
+                loading.setText('README.MD');
+                let readme = await this.build.readme(this.readme).then(res=>res).catch(err=>err);
+                if(readme.code!=200){
+                    this.$message({
+                        message: readme.message,
+                        type: 'error'
+                    });
+                    loading.close();
+                    return;
+                }
+                
+                //生成changelog.md文件
+                console.log('正在打包changelog');
+                loading.setText('CHANGELOG.MD');
+                let changelog = await this.build.changelog(this.changelog).then(res=>res).catch(err=>err);
+                if(changelog.code!=200){
+                    this.$message({
+                        message: changelog.message,
+                        type: 'error'
+                    });
+                    loading.close();
+                    return;
+                }
+
+                //生成extension.js文件
+                console.log('正在打包extension');
+                loading.setText('extension.js');
+                let extension = await this.build.extension({
+                    ...this.theme,
+                    leftNavBgImg:"{{leftNavBgImg}}",
+                    rightBgImg:"{{rightBgImg}}",
+                    entranceImg:"{{entranceImg}}"
+                },img,this.package.name).then(res=>res).catch(err=>err);
+                if(extension.code!=200){
+                    this.$message({
+                        message: extension.message,
+                        type: 'error'
+                    });
+                    loading.close();
+                    return;
+                }
+                
+                //生成压缩包
+                console.log('正在进行最后打包');
+                loading.setText('zip');
+                let zip = await this.build.zip(this.path.join(__dirname,'./Theme')).then(res=>res).catch(err=>err);
+                if(zip.code!=200){
+                    this.$message({
+                        message: extension.message,
+                        type: 'error'
+                    });
+                    loading.close();
+                    return;
+                }
+                console.log('打包完成');
+                loading.setText('Success');
+                loading.close();
+                this.build.themeDown('Theme.zip',zip.data);
+                this.init();
+            },
+            getPath(path){
+                this.dialog.showOpenDialog(null, {
+                    properties: ['openFile'],
+                    filters:[
+                        {
+                            name:'image',
+                            extensions:this.imgFormat
+                        }
+                    ]
+                },(d)=>{
+                    if(!d){
+                        return;
+                    }
+                    this.examine(d[0],path);
+                });
+            },
+            examine(filePath,path){
+                let filePathState = this.fs.existsSync(filePath);
+
+                if(!filePathState){
+                    this.$message({
+                        message: '请选择正确的文件路径',
+                        type: 'error'
+                    });
+                    return;
+                }
+                this.$set(this['theme'],path,filePath);
+                this.opener.postMessage({
+                    target:'ThemeDevelop',
+                    operate:'setColor',
+                    key:this.mappingTable[path],
+                    color:`url("${filePath.replace(/\\/ig,'/')}")`
+                })
+            },
+            deleteImg(path){
+                let oldImg = this.oldTheme[this.mappingTable[path]]?this.oldTheme[this.mappingTable[path]].replace(/\\/ig,'/'):null
+                this.$set(this['theme'],path,'');
+                this.opener.postMessage({
+                    target:'ThemeDevelop',
+                    operate:'setColor',
+                    key:this.mappingTable[path],
+                    color:oldImg
+                })
+            },
+            getConfig(){
+                this.opener.postMessage({
+                    target:'ThemeDevelop',
+                    operate:'getConfig'
+                })
+            },
+            getTheme(){
+                this.opener.postMessage({
+                    target:'ThemeDevelop',
+                    operate:'getTheme'
+                })
+            },
+            message(event){
+                
+                switch (event.data.operate) {
+                    case 'getConfig':
+                        for(let i in event.data.config){
+                            this.$set(this.package,i,event.data.config[i].default);
+                        }
+                        this.generate();
+                        break;
+                    case 'getTheme':
+                        let theme = event.data.theme.split(';');
+                        theme = theme.filter(v=>v).map(item=>item.split(':'));
+                        let theme1 = {};
+                        theme.forEach(item=>{
+                            theme1[item[0].trim()] = item[1];
+                        })
+                        
+                        for(let i in this.mappingTable){
+                            if(this.mappingTable[i] && this.mappingTable[i].includes('-color')){
+                                this.$set(this.theme,i,this.color(theme1[this.mappingTable[i]]).rgb().string());
+                                this.$set(this.oldTheme,i,this.color(theme1[this.mappingTable[i]]).rgb().string());
+                            }
+                        }
+                        this.$set(this.theme,'chartColors',[
+                            this.color(this.theme.main).alpha(1).rgb().string(),
+                            this.color(this.theme.main).alpha(0.6).rgb().string(),
+                            this.color(this.theme.main).alpha(0.4).rgb().string(),
+                            this.color(this.theme.main).alpha(0.2).rgb().string(),
+                            this.color(this.theme.main).alpha(0.1).rgb().string()
+                        ])
+                    default:
+                        
+                        break;
+                }
+                
+            },
+            handleTrigger(res,item){
+                if(res.state){
+                    this.activeColorPicker = item;
+                }else{
+                    this.activeColorPicker = '';
+                    this.activeColor = '';
+                }
+            },
+            copyColor(text){
+                var input = document.createElement('input');
+                input.setAttribute('readonly', 'readonly'); 
+                input.setAttribute('value', text);
+                document.body.appendChild(input);
+                input.select();
+                var res = document.execCommand('copy');
+                document.body.removeChild(input);
+                this.$message({
+                    message: 'Success',
+                    type: 'success'
+                });
+                return res;
+            },
+            exit(){
+                this.opener.postMessage({
+                    target:'ThemeDevelop',
+                    operate:'exit'
+                })
+            }
+        },
+        computed:{
+            imgName(){
+                return (filePath)=>{
+                    return this.path.basename(filePath);
+                }
+            }
+        },
+        mounted(){
+            window.onbeforeunload = function(e) {
+                this.opener.postMessage({
+                    target:'ThemeDevelop',
+                    operate:'exit'
+                })
+                return false;
+            };
+            this.init();
+            window.addEventListener('message',this.message,false);
+            this.getTheme()
+            
+        }
+    })
+</script>
+</html>

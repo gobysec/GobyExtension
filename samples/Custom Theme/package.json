@@ -1,0 +1,57 @@
+{
+	"name": "Custom Theme",
+	"publisher": "GobySec",
+	"description": "在线调试主题，一键生成主题插件。",
+	"version": "0.1.0",
+	"icon": "src/assets/img/icon.png",
+	"engines": "1.8.230",
+	"initEvents": "",
+	"main": "./src/extension.js",
+	"contributes": {
+		"configuration": {
+			"name": {
+				"type": "string",
+				"default": "",
+				"description": "Extension name"
+			},
+			"publisher": {
+				"type": "string",
+				"default": "",
+				"description": "Extension publisher"
+			},
+			"description": {
+				"type": "string",
+				"default": "",
+				"description": "Extension description"
+			},
+			"version": {
+				"type": "string",
+				"default": "",
+				"description": "Extension version"
+			},
+			"icon": {
+				"type": "string",
+				"default": "",
+				"description": "Extension icon",
+				"fromDialog": true
+			}
+		},
+		"views": {
+			"toolbar": [
+				{
+					"command": "ThemeDevelop",
+					"title": "ThemeDevelop",
+					"icon": "src/assets/img/icon.png"
+				}
+			]
+		}
+	},
+	"scripts": {},
+	"devDependencies": {},
+	"dependencies": {
+		"color": "^3.1.3",
+		"jszip": "^3.6.0",
+		"mavon-editor": "^2.9.1",
+		"rgb-hex": "^3.0.0"
+	}
+}
