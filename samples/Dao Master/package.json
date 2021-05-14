@@ -1,0 +1,14 @@
+{
+      "name": "Dao Master",
+      "publisher": "GobySec",
+      "description": "Dao Master Theme",
+      "version": "0.1.0",
+      "engines": "1.7.192",
+      "icon": "src/img/icon.png",
+      "initEvents": "init",
+      "main": "./src/extension.js",
+      "contributes": {},
+      "scripts": {},
+      "devDependencies": {},
+      "dependencies": {}
+}

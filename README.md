@@ -80,7 +80,7 @@ goby内置了扩展能力，在插件API加持之下，goby指定的部分可以
         
       
 
-``` json
+``` 
     {
             "name": "helloWorld",
             "publisher": "goby",
@@ -437,7 +437,7 @@ banner列表的标题栏 - bannerTop
         
       
 
-``` json
+``` 
     {
 		"contributes": {
 			"views": {
@@ -459,7 +459,7 @@ banner列表的标题栏 - bannerTop
         
      
 
-``` json
+``` 
     {
 		"contributes": {
 			"configuration": {
@@ -533,7 +533,7 @@ banner列表的标题栏 - bannerTop
         
       
 
-``` json
+``` 
     {
             "views": {
               "scanRes": {
@@ -922,7 +922,7 @@ webfinder页，使得用户可以对扫描出的web列表，进行自定义的�
 
 第二步，你需要在package.json里配置对应视图入口点，即contributes.views.toolbar,填写想要的标题、对应的命令。
 
-``` json
+``` 
     "contributes": {
       "views": {
         "toolbar": [
@@ -1180,7 +1180,7 @@ ips|Object|资产列表
 **callback(result) 返回代码示例**
        
 
-``` json
+``` 
      {
               "statusCode": 200,
               "messages": "",
@@ -1269,7 +1269,7 @@ portList|Promise|是一个Promise对象，可以通过then、catch分别捕获�
 
 **返回Promise对象数据示例(部分)**
 
-``` json
+``` 
   {
     statusCode:200, //状态码，200为正常
     message:"",     //状态相关信息
@@ -1299,7 +1299,7 @@ vulnerabilityList|Promise|是一个Promise对象，可以通过then、catch分�
 
 **返回Promise对象数据示例(部分)**
 
-``` json
+``` 
   {
     statusCode:200,         //状态码，200为正常
     message:"",             //状态相关信息
@@ -1318,7 +1318,7 @@ vulnerabilityList|Promise|是一个Promise对象，可以通过then、catch分�
 **In v 1.8.268+，更新Promise对象的 data 数据**
 
 返回Promise对象数据示例(部分)
-``` json
+``` 
 	{
 		statusCode:200,	        //状态码，200为正常
 		message:"",		//状态相关信息
@@ -1369,7 +1369,7 @@ orderList|Promise|是一个Promise对象，可以通过then、catch分别捕获�
 
 **返回Promise对象数据示例**
 
-``` json
+``` 
   {
     statusCode:200,     //状态码，200为正常
     message:"",         //状态相关信息
@@ -1417,7 +1417,7 @@ data|Promise|开启扫描返回的信息，是一个Promise对象，可以通过
 
 **返回Promise对象数据示例**
 
-``` json
+``` 
   {
     statusCode:200, //状态码，200为正常
     messages:"",    //状态相关信息
@@ -1441,7 +1441,7 @@ data|Promise|停止扫描返回的信息，是一个Promise对象，可以通过
 
 **返回Promise对象数据示例**
 
-``` json
+``` 
 	{
 		statusCode:200, //状态码，200为正常
 		messages:"",    //状态相关信息
@@ -1474,7 +1474,7 @@ callback(content) 返回数据示例
 
 type︰onApp，返回app相关数据
 
-``` json
+``` 
     {
         "hostinfo":"127.0.0.1:443",   
         "product":"Bootstrap"         
@@ -1483,7 +1483,7 @@ type︰onApp，返回app相关数据
 
 type︰onPort，返回port相关数据
 
-``` json
+``` 
   {
     "URL":"",
     "addition":"",
@@ -1496,7 +1496,7 @@ type︰onPort，返回port相关数据
 
 type︰onProtocol，返回protocol相关数据
 
-``` json
+``` 
   {
     "hostinfo":"127.0.0.1:80",
     "protocol":"http"
@@ -1505,7 +1505,7 @@ type︰onProtocol，返回protocol相关数据
 
 type︰onVulnerable，返回vulnerable相关数据
 
-``` json
+``` 
   {
     "hostinfo":"http://127.0.0.1",
     "vulnerable":false
@@ -1648,7 +1648,7 @@ visible|	String|	默认显示|	否	|控制自定义组件是否显示的命令�
         
       
 
-``` json
+``` 
        {
             "name": "initEvents",
             "publisher": "Goby Team",
@@ -1683,7 +1683,7 @@ devDependencies	| |Object	|等同于npm的devDependencies
 ### 完整示例
            
 
-``` json
+``` 
     {
             "name": "FOFA",
             "publisher": "Goby Team",
