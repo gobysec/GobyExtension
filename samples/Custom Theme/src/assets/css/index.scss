@@ -59,7 +59,7 @@ body{
     sans-serif
 }
 #app{
-    padding: 19px 20px 80px;
+    padding: 19px 20px 75px;
 }
 .title{
     font-size: 12px;
@@ -75,19 +75,13 @@ body{
     padding: 19px 0px 0px;
     margin-bottom: 7px;
     overflow: hidden;
-    &>div{
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        flex-flow: row wrap;
-    }
     .color-item{
         width: 80px;
-        // float: left;
-        // margin-right: 35px;
-        // &:nth-of-type(5n+5){
-        //     margin-right: 0;
-        // }
+        float: left;
+        margin-right: 45px;
+        &:nth-of-type(5n+5){
+            margin-right: 0;
+        }
         .el-color-picker{
             width: 100%;
             height: 26px;
@@ -357,20 +351,18 @@ body{
         transform: translateX(-50%);
     }
 }
-.br{
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: #E5EBF7;
-    margin-top: 21px;
-    position: absolute;
-}
 .generate{
-    position: absolute;
-    margin-top: 37px;
+    position: fixed;
+    // margin-top: 37px;
+    padding: 10px 0 ;
     right: 0;
+    left: 0;
+    bottom: 0;
+    border-top: 1px solid #E5EBF7;
+    z-index: 2000;
+    text-align: right;
+    background: #ffffff;
     button{
-        float: right;
         outline: none;
         width: 100px;
         height: 34px;

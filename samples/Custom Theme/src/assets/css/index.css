@@ -52,7 +52,7 @@ body {
 }
 
 #app {
-  padding: 19px 20px 80px;
+  padding: 19px 20px 75px;
 }
 
 .title {
@@ -72,22 +72,14 @@ body {
   overflow: hidden;
 }
 
-.color > div {
-  width: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-flow: row wrap;
-          flex-flow: row wrap;
-}
-
 .color .color-item {
   width: 80px;
+  float: left;
+  margin-right: 45px;
+}
+
+.color .color-item:nth-of-type(5n+5) {
+  margin-right: 0;
 }
 
 .color .color-item .el-color-picker {
@@ -386,23 +378,19 @@ body {
           transform: translateX(-50%);
 }
 
-.br {
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: #E5EBF7;
-  margin-top: 21px;
-  position: absolute;
-}
-
 .generate {
-  position: absolute;
-  margin-top: 37px;
+  position: fixed;
+  padding: 10px 0;
   right: 0;
+  left: 0;
+  bottom: 0;
+  border-top: 1px solid #E5EBF7;
+  z-index: 2000;
+  text-align: right;
+  background: #ffffff;
 }
 
 .generate button {
-  float: right;
   outline: none;
   width: 100px;
   height: 34px;

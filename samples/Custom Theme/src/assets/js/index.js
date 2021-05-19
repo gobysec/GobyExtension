@@ -5,5 +5,6 @@ module.exports = {
     readme:require('./readme'),
     zip:require('./zip'),
     themeDown:require('./themeDown'),
-    img:require('./img')
+    img:require('./img'),
+	toRgb:require('./toRgb')
 }

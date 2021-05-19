@@ -4,10 +4,10 @@ function activate(content) {
 	goby.registerCommand('ThemeDevelop', function () {
 		
 		if(!newPage){
-			newPage = window.open(path.join(__dirname,'./index.html'),'ThemeDevelop','width=620,height=507,resizable=no');
+			newPage = window.open(path.join(__dirname,'./index.html'),'Custom theme','width=620,height=655,resizable=no');
 		}else{
 			if(!newPage.location){
-				newPage = window.open(path.join(__dirname,'./index.html'),'ThemeDevelop','width=620,height=507,resizable=no');
+				newPage = window.open(path.join(__dirname,'./index.html'),'Custom theme','width=620,height=655,resizable=no');
 			}
 		}
 	});

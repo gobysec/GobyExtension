@@ -2,7 +2,7 @@
 	"name": "Custom Theme",
 	"publisher": "GobySec",
 	"description": "在线调试主题，一键生成主题插件。",
-	"version": "0.1.0",
+	"version": "0.2.1",
 	"icon": "src/assets/img/icon.png",
 	"engines": "1.8.230",
 	"initEvents": "",

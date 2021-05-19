@@ -13,7 +13,6 @@
     <div id="app" v-cloak>
         <p class="title">Color scheme</p>
         <div class="color">
-            <div>
                 <div class="color-item">
                     <el-color-picker v-model="theme.main" :class="{active:activeColorPicker=='main'}"  show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'main')" @change="addRecentlyUse($event,'--main-color','main')" @active-change="colorChange($event,'--main-color','main')" >
                         <div class="user-defined" slot="head">
@@ -47,73 +46,6 @@
                     <p class="color-name">primaryFont</p>
                 </div>
                 <div class="color-item">
-                    <el-color-picker v-model="theme.secondaryFont" :class="{active:activeColorPicker=='secondaryFont'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'secondaryFont')" @change="addRecentlyUse($event,'--secondaryFont-color','secondaryFont')" @active-change="colorChange($event,'--secondaryFont-color','secondaryFont')" >
-                        <div class="user-defined" slot="head">
-                            <p class="color-picker-title">Recently used colors</p>
-                            <div class="recentlyUse">
-                                <p v-if="recentlyUse.length==0">No Data</p>
-                                <span  v-for="(item,index) in recentlyUse" :key="index" :class={active:item==activeColor} :style="{background:item}" @click="colorChange(item,'--secondaryFont-color','secondaryFont',true)" >
-                                    <i class="el-icon-check" v-if="item==activeColor || item == theme.secondaryFont"></i>
-                                </span>
-                            </div>
-                            <p class="color-picker-title">Color palette</p>
-                        </div>
-                        <i class="iconfont copy" slot="copy" @click="copyColor(theme.secondaryFont)">&#xe6fe;</i>
-                    </el-color-picker>
-                    <p class="color-name">secondaryFont</p>
-                </div>
-                <div class="color-item">
-                    <el-color-picker v-model="theme.level3Font" :class="{active:activeColorPicker=='level3Font'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'level3Font')" @change="addRecentlyUse($event,'--level3Font-color','level3Font')" @active-change="colorChange($event,'--level3Font-color','level3Font')" >
-                        <div class="user-defined" slot="head">
-                            <p class="color-picker-title">Recently used colors</p>
-                            <div class="recentlyUse">
-                                <p v-if="recentlyUse.length==0">No Data</p>
-                                <span  v-for="(item,index) in recentlyUse" :key="index" :class={active:item==activeColor} :style="{background:item}" @click="colorChange(item,'--level3Font-color','level3Font',true)" >
-                                    <i class="el-icon-check" v-if="item==activeColor || item == theme.level3Font"></i>
-                                </span>
-                            </div>
-                            <p class="color-picker-title">Color palette</p>
-                        </div>
-                        <i class="iconfont copy" slot="copy" @click="copyColor(theme.level3Font)">&#xe6fe;</i>
-                    </el-color-picker>
-                    <p class="color-name">level3Font</p>
-                </div>
-                <div class="color-item">
-                    <el-color-picker v-model="theme.primaryBorder" :class="{active:activeColorPicker=='primaryBorder'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'primaryBorder')" @change="addRecentlyUse($event,'--primaryBorder-color','primaryBorder')" @active-change="colorChange($event,'--primaryBorder-color','primaryBorder')" >
-                        <div class="user-defined" slot="head">
-                            <p class="color-picker-title">Recently used colors</p>
-                            <div class="recentlyUse">
-                                <p v-if="recentlyUse.length==0">No Data</p>
-                                <span  v-for="(item,index) in recentlyUse" :key="index" :class={active:item==activeColor} :style="{background:item}" @click="colorChange(item,'--primaryBorder-color','primaryBorder',true)" >
-                                    <i class="el-icon-check" v-if="item==activeColor || item == theme.primaryBorder"></i>
-                                </span>
-                            </div>
-                            <p class="color-picker-title">Color palette</p>
-                        </div>
-                        <i class="iconfont copy" slot="copy" @click="copyColor(theme.primaryBorder)">&#xe6fe;</i>
-                    </el-color-picker>
-                    <p class="color-name">primaryBorder</p>
-                    <p class="demonstration">
-                </div>
-            </div>
-            <div>
-                <div class="color-item">
-                    <el-color-picker v-model="theme.secondaryBorder" :class="{active:activeColorPicker=='secondaryBorder'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'secondaryBorder')" @change="addRecentlyUse($event,'--secondaryBorder-color','secondaryBorder')" @active-change="colorChange($event,'--secondaryBorder-color','secondaryBorder')" >
-                        <div class="user-defined" slot="head">
-                            <p class="color-picker-title">Recently used colors</p>
-                            <div class="recentlyUse">
-                                <p v-if="recentlyUse.length==0">No Data</p>
-                                <span  v-for="(item,index) in recentlyUse" :key="index" :class={active:item==activeColor} :style="{background:item}" @click="colorChange(item,'--secondaryBorder-color','secondaryBorder',true)" >
-                                    <i class="el-icon-check" v-if="item==activeColor || item == theme.secondaryBorder"></i>
-                                </span>
-                            </div>
-                            <p class="color-picker-title">Color palette</p>
-                        </div>
-                        <i class="iconfont copy" slot="copy" @click="copyColor(theme.secondaryBorder)">&#xe6fe;</i>
-                    </el-color-picker>
-                    <p class="color-name">secondaryBorder</p>
-                </div>
-                <div class="color-item">
                     <el-color-picker v-model="theme.primaryBackground" :class="{active:activeColorPicker=='primaryBackground'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'primaryBackground')" @change="addRecentlyUse($event,'--primaryBackground-color','primaryBackground')" @active-change="colorChange($event,'--primaryBackground-color','primaryBackground')" >
                         <div class="user-defined" slot="head">
                             <p class="color-picker-title">Recently used colors</p>
@@ -129,56 +61,6 @@
                     </el-color-picker>
                     <p class="color-name">primaryBackground</p>
                 </div>
-                <div class="color-item">
-                    <el-color-picker v-model="theme.secondaryBackground" :class="{active:activeColorPicker=='secondaryBackground'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'secondaryBackground')" @change="addRecentlyUse($event,'--secondaryBackground-color','secondaryBackground')" @active-change="colorChange($event,'--secondaryBackground-color','secondaryBackground')" >
-                        <div class="user-defined" slot="head">
-                            <p class="color-picker-title">Recently used colors</p>
-                            <div class="recentlyUse">
-                                <p v-if="recentlyUse.length==0">No Data</p>
-                                <span  v-for="(item,index) in recentlyUse" :key="index" :class={active:item==activeColor} :style="{background:item}" @click="colorChange(item,'--secondaryBackground-color','secondaryBackground',true)" >
-                                    <i class="el-icon-check" v-if="item==activeColor || item == theme.secondaryBackground"></i>
-                                </span>
-                            </div>
-                            <p class="color-picker-title">Color palette</p>
-                        </div>
-                        <i class="iconfont copy" slot="copy" @click="copyColor(theme.secondaryBackground)">&#xe6fe;</i>
-                    </el-color-picker>
-                    <p class="color-name">secondaryBackground</p>
-                </div>
-                <div class="color-item">
-                    <el-color-picker v-model="theme.lv3Background" :class="{active:activeColorPicker=='lv3Background'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'lv3Background')" @change="addRecentlyUse($event,'--lv3Background-color','lv3Background')" @active-change="colorChange($event,'--lv3Background-color','lv3Background')" >
-                        <div class="user-defined" slot="head">
-                            <p class="color-picker-title">Recently used colors</p>
-                            <div class="recentlyUse">
-                                <p v-if="recentlyUse.length==0">No Data</p>
-                                <span  v-for="(item,index) in recentlyUse" :key="index" :class={active:item==activeColor} :style="{background:item}" @click="colorChange(item,'--lv3Background-color','lv3Background',true)" >
-                                    <i class="el-icon-check" v-if="item==activeColor || item==theme.lv3Background"></i>
-                                </span>
-                            </div>
-                            <p class="color-picker-title">Color palette</p>
-                        </div>
-                        <i class="iconfont copy" slot="copy" @click="copyColor(theme.lv3Background)">&#xe6fe;</i>
-                    </el-color-picker>
-                    <p class="color-name">lv3Background</p>
-                </div>
-                <div class="color-item">
-                    <el-color-picker v-model="theme.lv4Background" :class="{active:activeColorPicker=='lv4Background'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'lv4Background')" @change="addRecentlyUse($event,'--lv4Background-color','lv4Background')" @active-change="colorChange($event,'--lv4Background-color','lv4Background')" >
-                        <div class="user-defined" slot="head">
-                            <p class="color-picker-title">Recently used colors</p>
-                            <div class="recentlyUse">
-                                <p v-if="recentlyUse.length==0">No Data</p>
-                                <span  v-for="(item,index) in recentlyUse" :key="index" :class={active:item==activeColor} :style="{background:item}" @click="colorChange(item,'--lv4Background-color','lv4Background',true)" >
-                                    <i class="el-icon-check" v-if="item==activeColor || item == theme.lv4Background"></i>
-                                </span>
-                            </div>
-                            <p class="color-picker-title">Color palette</p>
-                        </div>
-                        <i class="iconfont copy" slot="copy" @click="copyColor(theme.lv4Background)">&#xe6fe;</i>
-                    </el-color-picker>
-                    <p class="color-name">lv4Background</p>
-                </div>
-            </div>
-            <div>
                 <div class="color-item">
                     <el-color-picker v-model="theme.navBackground" :class="{active:activeColorPicker=='navBackground'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'navBackground')" @change="addRecentlyUse($event,'--navBackground-color','navBackground')" @active-change="colorChange($event,'--navBackground-color','navBackground')" >
                         <div class="user-defined" slot="head">
@@ -196,36 +78,20 @@
                     <p class="color-name">navBackground</p>
                 </div>
                 <div class="color-item">
-                    <el-color-picker v-model="theme.navFont" :class="{active:activeColorPicker=='navFont'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'navFont')" @change="addRecentlyUse($event,'--navFont-color','navFont')" @active-change="colorChange($event,'--navFont-color','navFont')" >
+                    <el-color-picker v-model="theme.secondaryBackground" :class="{active:activeColorPicker=='secondaryBackground'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'secondaryBackground')" @change="addRecentlyUse($event,'--secondaryBackground-color','secondaryBackground')" @active-change="colorChange($event,'--secondaryBackground-color','secondaryBackground')" >
                         <div class="user-defined" slot="head">
                             <p class="color-picker-title">Recently used colors</p>
                             <div class="recentlyUse">
                                 <p v-if="recentlyUse.length==0">No Data</p>
-                                <span  v-for="(item,index) in recentlyUse" :key="index" :class={active:item==activeColor} :style="{background:item}" @click="colorChange(item,'--navFont-color','navFont',true)" >
-                                    <i class="el-icon-check" v-if="item==activeColor || item == theme.navFont"></i>
+                                <span  v-for="(item,index) in recentlyUse" :key="index" :class={active:item==activeColor} :style="{background:item}" @click="colorChange(item,'--secondaryBackground-color','secondaryBackground',true)" >
+                                    <i class="el-icon-check" v-if="item==activeColor || item == theme.secondaryBackground"></i>
                                 </span>
                             </div>
                             <p class="color-picker-title">Color palette</p>
                         </div>
-                        <i class="iconfont copy" slot="copy" @click="copyColor(theme.navFont)">&#xe6fe;</i>
+                        <i class="iconfont copy" slot="copy" @click="copyColor(theme.secondaryBackground)">&#xe6fe;</i>
                     </el-color-picker>
-                    <p class="color-name">navFont</p>
-                </div>
-                <div class="color-item">
-                    <el-color-picker v-model="theme.navHoverFont" :class="{active:activeColorPicker=='navHoverFont'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'navHoverFont')" @change="addRecentlyUse($event,'--navHoverFont-color','navHoverFont')" @active-change="colorChange($event,'--navHoverFont-color','navHoverFont')" >
-                        <div class="user-defined" slot="head">
-                            <p class="color-picker-title">Recently used colors</p>
-                            <div class="recentlyUse">
-                                <p v-if="recentlyUse.length==0">No Data</p>
-                                <span  v-for="(item,index) in recentlyUse" :key="index" :class={active:item==activeColor} :style="{background:item}" @click="colorChange(item,'--navHoverFont-color','navHoverFont',true)" >
-                                    <i class="el-icon-check" v-if="item==activeColor || item == theme.navHoverFont"></i>
-                                </span>
-                            </div>
-                            <p class="color-picker-title">Color palette</p>
-                        </div>
-                        <i class="iconfont copy" slot="copy" @click="copyColor(theme.navHoverFont)">&#xe6fe;</i>
-                    </el-color-picker>
-                    <p class="color-name">navHoverFont</p>
+                    <p class="color-name">secondaryBackground</p>
                 </div>
                 <div class="color-item">
                     <el-color-picker v-model="theme.scanResTopMainFont" :class="{active:activeColorPicker=='scanResTopMainFont'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'scanResTopMainFont')" @change="addRecentlyUse($event,'--scanResTopMainFont-color','scanResTopMainFont')" @active-change="colorChange($event,'--scanResTopMainFont-color','scanResTopMainFont')" >
@@ -259,9 +125,7 @@
                     </el-color-picker>
                     <p class="color-name">scanResTopSubFont</p>
                     </p>
-                </div>
-            </div>
-            <div>
+                </div>  
                 <div class="color-item">
                     <el-color-picker v-model="theme.scanResTopIcon" :class="{active:activeColorPicker=='scanResTopIcon'}" show-alpha color-format="rgb" @handle-trigger="handleTrigger($event,'scanResTopIcon')" @change="addRecentlyUse($event,'--scanResTopIcon-color','scanResTopIcon')" @active-change="colorChange($event,'--scanResTopIcon-color','scanResTopIcon')" >
                         <div class="user-defined" slot="head">
@@ -327,9 +191,6 @@
                     </el-color-picker>
                     <p class="color-name">navSelectBackground</p>
                 </div>
-                <div class="color-item"></div>
-            </div>
-                
         </div>
         <p class="title">IMG（Only supports uploading jpg / png / gif files）</p>
         <div class="img">
@@ -421,18 +282,19 @@
                 :autofocus="false"
             />
         </div>
-        <div class="br"></div>
         <div class="generate">
-            <button class="build" @click="getConfig">Generate</button>
             <button class="cencel" @click="exit">Cancel</button>
+            <button class="build" @click="getConfig">Generate</button>
         </div>
     </div>
 </body>
 <script src="./assets/js/vue.js"></script>
 <script src="./assets/element-ui/lib/index.js"></script>
+<script src="./assets/element-ui/lib/umd/locale/en.js"></script>
 <script>
     // require('electron').remote.getCurrentWindow().openDevTools();
-    Vue.use(require('mavon-editor'))
+    ELEMENT.locale(ELEMENT.lang.en)
+	Vue.use(require('mavon-editor'))
     var app = new Vue({
         el: '#app',
         data: {
@@ -459,8 +321,8 @@
                 lv3Background:'',
                 lv4Background:'',
                 navBackground:'',
-                navFont:'',
-                navHoverFont:'',
+                // navFont:'',
+                // navHoverFont:'',
                 scanResTopMainFont:'',
                 scanResTopSubFont:'',
                 scanResTopIcon:'',
@@ -564,22 +426,86 @@
                 if(lock){
                     this.activeColor = color;
                 }
-                if(key1=='main'){
-                    this.$set(this.theme,'chartColors',[
-                        this.color(color).alpha(1).rgb().string(),
-                        this.color(color).alpha(0.6).rgb().string(),
-                        this.color(color).alpha(0.4).rgb().string(),
-                        this.color(color).alpha(0.2).rgb().string(),
-                        this.color(color).alpha(0.1).rgb().string()
-                    ])
-                }
-                this.opener.postMessage({
-                    target:'ThemeDevelop',
-                    operate:'setColor',
-                    key,
-                    color
-                })
+				this.opener.postMessage({
+				    target:'ThemeDevelop',
+				    operate:'setColor',
+				    key,
+				    color
+				})
+				switch (key1){
+					case 'main':
+						this.$set(this.theme,'chartColors',[
+						    this.color(color).alpha(1).rgb().string(),
+						    this.color(color).alpha(0.6).rgb().string(),
+						    this.color(color).alpha(0.4).rgb().string(),
+						    this.color(color).alpha(0.2).rgb().string(),
+						    this.color(color).alpha(0.1).rgb().string()
+						])
+						break;
+					case 'primaryFont':
+						this.derivativeColor('primaryFont');
+						break;
+					case 'secondaryBackground':
+						this.derivativeColor('secondaryBackground');
+						break;
+					default:
+						break;
+				}
+           
+                
             },
+			derivativeColor(name){
+				switch (name){
+					case 'primaryFont':
+						this.$set(this.theme,'secondaryFont',this.color(this.theme.primaryFont).alpha(0.6).rgb().string());
+						this.opener.postMessage({
+							target:'ThemeDevelop',
+							operate:'setColor',
+							key:'--secondaryFont-color',
+							color:this.theme.secondaryFont
+						})
+						this.$set(this.theme,'level3Font',this.color(this.theme.primaryFont).alpha(0.36).rgb().string())
+						this.opener.postMessage({
+							target:'ThemeDevelop',
+							operate:'setColor',
+							key:'--level3Font-color',
+							color:this.theme.level3Font
+						})
+						this.$set(this.theme,'primaryBorder',this.color(this.theme.primaryFont).alpha(0.22).rgb().string())
+						this.opener.postMessage({
+							target:'ThemeDevelop',
+							operate:'setColor',
+							key:'--primaryBorder-color',
+							color:this.theme.primaryBorder
+						})
+						this.$set(this.theme,'secondaryBorder',this.color(this.theme.primaryFont).alpha(0.15).rgb().string())
+						this.opener.postMessage({
+							target:'ThemeDevelop',
+							operate:'setColor',
+							key:'--secondaryBorder-color',
+							color:this.theme.secondaryBorder
+						})
+                        this.$set(this.theme,'lv4Background',this.color(this.theme.primaryFont).alpha(0.19).rgb().string())
+						this.opener.postMessage({
+							target:'ThemeDevelop',
+							operate:'setColor',
+							key:'--lv4Background-color',
+							color:this.theme.lv4Background
+						})
+						break;
+					case 'secondaryBackground':
+						let color = this.color(this.theme.secondaryBackground).color;
+						this.$set(this.theme,'lv3Background',this.color(this.build.toRgb(color,0.98)).rgb().string())
+						this.opener.postMessage({
+							target:'ThemeDevelop',
+							operate:'setColor',
+							key:'--lv3Background-color',
+							color:this.theme.lv3Background
+						})			
+						break;
+				}
+						
+			},
             addRecentlyUse(color,key,key1){
                 if(color){
                     this.recentlyUse.unshift(color);
