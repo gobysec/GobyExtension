@@ -29,15 +29,17 @@
     let ipItem = "";
     let portItem = "";
     let protocolItem = "";
-
+	let dialog = parent.require('electron').remote.dialog,
+		fs = parent.require('fs');
+	let load;
     // 导出
     $(".export-csv").on("click", function() {
+	  load = layer.load();
       ipItem = $("#ip-item").prop("checked");
       portItem = $("#port-item").prop("checked");
       protocolItem = $("#protocol-item").prop("checked");
       goby.getAsset(goby.getTaskId(), getAssetCb);
     })
-
     // 回调函数
     function getAssetCb(data) {
       if (data.statusCode == 200) {
@@ -56,52 +58,82 @@
             fields
           };
           let myData = [];
+          
           data.data.ips.forEach((v, k) => {
-            let obj = {};
-            if (ipItem) {
-              obj.IP = v.ip;
-            }
-            if (portItem) {
-              let portsStr = "";
-              if (v.ports) {
-                v.ports.forEach((v1, k1) => {
-                  portsStr += v1.port + ",";
-                })
-              }
-              obj.Port = portsStr;
-            }
-            if (protocolItem) {
-              let proStr = "";
-              if (v.protocols) {
-                for (var i in v.protocols) {
-                  proStr += v.protocols[i].protocol + ",";
+            if(portItem&&protocolItem){
+
+              v.ports && v.ports.forEach((value,key)=>{
+                let obj={}
+                if(ipItem){
+                  obj.IP=v.ip;
                 }
+                if(portItem){
+                  obj.Port=value.port;
+                }
+                if(protocolItem){
+                  obj.Protocol=v.protocols[`${v.ip}:${value.port}`]?`${v.protocols[`${v.ip}:${value.port}`].protocols.join(',')}`:'unknow';
+                }
+                myData.push(obj);
+              })
+            }else{
+              let obj = {};
+              if (ipItem) {
+                obj.IP = v.ip;
               }
-              obj.Protocol = proStr;
+              if (portItem) {
+                let portsStr = "";
+                if (v.ports) {
+                  v.ports.forEach((v1, k1) => {
+                    portsStr += v1.port + ",";
+                  })
+                }
+                obj.Port = portsStr;
+              }
+              if (protocolItem) {
+                let proStr = "";
+                if (v.protocols) {
+                  for (var i in v.protocols) {
+                    proStr += v.protocols[i].protocol + ",";
+                  }
+                }
+                obj.Protocol = proStr;
+              }
+              
+              myData.push(obj);
             }
+              
             
-            myData.push(obj);
           })
-          try {
+		  
             const parser = new json2csv.Parser(opts);
             const csv = parser.parse(myData);
-            var csvContent = "data:text/csv;charset=utf-8,\ufeff" + csv;
-            var name = 'goby.csv';
-            let encodedUri = encodeURI(csvContent);
-            let link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", name);
-            document.body.appendChild(link);
-            link.click();
-            goby.showSuccessMessage("导出成功");
-            goby.closeIframeDia();
-          } catch (err) {
-            goby.showErrorMessage(err);
-          }
+			dialog.showSaveDialog({
+				properties: ['openFile', 'openDirectory', 'multiSelections'],
+				defaultPath: 'goby.csv'
+			}, function (d) {
+			  if (!d) {
+				  layer.close(load);
+				  return;
+			  }
+			  fs.writeFile(d,csv,(err)=>{
+				  if(err){
+					  layer.close(load);
+					  goby.showErrorMessage(err);
+					  goby.closeIframeDia();
+					  return;
+				  }
+				  layer.close(load); 
+				  goby.showSuccessMessage("导出成功");
+				  goby.closeIframeDia();
+			  })
+			  
+			});
         } else {
+		  layer.close(load);
           goby.showInformationMessage("无数据");
         }
       } else {
+		layer.close(load); 
         goby.showErrorMessage(data.messages);
       }
     }
