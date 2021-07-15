@@ -1547,6 +1547,26 @@ type︰onError，当Goby发生错误时，返回报错相关数据
     "message":"service error"   //错误信息
   }
 ```
+type：onChangeLang，当Goby语言发生变化时，返回当前语言
+
+**新增于：1.8.282**
+
+```
+	EN
+```
+### 语言相关
+
+#### getLang
+
+**新增于：1.8.225**
+
+获取Goby当前语言
+
+**返回**
+
+返回|类型|说明
+--|:--|:--
+lang|String|Goby当前语言，例如：EN、CN、DE、JA、KO、FR
 
 ## 发布内容配置
 发布内容配置即插件清单package.json中的contributes字段，格式为JSON，这个字段包含两个部分：
@@ -1661,6 +1681,65 @@ visible|	String|	默认显示|	否	|控制自定义组件是否显示的命令�
 最终效果如下：当你下载安装该插件后，会直接执行hello命令，弹出信息提示。
 
 ![](./img/init.gif)
+
+## 插件翻译
+
+插件默认语言需要为英文，如果需要适配Goby内其它语言，则需要设置翻译文件；如果未设置翻译，则Goby使用默认语言。
+
+### 相关示例
+
+package.json中配置翻译文件路径
+
+```
+	{
+	  "language":{
+	    "CN":"src/assets/translate/CN/translate.json",
+	    "DE":"src/assets/translate/DE/translate.json",
+	    "JA":"src/assets/translate/JA/translate.json",
+	    "KO":"src/assets/translate/KO/translate.json",
+	    "FR":"src/assets/translate/FR/translate.json"
+	  }
+	} 
+```
+翻译文件：translate.json
+
+ - 必须为json格式且内容与package.json相同。
+ - 内容包括：description、contributes、readme以及changelog。
+ - readme与changelog的值是对应文件与当前语言translate.json的相对路径。
+ - 自定义弹窗中内容的翻译推荐使用i18n，可参考FOFA插件。
+ 
+ 例如：中文翻译
+ 
+```
+	{
+		"description":"将通过FOFA查询的IP和端口，快速导入goby进行扫描。",
+		"contributes":{
+			"configuration":{
+			   "Email": {
+					"description": "FOFA Email"
+				},
+				"Key": {
+					"description": "FOFA Key"
+				},
+				"Size": {
+					"description": "查询返回到每页的数量，默认100条，最大可设置为10000条。"
+				} 
+			},
+			"views":{
+				"scanDia": [
+					{
+						"title": "FOFA",
+						"tips":"FOFA"
+					}
+				]
+			}
+		},
+		"readme":"./README.md",
+		"changelog":"./CHANGELOG.md"
+	}
+```
+
+
 
 ## 插件清单
 每一个goby插件都需要一份插件清单（package.json），必须放在插件根目录下。
