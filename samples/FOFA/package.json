@@ -1,8 +1,8 @@
 {
 	"name": "FOFA",
 	"publisher": "GobySec",
-	"description": "将通过FOFA查询的IP和端口，快速导入goby进行扫描。",
-	"version": "0.1.13",
+	"description": "The IP and port queried by FOFA will be quickly imported into goby for scanning.",
+	"version": "0.1.40",
 	"icon": "src/assets/img/fofa.png",
 	"engines": "1.6.170",
 	"initEvents": "",
@@ -22,7 +22,7 @@
 			"Size": {
 				"type": "string",
 				"default": "100",
-				"description": "查询返回到每页的数量，默认100条，最大可设置为10000条。"
+				"description": "The query returns the number of each page, the default is 100, and the maximum can be set to 10000."
 			}
 		},
 		"views": {
@@ -30,12 +30,18 @@
 				{
 					"command": "fofa",
 					"title": "FOFA",
+					"tips":"FOFA",
 					"icon": "src/assets/img/fofa.png"
 				}
 			]
 		}
 	},
+	"language":{
+		"CN":"src/assets/translate/CN/translate.json"
+	},
 	"scripts": {},
 	"devDependencies": {},
 	"dependencies": {}
 }
+
+

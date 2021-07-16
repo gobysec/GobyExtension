@@ -1,17 +1,23 @@
 ## 0.1.0 - 12th June,2020
-通过配置fofa账号和key，查询对应的ip和端口，并导入到扫描配置里。
+By configuring the fofa account and key, query the corresponding IP and port, and import it into the scan configuration.
 
 ## 0.1.5 - 16th June,2020
-请求地址改为https://fofa.so
+The request address is changed to https://fofa.so.
 
 ## 0.1.9 - 11th Aug,2020
-新增配置项Size: 查询返回到每页的数量，默认100条，最大可设置为10000条。
+Newly added configuration item Size: the number of queries returned to each page, the default is 100, and the maximum can be set to 10,000.
 
 ## 0.1.11 - 26th Oct,2020
-导入时过滤ipv6地址
+Filter ipv6 addresses when importing.
 
 ## 0.1.12 - 18th Jan,2021
-导入时判断是否为udp端口，如果是udp端口则添加 U: 。
+When importing, judge whether it is a UDP port, if it is a UDP port, add "U:".
 
 ## 0.1.13 - 9th Jun,2021
-如果搜索内容为公网IP,则自动补全语法为 IP=" "。
+If the search content is a public network IP, the auto-complete syntax is IP=" ".
+
+## 0.1.2 - 7th July,2021
+Increase English translation, adapt to Goby multi-language.
+
+## 0.1.4 - 16th July,2021
+Fixed display issues

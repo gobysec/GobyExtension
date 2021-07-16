@@ -12,12 +12,12 @@
 <body>
   <div class="layui-form-item clearfix">
     <div class="layui-input-block marLeft0 fl search-input-wrap">
-      <input id="fofa-input" type="text" name="title" required lay-verify="required" placeholder="请输入查询规则"
+      <input id="fofa-input" type="text" name="title" required lay-verify="required" data-i18n="[placeholder]Please enter the query rule"
         autocomplete="off"
         class="layui-input">
       <span class="fofa-search"><i class="iconfont iconfangdajing"></i></span>
     </div>
-    <button class="layui-btn export-ip fr" lay-submit lay-filter="formDemo">导入当前页</button>
+    <button class="layui-btn export-ip fr" lay-submit lay-filter="formDemo" data-i18n="Import"></button>
   </div>
   <div class="layui-table-wrap">
     <table lay-filter="demo" id="ip-table" class="layui-table">
@@ -25,7 +25,7 @@
         <tr>
           <th min-width="50">host</th>
           <th min-width="50">IP</th>
-          <th min-width="50">端口</th>
+          <th min-width="50">port</th>
           <th min-width="50">title</th>
         </tr> 
       </thead>
@@ -41,20 +41,52 @@
     </div>
   </div>
   <div id="page"></div>
-
+  <span data-i18n="description"></span>
   <script src="assets/js/jquery-3.3.1.min.js"></script>
+  <script src="assets/js/jquery.i18next.js"></script>
   <script src="assets/js/jquery.base64.js"></script>
   <script src="assets/lib/layui/layui.all.js"></script>
   <script>
     
     let goby = parent.goby; // 获取GobyAPi
-	let net  = parent.require('net');
+    let fs = parent.require('fs');
     let results = []; // 定义搜索结果数组
+    let net = parent.require('net')
     // 字符串转base64
     function encode(str){
       var base64 = $.base64.encode(str);
       return base64;
     }
+
+    function lang(){
+      //获取当前Languzge
+      let language = goby.getLang();
+
+      //判断翻译文件是否存在
+      let translateState = fs.existsSync(goby.__dirname + '/assets/translate/' + language+'/html.json');
+
+      //翻译文件存在则使用翻译文件,否则使用默认EN翻译
+      let lang = translateState?language:'EN';
+
+      let a = $.i18n.init({
+        lng: language, //指定语言
+        useCookie:false,
+        resGetPath: './assets/translate/'+lang+'/html.json',//语言包的路径
+      }, function(err, t) {
+        if(!err){
+          $('[data-i18n]').i18n(); // 通过选择器集体翻译
+          return;
+        }
+        goby.showErrorMessage(err)
+      });
+    }
+
+    lang();
+    
+    //当lang改变时更新页面内容
+    goby.bindEvent('onChangeLang',()=>{
+      lang();
+    })
     
     // 查询数据
     function getData(page, type) {
@@ -66,15 +98,13 @@
       let key = config.Key.default;
       let size = config.Size.default; // fofaApi size
       let content = $("#fofa-input").val(); // 调用fofaApi搜索
-	  
-	  if(net.isIP(content.trim())){//判断是否为ip,如果是ip,则补全为ip=""
-		  let ip = content.trim();
-		  if(!IsLAN(ip)){
-				content=`ip="${content.trim()}"`;
-				$("#fofa-input").val(content);
-		  }
-		  
-	  }
+      if(net.isIP(content.trim())){//判断是否为ip,如果是ip,则补全为ip=""
+        let ip = content.trim();
+        if(!IsLAN(ip)){
+          content=`ip="${content.trim()}"`;
+          $("#fofa-input").val(content);
+        }
+      }
       let qbase64 = encode(content);
       let url = `https://fofa.so/api/v1/search/all?email=${email}&key=${key}&qbase64=${qbase64}&page=${page}&size=${size}&fields=host,ip,port,title,base_protocol`;
       $.ajax({
@@ -144,34 +174,38 @@
         let ips = [];
         let ports = [];
         results.forEach((v, k) => {
-          if(net.isIPv4(v[1])){
+          let reg = /^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$/ig;
+          if(!v[1].match(reg)){
             ips.push(v[1]);
             ports.push(v[4]=="udp"?`U:${v[2]}`:v[2]);
+          }else{
+            
           }
         })
         
         goby.addScanIps(ips, 1);
         goby.addScanPorts(ports, 1);
-        goby.showSuccessMessage("导入扫描对象成功");
+        goby.showSuccessMessage($.t("Import scanned objects successfully"));
         goby.closeIframeDia();
       } else {
-        goby.showInformationMessage("导入对象不能为空");
+        goby.showInformationMessage($.t("Import object cannot be empty"));
       }
     })
-	function IsLAN(ip) {
-	    ip.toLowerCase();
-	    if(ip=='localhost') return true;
-	    var a_ip = 0;
-	    if(ip == "") return false;
-	    var aNum = ip.split("."); 
-	    if(aNum.length != 4) return false;
-	    a_ip += parseInt(aNum[0]) << 24;
-	    a_ip += parseInt(aNum[1]) << 16;
-	    a_ip += parseInt(aNum[2]) << 8;
-	    a_ip += parseInt(aNum[3]) << 0;
-	    a_ip=a_ip>>16 & 0xFFFF;
-	    return( a_ip>>8 == 0x7F || a_ip>>8 == 0xA || a_ip== 0xC0A8 || (a_ip>=0xAC10 && a_ip<=0xAC1F) );
-	}
+
+    function IsLAN(ip) {
+        ip.toLowerCase();
+        if(ip=='localhost') return true;
+        var a_ip = 0;
+        if(ip == "") return false;
+        var aNum = ip.split("."); 
+        if(aNum.length != 4) return false;
+        a_ip += parseInt(aNum[0]) << 24;
+        a_ip += parseInt(aNum[1]) << 16;
+        a_ip += parseInt(aNum[2]) << 8;
+        a_ip += parseInt(aNum[3]) << 0;
+        a_ip=a_ip>>16 & 0xFFFF;
+        return( a_ip>>8 == 0x7F || a_ip>>8 == 0xA || a_ip== 0xC0A8 || (a_ip>=0xAC10 && a_ip<=0xAC1F) );
+    }
   </script>
 </body>
 
