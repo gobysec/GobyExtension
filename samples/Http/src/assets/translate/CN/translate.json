@@ -1,0 +1,19 @@
+{
+    "description": "可以对扫描出的IP进行http发包测试",
+    "contributes": {
+        "views": {
+            "ipDetail": {
+                "bannerTop": [
+                  {
+                    "command": "http",
+                    "title": "Http发包",
+                    "icon": "src/assets/img/http.png"
+                  }
+                ]
+            }
+        }
+    },
+
+    "readme":"./README.md",
+    "changelog":"./CHANGELOG.md"
+}

@@ -1,8 +1,8 @@
-## 快速开始
-1.安装
+## Quick start
+1. Installation
 
-2.在IP详情页里，点击banner列表上的对应Logo，显示发包界面,点击按钮，默认发送get的http请求
+2. In the IP details page, click the corresponding Logo on the banner list to display the package interface, click the button, and send the get http request by default
 
 ![](static/img/extension/ex-http.gif)
 
-3.Github: [https://github.com/gobysec/GobyExtension/tree/master/samples/Http](https://github.com/gobysec/GobyExtension/tree/master/samples/Http)，也可以从git上下载插件，手动放入到 /extensions 目录，然后重启Goby
+3. Github: [https://github.com/gobysec/GobyExtension/tree/master/samples/Http](https://github.com/gobysec/GobyExtension/tree/master/samples/Http), you can also download from Download the plugin on git, manually put it into the /extensions directory, and restart Goby

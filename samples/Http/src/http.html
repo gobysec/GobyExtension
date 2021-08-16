@@ -29,7 +29,7 @@
     // 获取iframe的参数
     function GetIframeQueryString(name, id) {
       var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
-      var r =window.parent.document.getElementById(id).contentWindow.location.search.substr(1).match(reg);
+      var r =window.location.search.substr(1).match(reg);
       if (r != null) {
       return decodeURI(r[2]);
       }
@@ -47,10 +47,10 @@
         contentType: 'application/x-www-form-urlencoded;charset=utf-8',
         dataType: "json",
         success(res) {
-          $("#res").html(JSON.stringify(res));
+          $("#res").text(JSON.stringify(res));
         },
         error(res) {
-          $("#res").html(JSON.stringify(res));
+          $("#res").text(JSON.stringify(res));
         }
       });
     })
