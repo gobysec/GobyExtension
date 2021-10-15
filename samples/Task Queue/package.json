@@ -1,8 +1,8 @@
 {
 	"name": "Task Queue",
 	"publisher": "GobySec",
-	"description": "自定义任务队列,当前任务完成后自动开启下一个任务。同时支持拖拽排序与定时任务",
-	"version": "0.2.0",
+	"description": " This plugin can customize scan tasks. After the current task is completed, the next task will be automatically enabled. You can also drag and drop the task list to sort and create scheduled tasks.",
+	"version": "0.2.1",
 	"icon": "src/assets/img/logo2.png",
 	"engines": "1.8.261",
 	"initEvents": "",
@@ -18,6 +18,9 @@
 					}
 				]
 		}
+	},
+	"language":{
+		"CN":"src/assets/translate/CN/translate.json"
 	},
 	"scripts": {},
 	"devDependencies": {},

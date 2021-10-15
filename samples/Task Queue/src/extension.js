@@ -23,23 +23,21 @@ function activate(content) {
 						if(timeNode){
 							clearInterval(this.timed);
 							this.timed = setInterval(()=>{
-								console.log(45465);
 								let  queue = this.getQueue();
-								
 								if(!this.timeNode) return;
 								if(new Date().getTime() >= new Date(this.timeNode).getTime()){
 									
 									if(queue.data.filter(v=>v.isTimeNode ==1 && v.state == 2).length==0) return;
 									
 									if(this.isImmediately){//到达定时时间后立即开始扫描定时任务
-
 										if(!this.isTargetTime){
 											if(goby.getScanState().state!=3){
-												this.stopScan().then(()=>{
+												goby.getScanState().state == 1 && this.stopScan().then(()=>{
 													this.isTargetTime = true;
 												}).catch((err)=>{
 													console.log(err);
 												})
+												goby.getScanState().state !=1 && (this.isTargetTime = true)  && (endScanFun({}))
 											}
 											
 										}
@@ -47,6 +45,7 @@ function activate(content) {
 										if(goby.getScanState().state != 1 && goby.getScanState().state != 3){
 											if(!this.isTargetTime){
 												if(queue.data.filter(v=>v.isTimeNode == 1 && v.state == 2).length>0 && queue.data.filter(v=>v.isTimeNode == 1 && v.state == 1).length==0){
+													
 													this.startScan(queue.data.filter(v=>v.isTimeNode == 1 && v.state == 2)[0].id).then((res)=>{
 														this.isTargetTime = true;
 														console.log('成功');
@@ -315,7 +314,8 @@ function activate(content) {
 		let url = path.join(__dirname,'./assets/taskQueue.html');
 		goby.showIframeDia(url,'Task Queue',666,600);
 	});	
-	goby.bindEvent('onEndScan',(res)=>{
+	goby.bindEvent('onEndScan',endScanFun)
+	function endScanFun(res){
 		let queue = window.taskQueue.getQueue();
 		let clear = queue.data.filter((v,k)=>{
 			return v.taskId && v.taskId == res.taskId;
@@ -380,7 +380,12 @@ function activate(content) {
 					console.log('开启下一个成功');
 				});
 			}
+			console.log(window.taskQueue.isTargetTime);
+			console.log(window.taskQueue.timeNode);
+			console.log(new Date().getTime() >= new Date(window.taskQueue.timeNode).getTime());
+			console.log(timeing);
 			if(window.taskQueue.isTargetTime  && window.taskQueue.timeNode && (new Date().getTime() >= new Date(window.taskQueue.timeNode).getTime()) && timeing.length>0){
+
 				window.taskQueue.startScan(timeing[0].id).then((result)=>{
 					window.taskQueue.change({
 						...timeing[0],
@@ -392,10 +397,9 @@ function activate(content) {
 					})
 					console.log('开启下一个成功');
 				});
-			}
-				
+			}		
 		}
-	})
+	}
 	
 	goby.bindEvent('onPauseScan',(res)=>{
 		let queue = window.taskQueue.getQueue();

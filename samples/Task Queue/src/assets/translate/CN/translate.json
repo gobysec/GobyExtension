@@ -1,0 +1,15 @@
+{
+    "description": "自定义任务队列,当前任务完成后自动开启下一个任务。同时支持拖拽排序与定时任务",
+    "contributes":{
+        "views":{
+            "toolbar":[
+                {
+                    "title": "Task Queue ",
+                    "tips":"Task Queue"
+                }
+            ]
+        }
+    },
+    "readme":"./README.md",
+    "changelog":"./CHANGELOG.md"
+}

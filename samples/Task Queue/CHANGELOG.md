@@ -1,21 +1,24 @@
 ## 0.1.0 - 9th Dec,2020
-自定义任务队列，扫描完自动开启下一个任务
+Customize the scan task queue. When a task is scanned, the next specified task is automatically enabled.
 
 ## 0.1.991 - 30th Dec,2020
-1 任务可拖拽排序
+1 Scan tasks can be dragged and sorted.
 
-2 加入定时功能
+2 Add the ability to create scheduled tasks.
 
 ## 0.1.992 - 8th Jan,2021
-增加过滤敏感字符
+Add filtering for sensitive characters.
 
-## 0.1.995  -22th Jan,2021
-文案修改
+## 0.1.995  - 22th Jan,2021
+Modify copywriting.
 
-## 0.1.996  -28th Jan,2021
-重启Goby队列中的任务不清空,保留之前设置的队列任务
+## 0.1.996  - 28th Jan,2021
+When you restart Goby, do not clear the tasks in the scan task queue, and retain the previously set scan tasks.
 
-## 0.2.0
-插件api修改,更新调用startScan的方法
+## 0.2.0  - 23th Apr,2021
+Modify the plugin api and update the method that calls `startScan`.
 
-加入扫描任务时,Vulnerability选项可多选
+When adding a scan task, you can select multiple Vulnerability options.
+
+## 0.2.1 - 15th Oct,2021
+Fix some bugs

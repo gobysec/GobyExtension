@@ -279,10 +279,10 @@
             type: 'datetime',
             trigger:'focus',
             btns: ['confirm'],
-            min:new Date().getTime()+3600000,
+            min:new Date().getTime(),
             // value:new Date(new Date().getTime()+3600000),
             ready(date){
-                let nowDate = new Date(new Date().getTime()+3600000);
+                let nowDate = new Date(new Date().getTime());
                 // this.value = nowDate,
                 this.min = {
                     year:nowDate.getFullYear(),
