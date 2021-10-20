@@ -1,84 +1,90 @@
-# 概述
-goby内置了扩展能力，在插件API加持之下，goby指定的部分可以自定义或者加强。
+# Overview
 
-本文档将介绍：
- - 如何构建、运行、调试、测试和发布插件
- - 如何利用好goby的插件API
- - 显示相关指南和代码示例，方便你快速入门
+Goby has built-in expansion capabilities. Under the extension API blessing, the goby-supported parts can be customized or enhanced.
 
-## 插件能做什么？
-下面我们看看使用插件API能做到些什么：
+This document includes following items:
 
-1. 在UI中添加自定义组件和视图 - 扩展工作台
+ - How to build, run, debug, test and release extensions.
+ - How to use goby’s extensions and API better.
+ - Guidelines and code example which help you get started quickly.
 
-如果你想大概浏览一下所有的插件API，请参阅插件功能概述。插件示例列出了各种插件API使用的示例代码和指南。
+## What can extensions do?
 
-## 如何构建插件？
-想要做出一个好插件需要花费不少精力，我们先来看看这个教程的每个章节能为你做点什么：
+1. Expend the workbench by adding custom components and views to interface.
 
- - **第一步** 使用helloWorld例子教你贯穿于制作插件时的基本概念
- - **开发插件** 包含了各类插件开发的流程，比如测试、打包、发布插件
- - **插件功能** 将goby的API拆解成了几个小分类，帮你掌握到每个场景下的开发细节
- - **插件示例** 包括指南和代码实例，详细介绍特定API的使用场景
- - **参考** 包括详细的goby API,贡献点等其他内容
+If you want to have a general overview of all APIs, please refer to the function overview. The extension has included code example and guide.
 
-# 第一步
-## 你的第一个插件
-在本小节中，我们会教你一些基础概念，请先安装开发版goby([Windows](https://gobies.org/goby-win-x64-1.7.199.zip) [MacOS](https://gobies.org/goby-darwin-x64-1.7.199.zip) [Linux](https://gobies.org/goby-linux-x64-1.7.199.zip))，之后你需要下载一个可以立马开发的项目[(helloWorld)](https://gobies.org/helloWorld.zip)，将其解压到**goby/extensions**目录下，然后启动goby。
+## How to build an extension?
 
-点击开始扫描，你会发现扫描弹窗顶部会有一个hello的按钮，点击按钮，如果出现了helloWorld提示信息弹窗，那么恭喜你运行成功了！
+It’s not easy to make a good extension. Let’s take a look at what each chapter of this tutorial can do:
+
+ - **Get started** We will give you a "Hello World" example to get started.
+ - **Extension development** Contains various extension development processes, such as testing, packaging and publishing etc.
+ - **Extension functions** We disassembled goby’s API into several parts to help you get the development details for each scene.
+ - **Example Includes** code example and guide. Detailing specific API usage.
+ - **Appendix Including** the details of goby API, contributors and other extra information.
+
+
+# Get started
+
+## Your first extension
+
+In this section, you will learn some basic concepts.Please install the [Debug](https://api.gobies.org/api/plugin-download/version_hash/785a27e6263d88bf12a947c6b4c135ae)extension of goby first . After that, you need to download a project from (helloWorld). Unzip it under directory goby/extensions then start goby.
+
+Click "Start scan", you will find a hello button at the top of the pop-up window, click the button, if another pop-up windows with [(helloWorld)](https://gobies.org/helloWorld.zip) appears. Congratulations! You have finished this Step.
 
 ![](./img/hello.gif)
 
-### 开发插件
+### Extension Development
 
-现在让我们稍稍改动一下弹窗显示的内容：
- -  进入项目目录，goby/extensions/helloWorld/src/extension.js
- - 把文件里goby.showInformationMessage中的helloWorld改为hellogoby
- - 重启goby，点击开始扫描，点击hello按钮
+Now let’s change the pop-up information:
 
-这时你应该就能看到弹窗的消息更新了：
+ - Make sure you are in the "goby/extensions/helloWorld/src/" directory
+ - Edit file "extension.js", replace "helloWorld" in function "goby.showInformationMessage" with "helloGoby"
+ - Restart goby, click the hello button.
+
+Now you should seen the changed information:
 
 ![](./img/helloMod.gif)
 
-### 使用 **Javascript**
-在本文档中，我们主要使用js开发goby插件。
+### Use **JavaScript**
 
-## 解析插件结构
-上一节中，你已经能够自己创建一个基础的插件了,但是它究竟是怎么运作的呢？
+In the document we mainly use JavaScript to develop goby extensions.
 
-理解下面两个关键概念你才能作出一个基本的插件：
+## Resolving extension structure
 
- -  **发布内容配置**：goby扩展了 package.json（插件清单）的字段以便于开发插件
- - **goby API**：你的插件代码中需要调用的一系列JavaScript API
+In last section, you have learned create a new basic extension by yourself. But how does it work?
 
-大体上，你的插件就是通过组合发布内容配置和goby API扩展goby的功能。你能在插件功能概述章节中找到合适你插件的贡献点和goby API。
+The next two concepts will help you:
 
-现在让我们自己看一看helloWorld示例的源码部分，以及我们上面提到的两个概念是如何应用其中的。
+ - **Publishing configuration**：goby expands the fields of package.json (extension list) to facilitate the development of extensions.
+ - **Goby API**：your extension code depends on various JavaScript API.
 
-### 插件目录结构
-      
-          ├── .gitignore          // 忽略构建输出和node_modules文件
-          ├── README.md           // 插件介绍文档
-          ├── CHANGELOG.md        // 插件更新日志文档
+In general, your extension is to extend the goby’s function by combining publishing content configuration and goby API. You can find appropriate contributions and goby API for your extensions in the "Overview of extension functions".
+
+Now let’s take a look of the example code in "helloWorld", And how the two concepts we mentioned above are applied.
+
+### Extension directory structure
+
+          ├── .gitignore          // Ignore build output and node_modules 
+          ├── README.md           // Help document
+          ├── CHANGELOG.md        // Update log file
           ├── src
-          │   └── extension.js    // 插件源代码
-          ├── package.json        // 插件配置清单
-   
-      
-目前，让我们把精力集中在这个插件的关键部分——package.json和extensions.js。
+          │   └── extension.js    // Source code
+          ├── package.json        // extension configuration list
 
-###### 插件清单
-每个goby插件都必须包含一个package.json，它就是插件的配置清单。package.json混合了Node.js字段，如：scripts、dependencies，还加入了一些goby独有的字段，如：publisher、initEvents、contributes等。关于这些goby字段说明都在插件清单参考中可以找到。我们在本节只介绍一些非常重要的字段：
 
- -  **name**: 插件的名称。
- - **publisher**: 发行者名称。goby根据publisher、name组合作为一个插件的ID。
- - **main**: 插件的主入口文件。
- - **initEvents**和**contributes**: 初始化事件和发布内容配置。 
- - **engines**: 描述了这个插件依赖的最低goby版本。
+Now let’s concentrate on the key parts of the extension——package.json and extensions.js
 
-        
-      
+###### extension list
+
+Every Goby extension must contain package.json, That is the extension configuration list. Package.json includes some of Node.js keywords. Such as scripts, dependencies, also added some goby unique fields, such as publisher, initEvents, contributes etc. All this could be found in reference of extension list. We only introduce some important fields in this section.
+
+ - **name**: The extension’s name.
+ - **publisher**: The publisher’s name. Goby will combine "publisher" and "name" as a extension’s ID.
+ - **main**: The main entrance of extension.
+ - **initEvents** 和 **contributes**: Initialize event and publish configurations.
+ - **engines**: Describes the lowest version of goby that this extension depends on.
 
 ``` json
     {
@@ -105,12 +111,11 @@ goby内置了扩展能力，在插件API加持之下，goby指定的部分可以
             "dependencies": {}
           }
 ```
-        
-      
-###### 插件入口文件
-插件入口文件需要导出一个函数，activate，当插件安装成功后，会执行这个函数。
 
-        
+
+###### Extension’s entry file
+
+Entry file need to export function activate, When the extension is installed successfully, this function will be executed. 
       
 
 ``` scilab
@@ -122,106 +127,96 @@ goby内置了扩展能力，在插件API加持之下，goby指定的部分可以
           
           exports.activate = activate;
 ```
-        
-      
-## 小结
-在本节中，你学会了如何创建，运行和调试插件，也学习了有关goby插件开发的基本概念。但这仅是初级入门，在之后的章节会进一步详细讲解如何开发插件。
 
-# 开发插件
-## 测试插件
-开发版goby为插件开发提供了运行和调试的能力，你只需要将你的插件放到**goby/extensions**目录下，然后启动goby就可以了。
+## Summary
 
-你可以点击**view**按钮，选择**toggle developer tools**，调出控制台。
+In this section, you learned how to create, run and debug extensions, and also learned the basic concepts of Goby extension development. But this is only a beginner's guide. how to develop extensions will be explained in further detail in later sections.
+
+# Extension development
+
+## Testing extensions
+
+The development version of Goby provides running and debugging capabilities for extension development. Just put your extension into the **goby/extensions** directory, and start Goby.
+
+You can click the **view** button, choose **toggle developer tools** to open the console.     
 
 ![](./img/develop.gif)
 
-## 发布插件
-发布流程：
+## Publishing
+Functions:
+ - User registration
+ - Packing
+ - Publishing
+ - Deleting
 
- - 用户注册
- - 插件打包
- - 插件发布
- - 插件删除
-
-### 用户注册
-发布goby插件，首先需要[注册](https://gobies.org/user/register)成为goby用户。
+### User registration
+Before publishing, you should [register](https://gobies.org/user/register) first.
 
 ![](./img/register.png)
 
-### 插件打包
-提交的goby插件，目前只支持zip格式包，你可以自己打包成zip上传，也可以参考打包插件章节进行自动化打包。
+### Packing
+We only accept ".zip" format packages currently, you can convert it and upload by yourself or use automatic packaging (Please refer to the next section, we will tell you how to pack your extensions).
 
-需要特别注意的是：打包时必须把插件文件夹整个打包，即执行自动解压后，要确保整个插件的目录结构是完整的。
-
+**Warning: the entire extension folder must be packaged when packaging, that means after performing automatic decompression, make sure that the directory structure of the entire extension is complete.**
 
 ![](./img/unzip.gif)
 
-### 插件发布
-用户在goby登录后，可以在个人中心-插件页点击发布插件，上传zip包之后，会有专门人员进行审核，通过审核之后，插件才会出现在市场列表里。
+### Publishing
+After login, you can publish your extensions from personal center-Extensions management, when zip archive uploaded, we will have specialized personnel to review, after passing the review, the extension will appear in the market list.
 
 ![](./img/publish.gif)
 
-### 插件删除
-你可以在个人中心-插件页里，删除插件。
+### Deleting
+You can delete extension in the personal center.
 
 ![](./img/delete.png)
 
-## 打包插件
-之前已经提过，goby插件提交时，只支持zip格式上传，对于Javascript而言，可选的打包工具非常多，本节主要演示使用[jszip](https://www.npmjs.com/package/jszip)进行打包。
+### Packaging extensions
+As mentioned before, when the goby extension is submitted, only zip format upload is supported. As for JavaScript, there are many optional packaging tools. This section mainly demonstrates the use of [jszip](https://www.npmjs.com/package/jszip) for packaging.
 
-1. 首先需要安装jszip包
-
-        
-  
+1. Install the jszip package first
 
 ``` ebnf
         npm install jszip
 ```
-        
-      
-2. 然后，在你的插件目录下新建build.js打包脚本
 
-        
-     
+2. Then, create build.js in your extension directory
 
 ``` javascript
-     var JSZip = require('jszip');
+          var JSZip = require('jszip');
           var fs = require('fs');
           var path = require("path");
           var zip = new JSZip();
 
-          // 打包文件
+          // packaging files
           zip.file("package.json", fs.readFileSync(__dirname+"/package.json"));
           zip.file("CHANGELOG.md", fs.readFileSync(__dirname + "/CHANGELOG.md"));
           zip.file("README.md", fs.readFileSync(__dirname + "/README.md"));
 
-          // 打包文件夹里的文件
+          // package files in the folder
           var src = zip.folder("src");
           src.file("extension.js", fs.readFileSync(__dirname + "/src/extension.js"));
 
-          // 压缩
+          // compress
           zip.generateAsync({
-            // 压缩类型选择nodebuffer，在回调函数中会返回zip压缩包的Buffer的值，再利用fs保存至本地
+            // select nodebuffer as the compression type，it will return the value of zip file in callback functions ，and then use fs to save to local disk.
             type: "nodebuffer"
           }).then(function (content) {
             let zip = '.zip';
-            // 写入磁盘
+            // write into disk
             fs.writeFile(__dirname + zip, content, function (err) {
               if (!err) {
-                // 写入磁盘成功
-                console.log('压缩成功');
+                // if written successfully
+                console.log('Compression successfully');
               } else {
-                console.log('压缩失败');
+                console.log('Compression failed');
               }
             });
           });
 ```
-        
-      
-3. 最后，在插件目录里执行打包命令,压缩成功后就可以在**goby/extensions**目录下，看见打包的zip文件。
 
-        
-      
+3. Finally, execute the packaging command in the extension directory. You will see the packaged zip file in **goby/extensions**.
+ 
 
 ``` crmsh
     node ./build.js
@@ -229,170 +224,165 @@ goby内置了扩展能力，在插件API加持之下，goby指定的部分可以
         
    ![](./img/zip.gif)
 
+Additionally, jszip is just one of the packaging methods, you can choose your favorite instead.
 
-当然，jszip包只是提供的一种打包方案，具体你可以用自己喜欢的打包工具。
+# Extension Functions
+## Overview
+Goby provides some methods for extensions to extend the capabilities. But sometimes it is not easy to find the appropriate publishing configuration and goby API. This section contains following parts:
 
-# 插件功能
-## 概述
-goby提供了一些方法，供插件扩展goby本身的能力。但是有的时候不容易找到合适的发布内容配置和goby API。这章内容将插件的功能分成了几个部分，每个部分都将告诉你：
+ - Available function for extension.
+ - Some inspiration
 
- - 插件可以使用的功能
- - 一些插件灵感
+However, we will also tell you some limit, such as: extensions cannot modify the underlying DOM of Goby UI.
 
-不过，我们也会告诉你一些限制点，比如：插件不可以修改goby UI底层的DOM。
+### Common Functions
+Common functions are the core functions you may use in any extension.
 
-### 常用功能
-常用功能是你在任何插件中都可能用到的核心功能。
+Including:
 
-这些功能包括：
+ - Registration order
+ - Configure the entry point for views
+ - Use custom views
+ - Configure extension settings
+ - Notifications
+ - Event Notifications
 
- - 注册命令
- - 配置视图入口点
- - 使用用户自定义视图
- - 配置插件相关设置
- - 显示通知信息
- - 事件通知
+### Extension workbench
+The extension workbench is the view entry point that user can customized, it can enhance the function of goby. For example, you can add new button on the pop-up window. By clicking the corresponding button. You can also import specify IP from other location, adding buttons on the banner list interface, or sending HTTP packet to current IP, even create a custom HTML page for easy use.
 
-### 扩展工作台
-扩展工作台即用户可以配置的视图入口点，可以加强goby的功能，比如说你可以在扫描弹窗界面添加新的按钮，点击主动获取指定ip导入扫描对象中；也可以在ip详情页banner列表的部分新增按钮，点击对当前ip直接进行http发包测试；你甚至可以自定义一个html页面，来满足开发需求。
+Inspiration
+ - Customize the operation buttons and interactive behaviors at the top of the scan pop-up window
+ - Customize the operation buttons and interactive behaviors of the banner list of the IP details page
+ - Use "goby.showIframeDia" method to display custom page content
 
-插件灵感
+### Limit
+The extension does not have permission to access the underlying DOM of the goby UI, and it is forbidden to add custom CSS and HTML fragments to the goby UI.
 
- - 定义扫描弹窗顶部的操作按钮和交互行为
- - 定义ip详情页banner列表的操作按钮和交互行为
- - 使用goby.showIframeDia方法显示自定义页面内容
+## Common functions
+Common functions are very important to your extensions. Almost all extensions will use these functions more or less. This section will briefly introduce them for you.
 
-### 限制
-当然，插件也是有一些限制的。
+### Commands
+Commands are the core of extension, for all the entry points of your customized view, the functions bound to it must be commands.
 
-插件没有权限访问goby UI的底层DOM，禁止添加自定义的CSS和HTML片段到goby UI上。
+The goby.registerCommond is indispensable for all extensions to register commands.
 
-## 常用功能
-常用功能对你的插件来说非常重要，几乎所有的插件都会或多或少的用到这些功能，下面为你简单地介绍一下它们。
+### View entry point
+Users can customize the buttons at the top of the pop-up window, You can also customize the toolbar extension buttons. Currently goby cannot support much, you can see more in contributions.views.
 
-### 命令
-命令是插件运作的核心，所有你自定义的视图入口点，它绑定的函数都必须是命令。
+Custom view
+In many cases, only configuring the view entry point is not enough for users. For example, you want to display a custom page which is searchable by clicking the button on the pop-up window, and let the user operate (edit, select) by himself. You need to use a custom view to achieve. Currently goby provides the following APIs to display custom pages:
 
-一个插件最基本应该具备：使用goby.registerCommand注册命令。
+ - Use the goby.showIframeDia method to display the content of a custom page. In goby, your page will be embedded in a pop-up window for display. The title, width and height of the window can be set by parameters.
 
-### 视图入口点
-用户可以自定义扫描弹窗顶部按钮，也可以自定义工具栏插件按钮。目前goby支持的视图入口点并不多，你可以在contributes.views中查看更多内容。
+ - You can also use the goby.showPagemethod to display the content of a custom page. Goby will embed your page on the right side and this page can run in the background.
 
-### 自定义视图
-很多时候，只配置视图入口点是不能满足开发需求的，比如说你想实现点击扫描弹窗自定义的按钮后，显示一个自定义的可搜索的列表页面，让用户自己操作、选择，这时候就需要用到自定义视图。目前goby提供了以下API来显示自定义页面：
- 
- - 使用goby.showPage方法也可以显示自定义页面内容，goby会将你的页面内嵌到右侧显示，可设置是否后台运行。 
+### Extension settings
+Most extensions will be open for users. If you have this requirement, just fill in the relevant configuration items in contributions.configuration.
 
- - 使用goby.showIframeDia方法就可以显示自定义页面内容，在goby里会将你的页面嵌入到弹窗里进行显示，弹窗的标题，宽高等都可以通过参数进行设置。
+At the same time, you can get the extension configuration item from goby.getConfiguration, you can also modify it from goby.setConfiguration.
 
-### 插件相关设置
-大部分插件在开发时，都会对外开放配置，如果你有这个需求，只要在contributes.configuration中填写有关的配置项即可。
-
-同时，你可以通过goby.getConfiguration获取该插件配置项；也可以通过goby.setConfiguration设置该插件配置项。
-
-### 通知信息
-几乎所有的插件都需要在某些时候为用户提示信息。goby提供了4个API来展示不同重要程度的信息：
+### Notification
+Almost all extensions need to prompt users at some point. Goby provides 4 APIs to display information of different importance.
 
  - goby.showInformationMessage
  - goby.showWarningMessage
  - goby.showErrorMessage
  - goby.showSuccessMessage
 
-### 事件通知
-很多时候，插件需要参与到扫描过程中，需要在扫描状态发生变化时执行一些事件，或者实时获取扫描数据，此时可以通过goby.bindEvent来绑定事件通知。
+### Event Notifications
+In many cases, extensions need to participate in the scanning process and trigger some events when the scanning status changes, or obtain real time scan data. At this time, you can bind event notifications by goby.bindEvent.
 
-## 扩展工作台
-“工作台”是指整个goby UI，目前goby可配置的UI部分如下：
+## Extension workbench
+Workbench refers to the entire goby UI, the current configurable parts are as follows:
 
- - 扫描弹窗页 - scanDia
- - 扫描结果页 - scanRes
- - 更多下拉菜单 - moreOptions (废弃于： v 1.8.237)
- - ip详情页 - ipDetail
- -  banner列表的标题栏 - bannerTop
- - 漏洞列表页 - vulList
- - Webfinder页 - webfinder
- - 左侧导航页 - leftNav (新增于：v 1.8.225   废弃于： v 1.8.237)
- - toolbar - toolbar (新增于：v 1.8.230  )
+ - Pop-up scan page - scanDia
+ - Scan result page - scanRes
+ - Drop-down menu - moreOptions (Deprecated in：v 1.8.237)
+ - IP detail page - ipDetail
+ - The title bar of the banner list - bannerTop
+ - Vulnerability list - vulList
+ - Webfinder page - webfinder
+ - Left navigation - page-leftNav (New in：v 1.8.225   Deprecated in：v 1.8.237)
+ - toolbar - toolbar (New in：v 1.8.230  )
 
-## 扫描弹窗页 - **scanDia**
-在插件清单中配置contributes.views.scanDia，就可以给扫描弹窗顶部添加自定义的组件。具体位置如图：
+## Pop-up scan page - **scanDia** 
+Modify contributes.views.scanDia in the extension list to add custom components to the top of the pop-up scan page. As shown below:
 
 ![](./img/scanDia.png)
 
-同时关于scanDia的具体使用，也有一个简单的例子可供学习，具体见扫描弹窗页。
+There is also a simple example for learning about the specific use of scanDia, see the next scanDia part below for more details.
 
-## 扫描结果页 - **scanRes**
-###### 更多下拉菜单 - moreOptions
-废弃于： v 1.8.237
+## Scan result page - **scanRes**
+###### Drop-down menu - moreOptions
+Deprecated in：v 1.8.237
 
-在插件清单中配置contributes.views.scanRes.moreOptions，就可以给扫描结果的下拉菜单添加自定义的组件，同时资产列表、漏洞列表页的下拉菜单也会出现相同组件。具体位置如图：
+By modifying contributions.views.scanRes.moreOptions in the extension list, you can add custom components to the drop-down menu of the scan results, and the same components will also appear in the asset list and vulnerability list pages. As shown below:
 
 ![](./img/moreOptions.png)
 ![](./img/moreOptions1.png)
 ![](./img/moreOptions2.png)
 
-同时关于moreOptions的具体使用，也有一个简单的例子可供学习，具体见扫描结果页。
+There is also a simple example for learning about the specific use of moreOptions, see the next scanRes part below for more details.
 
-## ip详情页 - **ipDetail**
-banner列表的标题栏 - bannerTop
-在插件清单中配置contributes.views.ipDetail.bannerTop，就可以给ip详情页banner列表的标题栏添加自定义的组件。具体位置如图：
+## IP detail page - **ipDetail**
+The title bar of the banner list - bannerTop
+Modifying contributions.views.ipDetail.bannerTop in the extension list to add custom components to the title bar of the banner list of the IP details page. As shown below:
 
 ![](./img/bannerTop.png)
 
-同时关于bannerTop的具体使用，也有一个简单的例子可供学习，具体见ip详情页。
+There is also a simple example for learning about the specific use of bannertTop, see the next ipDetail part below for more details.
 
-## 漏洞列表页 - **vulList**
-在插件清单中配置contributes.views.vulList，就可以给漏洞列表相关的页面添加自定义的组件。具体位置如图：
+## Vulnerability list - **vulList**
+Modify the contributions.views.vulList in the extension list to add custom components to the pages related to the vulnerability list. As shown below:
 
 ![](./img/vulList.png)
 ![](./img/vulList1.png)
 ![](./img/vulList2.png)
 ![](./img/vulList3.png)
 
-同时关于vulList的具体使用，也有一个简单的例子可供学习，具体见漏洞列表页。
+There is also a simple example for learning about the specific use of vulList, see the next ipDetail part below for more details.
 
-## Webfinder页 - **webfinder**
-在插件清单中配置contributes.views.webfinder，就可以给webfinder页面添加自定义的组件。具体位置如图：
+## Webfinder page - **webfinder**
+Modify the contributions.views.webfinder in the extension list to add custom components to the pages related to the webfinder page. As shown below:
 
 ![](./img/webfinder.png)
 
-同时关于webfinder的具体使用，也有一个简单的例子可供学习，具体见webfinder页。
+There is also a simple example for learning about the specific use of webfinder, see the next webfinder part below for more details.
 
-## 左侧导航页 - **leftNav**
-**新增于：1.8.225 废弃于： v 1.8.237**
+## Left navigation page - **leftNav**
+**New in：v 1.8.225   Deprecated in：v 1.8.237**
 
-在插件清单中配置contributes.views.leftNav，就可以给左侧导航栏添加自定义的组件。具体位置如图：
+You can configure contributes.views.leftNav in the extension list to add custom components to the left navigation bar. The specific location is as follows:
 
 ![](./img/leftNav.png)
 
-同时关于LeftNav的具体使用，也有一个简单的例子可供学习，具体见左侧导航页。
+There is also a example for learning about the specific use of Left-nav, see the left navigation page for details.
 
 ## toolbar - **toolbar**
-**新增于：1.8.230**
+**New in：v 1.8.230**
 
-在插件清单中配置contributes.views.toolbar，就可以给工具栏添加自定义的组件。具体位置如图：
+Modify contributes.views.toolbar in the extension list to add custom components to the toolbar. The specific location is as follows:
+
 ![](./img/toolbar.jpg)
 
-同时关于toolbar的具体使用，也有一个简单的例子可供学习，具体见工具栏。
+There is also a simple example for learning about the specific use of toolbar, see the next scanDia part below for more details.。
 
-# 插件示例
-## 概述
-在插件功能章节，从更宽泛的层面上介绍了插件能做些什么，本章则细化了各个功能点，并提供了详细的代码例子。
+# Extension example
+## Overview
+In the extension function section, document introduced what extension can do. This section details each function and provides detailed code examples.
 
-在每个示例中，你将会看到：
+In this section you will learn:
+ - List of goby APIs used
+ - List of contributions (published content configuration) used
+ - Gif or image of the sample extension
 
- - 使用的goby API列表
- - 使用的contributes（发布内容配置）列表
- - 示例插件的gif或者图片
+## Pop-up scan page - scanDia
+The configuration of the scan pop-up window allows users to customize the processing and operation of scan. This example is mainly to add a button in the scan pop-up window, click to display a custom page. In this page, you can perform FOFA query, get the scanned object, and import IP and port from object.
 
-## 扫描弹窗页 - scanDia
-扫描弹窗页的配置，使得用户可以对扫描配置进行自定义的处理和操作，下面我们看一个简单的例子。这个例子主要是在扫描弹窗页里，新增一个按钮，点击显示自定义页面，在这个自定义页面里可以进行fofa查询，获取扫描对象，并导入到扫描ip、端口里。
-
-### 下载链接
+### Download link
 [FOFA](https://gobies.org/FOFA.zip)
 
-### 使用的**goby API**
-
+### **Goby API** used
  - goby.registerCommand
  - goby.showIframeDia
  - goby.closeIframeDia
@@ -404,38 +394,31 @@ banner列表的标题栏 - bannerTop
  - goby.showErrorMessage
  - goby.showSuccessMessage
 
-### 示例
-第一步，你需要注册自定义组件要触发的命令。
+### Example
+First, you need to register the command to be triggered by the custom component.
 
-        
-      
-
-``` zephir
-    function activate(content) {
+``` 
+          function activate(content) {
             goby.registerCommand('fofa', function () {
-              // 获取插件配置项
+              // get extension configuration
               let config = goby.getConfiguration();
               let email = config.email.default;
               let key = config.key.default;
               if (email && key) {
                 let path = __dirname + "/fofa.html"
-                // 显示自定义页面
-                goby.showIframeDia(path, "fofa查询", "666", "500");
+                // display custom page
+                goby.showIframeDia(path, "fofa search", "666", "500");
               } else {
-                // 显示插件配置弹窗
+                // display extension pop-up configuration
                 goby.showConfigurationDia();
               }
             });
           }
           
           exports.activate = activate;
-```
-        
-      
-第二步，你需要在package.json里配置对应视图入口点，即contributes.views.scanDia,填写想要的标题、对应的命令和icon。
+``` 
 
-        
-      
+Second, you need to configure the corresponding view entry point in package.json, function name is contributions.views.scanDia, and fill in the required fields(title, command, icon).  
 
 ``` json
     {
@@ -453,11 +436,8 @@ banner列表的标题栏 - bannerTop
 	}
 ```
         
-      
-第三步，因为使用了fofa查询，所以需要增加fofa账号和key的配置项，你需要在package.json的contributes.configuration字段里添加相关配置。
-
-        
-     
+Third, because we have used FOFA for collecting, we need to add FOFA account and key to configuration files, just modify contributes.configuration in package.json.      
+   
 
 ``` json
     {
@@ -478,29 +458,27 @@ banner列表的标题栏 - bannerTop
 	}
 ```
         
-      
-第四步，点击自定义的组件后，要显示用户自定义的界面，可以用goby.showIframeDia，传入html页面。
+Fourth, after using the custom component, to display the specific interface, you can use goby.showIframeDia to transfer the html page.
 
-需要特别注意的是，在自定义的html页面里使用goby API对象时，必须通过parent.goby的方法获取。
+Attention! When using the goby API object in a custom HTML page, it must be obtained through the "parent.goby" function.    
 
 ![](./img/fofa-html.png)
 
-至于具体的代码内容，可以[下载代码](https://gobies.org/FOFA.zip)查看详细。
+If you want know more, you can [download the code](https://gobies.org/FOFA.zip) to view the details.
 
-最终效果如下：
+The final effect is shown below:
 
 ![](./img/ex-fofa.gif)
 
-## 扫描结果页 - scanRes.moreOptions
-废弃于： v 1.8.237
+## Scan result page - scanRes.moreOptions
+Deprecated in：v 1.8.237
 
-扫描结果页的配置，使得用户可以对扫描后的结果进行自定义的处理和操作，下面我们看一个简单的例子。这个例子主要是在扫描结果页更多下拉框里，新增一个按钮，点击可以选择导出不同字段的csv文件的功能。
+This page allows users to customize the processing and operation of the scanned results. Let's look at a simple example below. This example is used to add a button in the drop-down menu on the scan result page, the button can export selected items to csv file.
 
-### 下载链接
+### Download link
 [ExportCsv](https://gobies.org/ExportCsv.zip)
 
-### 使用的**goby API**
-
+### **Goby API** used
  - goby.registerCommand
  - goby.showIframeDia
  - goby.closeIframeDia
@@ -510,28 +488,21 @@ banner列表的标题栏 - bannerTop
  - goby.showErrorMessage
  - goby.showSuccessMessage
 
-### 示例
-第一步，你需要注册自定义组件要触发的命令。
-
-        
-     
+### Example
+First, you need to register the command to be triggered by the custom component.
 
 ``` lua
      function activate(content) {	
             goby.registerCommand('ExportCsv', function () {
               let path = __dirname + "/index.html"
-              goby.showIframeDia(path, "导出", "334", "210");
+              goby.showIframeDia(path, "export", "334", "210");
             });
           }
           
           exports.activate = activate;
 ```
         
-      
-第二步，你需要在package.json里配置对应视图入口点，即contributes.views.scanRes.moreOptions,填写想要的标题、对应的命令和icon。
-
-        
-      
+Second, you need to configure the corresponding view entry point in package.json, function name is contributes.views.scanRes.moreOptions, and fill in the required fields(title, command, icon).    
 
 ``` json
     {
@@ -549,48 +520,39 @@ banner列表的标题栏 - bannerTop
           }
 ```
         
-      
-第三步，点击自定义的组件后，要显示用户自定义的界面，可以用goby.showIframeDia，传入html页面。
+Third, after using the custom component, to display the specific interface, you can use goby.showIframeDia to transfer the html page.
 
-至于具体的代码内容，可以[下载代码](https://gobies.org/ExportCsv.zip)查看详细。
+If you want know more, you can [download the code](https://gobies.org/ExportCsv.zip) to view the details.
 
-最终效果如下：
+The final effect is shown below:
 
 ![](./img/ex-export.gif)
 
-## ip详情页 - ipDetail.bannerTop
-ip详情页的配置，使得用户可以对ip详情页进行自定义的处理和操作，下面我们看一个简单的例子。这个例子主要是在ip详情页的banner列表里，新增一个按钮，点击可以进行http发包测试。
+## IP detail page - ipDetail.bannerTop
+This page allows users to customize the processing and operation of the IP details page. Let's look at a simple example below. This example is mainly to add a button in the banner list of the IP details page, click it to send HTTP packets.
 
-### 下载链接
+### Download link
 [Http](https://gobies.org/Http.zip)
 
-### 使用的**goby API**
-
+### **Goby API** used
  - goby.registerCommand
  - goby.showIframeDia
 
-### 示例
-第一步，你需要注册自定义组件要触发的命令。
-
-        
-     
+### Example
+First, you need to register the command to be triggered by the custom component.    
 
 ``` lua
      function activate(content) {
             goby.registerCommand('http', function (content) {
               let path = __dirname + "/http.html?hostinfo=" + content.hostinfo;
-              goby.showIframeDia(path, "http发包", "441", "188");
+              goby.showIframeDia(path, "http send packet", "441", "188");
             });
           }
           
           exports.activate = activate;
 ```
         
-      
-第二步，你需要在package.json里配置对应视图入口点，即contributes.views.ipDetail.bannerTop,填写想要的标题、对应的命令和icon。
-
-        
-   
+Second, you need to configure the corresponding view entry point in package.json, function name is contributes.views.ipDetail.bannerTop, and fill in the required fields(title, command, icon).
 
 ``` xquery
        "contributes": {
@@ -599,7 +561,7 @@ ip详情页的配置，使得用户可以对ip详情页进行自定义的处理�
                 "bannerTop": [
                   {
                     "command": "http",
-                    "title": "Http发包",
+                    "title": "Http send packet",
                     "icon": "src/assets/img/http.png"
                   }
                 ]
@@ -608,47 +570,41 @@ ip详情页的配置，使得用户可以对ip详情页进行自定义的处理�
            }
 ```
         
-      
-第三步，点击自定义的组件后，要显示用户自定义的界面，可以用goby.showIframeDia，传入html页面。
+Third, after using the custom component, to display the specific interface, you can use goby.showIframeDia to transfer the html page.
 
-至于具体的代码内容，可以[下载代码](https://gobies.org/Http.zip)查看详细。
+If you want know more, you can download the code to view the details.
 
-最终效果如下：
+The final effect is shown below:
 
 ![](./img/ex-http.gif)
 
-## 漏洞列表页 - vulList
-漏洞列表页的配置，使得用户可以对漏洞相关的页面进行自定义的处理和操作，下面我们看一个简单的例子。这个例子主要是在漏洞相关的页面，根据当前漏洞名是否在自定义的列表里，动态显示MSF利用按钮，点击按钮可以一键调用本地Metasploit框架，对该漏洞进行检测。
+## Vulnerability list - vulList
+This page allows users to customize the processing and operation of the vulnerability. Let’s look at a simple example. This example is mainly based on whether the current vulnerability name is in the custom list, display the MSF utilization button dynamically. Click the button to call the local Metasploit framework to detect the vulnerability.
 
-### 下载链接
+### Download link
 [MSF Sploit](https://gobies.org/MSFSploit.zip)
 
-### 使用的**goby API**
-
+Goby API used
  - goby.registerCommand
  - goby.getConfiguration
  - goby.setConfiguration
  - goby.showInformationMessage
  - goby.showErrorMessage
 
-### 示例
-第一步，你需要注册自定义组件要触发的命令。与之前的几个例子不同的是，这里使用了控制组件是否显示的回调命令，它绑定在views的visible字段上，根据其返回的布尔值来决定是否显示该组件。
+### Example
+First, you need to register the command to be triggered by the custom component. Different from the previous examples is that the callback command controls the component’s visibility. It is bound to the visible field of views and determines whether to display the component according to the returned Boolean value.
 
-        
-     
-
-``` javascript
-     let cp = require('child_process');
+```       let cp = require('child_process');
           const os = require('os');
           const fs = require('fs');
 
           function activate (content) {
-              // msf 对应关系
+              // msf correspondence
               let identical = {
                   "Eternalblue/DOUBLEPULSAR MS17-010 SMB RCE": "exploit/windows/smb/ms17_010_eternalblue"
               };
 
-              // 点击触发的命令
+              // Click to trigger the command
               goby.registerCommand('msf', function (content) {
                   let config = goby.getConfiguration();
                   console.log(config)
@@ -681,7 +637,7 @@ ip详情页的配置，使得用户可以对ip详情页进行自定义的处理�
                   }
               });
 
-              // 控制组件是否显示的回调命令
+              // callback command controls the visibility
               goby.registerCommand('msf_visi', function (content) {
                 if (identical[content.name]) return true;
                 return false;
@@ -691,11 +647,7 @@ ip详情页的配置，使得用户可以对ip详情页进行自定义的处理�
           exports.activate = activate;
 ```
         
-      
-第二步，你需要在package.json里配置对应视图入口点，即contributes.views.vulList,填写想要的标题、对应的命令、以及控制该组件显示的回调命令。
-
-        
-     
+Second, you need to configure the corresponding view entry point in package.json, function name is contributes.views.vulList, and fill in the required fields(title, command and callback command).         
 
 ``` xquery
      "contributes": {
@@ -711,11 +663,7 @@ ip详情页的配置，使得用户可以对ip详情页进行自定义的处理�
           }
 ```
         
-      
-第三步，因为要调用本地Metasploit，所以需要增加Metasploit安装路径的配置项，你需要在package.json的contributes.configuration字段里添加相关配置。
-
-        
-   
+Third, because it will call the local Metasploit, you need to modify the configuration which contains Metasploit’s installation path. Just add path to contributes.configuration in package.json.
 
 ``` xquery
        "contributes": {
@@ -723,37 +671,31 @@ ip详情页的配置，使得用户可以对ip详情页进行自定义的处理�
               "url": {
                 "type": "string",
                 "default": "",
-                "description": "请输入插件地址"
+                "description": "Please enter the extension address"
               }
             }
           }
 ```
         
-      
-至于具体的代码内容，可以[下载代码](https://gobies.org/MSFSploit.zip)查看详细。
+If you want know more, you can [download the code](https://gobies.org/MSFSploit.zip) to view the details.
 
-最终效果如下：
+The final effect is shown below:     
 
 ![](./img/ex-msf.gif)
 
-## Webfinder页 - webfinder
-webfinder页，使得用户可以对扫描出的web列表，进行自定义的处理和操作，下面我们看一个简单的例子。这个例子主要是在webfinder的页面，点击按钮显示对应的hostinfo。
+## Webfinder page - webfinder
+The webfinder page allows users to customize the processing and operation of the scanned web list. Let’s look at a simple example. In this example, just click the button on the webfinder page to display hostinfo.
 
-### 下载链接
+### Download link
 [Webfinder](https://gobies.org/Webfinder.zip)
 
-### 使用的**goby API**
-
+### **Goby API** used
  - goby.registerCommand
  - goby.showIframeDia
  - goby.closeIframeDia
 
-
-### 示例
-第一步，你需要注册自定义组件要触发的命令。
-
-        
-     
+### Example
+First, you need to register the command to be triggered by the custom component.  
 
 ``` javascript
     function activate(content) {
@@ -766,11 +708,7 @@ webfinder页，使得用户可以对扫描出的web列表，进行自定义的�
     exports.activate = activate;
 ```
         
-      
-第二步，你需要在package.json里配置对应视图入口点，即contributes.views.webfinder,填写想要的标题、对应的命令。
-
-        
-     
+Second, you need to configure the corresponding view entry point in package.json, function name is contributes.views.webfinder, and fill in the required fields(title, command). 
 
 ``` xquery
     "contributes": {
@@ -786,35 +724,28 @@ webfinder页，使得用户可以对扫描出的web列表，进行自定义的�
     }
 ```
         
-      
+If you want know more, you can [download the code](https://gobies.org/Webfinder.zip) to view the details.
 
-至于具体的代码内容，可以[下载代码](https://gobies.org/Webfinder.zip)查看详细。
-
-最终效果如下：
+The final effect is shown below:
 
 ![](./img/ex-webfinder.gif)
 
-## 左侧导航页 - leftNav
-**新增于：v 1.8.225   废弃于： v 1.8.237**
+## Left navigation page - leftNav
+**New in：v 1.8.225   Deprecated in：v 1.8.237**
 
-左侧导航页，使得用户可以全局执行插件，对扫描过程中的数据进行自定义的处理和操作，下面我们看一个简单的例子。这个例子主要是在左侧导航页面，点击按钮调用showPage API，在自定义页面调用bindEvent API获取扫描数据进行过滤输出。
+The navigation page on the left allows users to execute the extensions globally to perform custom processing and operations during the process. We will show you an example. This example is mainly on the left navigation page, click the button to call the showPage API and the bindEvent API on the custom page,so that you can get data and filter them.
 
-### 下载链接
+### Download link
 [Database Asset](https://gobies.org/Database%20Asset.zip)
 
-
-### 使用的**goby API**
-
+### **Goby API** used
  - goby.registerCommand
  - goby.showPage
  - goby.bindEvent
  - goby.changeBadge
 
-### 示例
-第一步，你需要注册自定义组件要触发的命令。
-
-
-
+### Example
+First, you need to register the command to be triggered by the custom component.
 
 ``` javascript
     function activate(content) {
@@ -826,11 +757,7 @@ webfinder页，使得用户可以对扫描出的web列表，进行自定义的�
     exports.activate = activate;
 ```
 
-
-第二步，你需要在package.json里配置对应视图入口点，即contributes.views.leftNav,填写想要的标题、对应的命令。
-
-
-
+Secondly, you need to configure the corresponding view entry point in package.json which is also called contributions.views.leftNav, then edit the title and corresponding command you want.
 
 ``` xquery
     "contributes": {
@@ -846,56 +773,51 @@ webfinder页，使得用户可以对扫描出的web列表，进行自定义的�
     }
 ```
 
-第三步，点击自定义组件后，要显示用户自定义的界面,可以用goby.showPage，传入html页面路径，该路径支持绝对路径与相对路径。第二个参数为是否后台运行此页面。
-
-
-
+Thirdly, after clicking the custom component, you can use goby.showPage to display the user-defined interface, This function can also use to pass the html page path. Both absolute path and relative path are supported. The second parameter is whether to run this page in the background.
 
 ``` javascript
     goby.showPage('./assets/index.html',true);
 ```
 
-需要特别注意的是，在goby.showPage的自定义页面中使用goby API对象时，无需再通过parent.goby获取,可直接使用goby，parent.goby在此处不推荐使用。
+Attention: when using the goby API object in the custom page provided by goby.showPage, there is no need to obtain it through parent.goby(This function is not recommended here).
 
-
-第四步，因为在showPage页面里调用了goby.bindEvent，所以需要在package.json中initEvents配置该命令。
-
-
-
-``` xquery
-    {
-      "name": "Database Asset",
-      "publisher": "Goby Team",
-      "description": "实时统计扫描过程中有数据库(目前仅支持mysql，redis，MongoDB，Elasticsearch)资产的ip信息，并且可以查看详情",
-      "initEvents": ["left-nav"]
-    }
-```
-
-第五步，当开始扫描时，对返回的数据进行过滤处理，展示对应的数据，并调用goby.changeBadge，显示当前任务数据的总数。
-
-目前第一个参数只支持leftNav，第二个参数为标记位置对应的command，第三个参数为Badge显示的内容。
+Fourth, because goby.bindEvent is called in the showPage function, this command needs to be configured in initEvents parameters in package.json.
 
 ``` javascript
-    //num是符合条件的数据量
-          
-    goby.changeBadge('leftNav','left-nav',num);
+          {
+            "name": "Database Asset",
+            "publisher": "Goby Team",
+            "description": "This extension can perform statistics on the ip information of database assets in the scanning process in real time, and can view the details. (Currently only supports `Mysql`, `Redis`, `MongoDB`, `Elasticsearch`) 
+",
+            "initEvents": ["left-nav"]
+          }
 ```
-至于具体的代码内容，可以[下载代码](https://gobies.org/Database%20Asset.zip)查看详细。
 
-最终效果如下：
+Fifth, when the scan started, filter the returned data, display the corresponding data, and call goby.changeBadge to display the summary of current task.
+
+Currently, the first parameter only supports leftNav, the second parameter is the command corresponding to the marked position, and the third parameter is the content displayed by Badge.
+
+``` javascript
+          //num is the amount of eligible data
+          
+          goby.changeBadge('leftNav','left-nav',num);
+```
+
+If you want know more, you can [download the code](https://gobies.org/Database%20Asset.zip) to view the details.
+
+The final effect is shown below:
 
 ![](./img/ex-Database%20Asset.gif)
 
 ## toolbar - toolbar
-**新增于：v 1.8.230**
+**New in：v 1.8.230**
 
-工具栏的配置，使得用户可以全局执行插件，下面我们看一个简单的例子。这个例子主要是在工具栏新增按钮，点击操作生成任务队列。
+The configuration of the toolbar allows users to call the extensions globally. Let's look at a simple example below. This example is mainly to add a button in the toolbar, click the operation to generate a task queue.
 
-### 下载链接
+### Download link
 [Task Queue](https://gobies.org/Task%20Queue.zip)
 
-### 使用的**goby API**
-
+### **Goby API** used
 - goby.registerCommand
 - goby.showIframeDia
 - goby.getScanState
@@ -905,7 +827,8 @@ webfinder页，使得用户可以对扫描出的web列表，进行自定义的�
 - goby.getVulnerabilityList
 - goby.getOrderList
 
-第一步，你需要注册自定义组件要触发的命令。
+### Example
+First, you need to register the command to be triggered by the custom component.
 
 ``` javascript
 
@@ -920,7 +843,7 @@ webfinder页，使得用户可以对扫描出的web列表，进行自定义的�
     exports.activate = activate;
 ```
 
-第二步，你需要在package.json里配置对应视图入口点，即contributes.views.toolbar,填写想要的标题、对应的命令。
+Second, you need to configure the corresponding view entry point in package.json, function name is contributions.views.toolbar, and fill in the required fields(title, command, icon).
 
 ``` json
     "contributes": {
@@ -936,249 +859,243 @@ webfinder页，使得用户可以对扫描出的web列表，进行自定义的�
       }
     }
 ```
-第三步，点击自定义的组件后，要显示用户自定义的界面，可以用goby.showIframeDia，传入html页面。
 
-至于具体的代码内容，可以[下载代码](https://gobies.org/Task%20Queue.zip)查看详细。
+Fourth, after using the custom component, to display the specific interface, you can use goby.showIframeDia to transfer the html page.
 
-最终效果如下：
+If you want know more, you can [download the code](https://gobies.org/Task%20Queue.zip) to view the details.
+
+The final effect is shown below:
 
 ![](./img/Task%20Queue.gif)
 
-# 参考
-## goby API
-### 命令相关
-goby API是goby提供给插件开发者使用的一系列Javascript API。以下是所有的goby API列表。
+# Appendix
+## Goby API
+### About commands
+The goby API is a series of JavaScript APIs provided for goby extension developers. All goby APIs are as follow:
 
 #### registerCommand
-注册命令，不同插件的命令名称可以相同
+Registration command, the command name of different extensions can be the same.
 
-[观看本节视频讲解](https://www.bilibili.com/video/BV1u54y147PF?p=6)
+[Watch the video to learn more](https://www.bilibili.com/video/BV1u54y147PF?p=6)
 
-**请求**
+**Request**
 
-参数|类型|默认值|必填|说明
+Parameter|Type|Default|Required|Description
 --|:--|:--|:--|:--
-name|String| | 是|命令的名称
-callback(content)|Function| | 是|命令的回调函数，回调函数返回的content内容，根据命令绑定的views（视图入口点）不同而变化
+name|String| | Yes|Name of command
+callback(content)|Function| | Yes|The callback function of the command. The callback function will return the value of content, and varies according to the views (view entry point) bound by the command
 
 **callback(content)**
 
-views(视图入口点)|是否存在|类型|示例|说明
+views（view Entry Point）|Existence|Type|Example|Description
 --|:--|:--|:--|:--
-scanDia|否	|	|	|
-scanRes.moreOptions|否	|	|	|废弃于： v 1.8.237
+scanDia|False	|	|	|
+scanRes.moreOptions|False	|	|	|Deprecated in：v 1.8.237
 toolbar|	|	|	|
-ipDetail.bannerTop|是|Object	|{ hostinfo: "80.241.214.220:25", port: "25", protocol: "smtp" }|hostinfo: host信息；port: 端口；protocol: 协议
-vulList|是|Object|{ "hostinfo":"127.0.0.1", "name":"Eternalblue/DOUBLEPULSAR MS17-010 SMB RCE", "filename":"smb_ms17_010.json", "level":"3", "vulurl":"", "keymemo":"", "hasexp":false }|hostinfo: host信息；name: 漏洞名称；filename: 漏洞文件名；level: 漏洞等级；vulurl: 漏洞地址
+ipDetail.bannerTop|True|Object	|{ hostinfo: "80.241.214.220:25", port: "25", protocol: "smtp" }|hostinfo: host information；port: port；protocol: protocol
+vulList|True|Object|{ "hostinfo":"127.0.0.1", "name":"Eternalblue/DOUBLEPULSAR MS17-010 SMB RCE", "filename":"smb_ms17_010.json", "level":"3", "vulurl":"", "keymemo":"", "hasexp":false }|hostinfo: host information；name: Vulnerability name；filename: Vulnerability file name；level: Threat level；vulurl: vulnerability link location
 
-### UI相关
+### About UI
 #### showIframeDia
-显示内嵌iframe的弹窗
+Show the pop-up window of the embedded iframe.
 
-如果你需要在自定义的html页面里使用goby API，必需要调用parent.goby来获取实例对象
+If you need to use goby API in a custom html page, you must call parent.goby to get the instance object.
 
-**请求**
+**Request**
 
-参数|类型|默认值|必填|说明
+Parameter|Type|Default value|Required|Description
 --|:--|:--|:--|:--
-url|String	|	|是|iframe的src地址
-title|String	|	|否|iframe的标题
-width|Number|666|否|iframe的宽度
-height|Number|auto|否|iframe的高度，最大高度为500，超过显示滚动条
+url|String	|	|Yes|Source address of iframe
+title|String	|	|No|Title of iframe
+width|Number|666|No|Width of iframe
+height|Number|auto|No|Height of iframe，the maximum height is 500, if exceeds show scroll bar
 
-##### closeIframeDia
-关闭内嵌iframe的弹窗
+#### closeIframeDia
+Close the pop-up window.
 
 #### showPage
+**New in 1.8.225+**
 
-**新增于：1.8.225** 
+The custom page provided by showPage does not need to use parent.goby to obtain the instance object, goby can be used directly.
 
-显示自定义页面
+[Watch the video to learn more](https://www.bilibili.com/video/BV1Ha411w7RF?from=search&seid=11763570465244390878)
 
-showPage打开的自定义页面,无需通过parent.goby来获取实例对象,可直接使用goby。
+**Request**
 
-[观看本节视频讲解](https://www.bilibili.com/video/BV1Ha411w7RF?from=search&seid=11763570465244390878)
-
-**请求**
-
-参数|类型|默认值|必填|说明
+Parameter|Type|Default Value|Required|Description
 --|:--|:--|:--|:--
-url|String  |  |是  |自定义页面的url地址，支持绝对路径与相对路径。如果需要绝对路径，可直接使用__dirname与__filename来获取当前所在目录与文件路径进行拼接
-background|Boolean|false  |否 |打开的页面是否后台运行，如果为true，该页面每次进入不会重新加载，如果为false，则每次进入重新加载
+url|String  |  |Yes  |The url of the custom page supports absolute and relative paths. If you need an absolute path, you can use __dirname and __filename to get the current directory and file path for splicing
+background|Boolean|false  |No |whether the opened page is running in the background, if it is true, the page will not be reloaded every time when access the page, otherwise not.
 
 #### openExternal
+**New in 1.8.225+**
 
-**新增于：1.8.225** 
+Open the url link in the browser
 
-在浏览器打开给定的url链接
-
-[观看本节视频讲解](https://www.bilibili.com/video/BV11z4y1k7zP?from=search&seid=12528056831390729887)
-
+[Watch the video to learn more](https://www.bilibili.com/video/BV11z4y1k7zP?from=search&seid=12528056831390729887)
 
 
-**请求**
+**Request**
 
-参数|类型|默认值|必填|说明
+Parameter|Type|Default Value|Required|Description
 --|:--|:--|:--|:--
-url | String  |   | 是  |浏览器打开页面的url链接，链接中需要带有http、https、localhost或file协议。
+url | String  |   | Yes |The url link in browser, the link must contain http, https, localhost or file protocol.
 
 #### changeBadge
 
-**新增于：1.8.225**
+**New in 1.8.225+**
 
-修改按钮、图标旁的数字或状态标记
+Modify the number or status of the button or icon
 
-[观看本节视频讲解](https://www.bilibili.com/video/BV1Ur4y1F7Bp?from=search&seid=12528056831390729887)
+[Watch the video to learn more](https://www.bilibili.com/video/BV1Ur4y1F7Bp?from=search&seid=12528056831390729887)
 
-**请求**
+**Request**
 
-参数|类型|默认值|必填|说明
+Parameter|Type|Default Value|Required|Description
 --|:--|:--|:--|:--
-placement|String| |是|标记的位置，v 1.8.225 - v 1.8.230 仅支持leftNav，v 1.8.237+ 仅支持toolbar
-command|String| |是|标记位置对应的command，如果是插件入口点的标记，则command为插件入口绑定的command
-content|<img width=200/><br> String｜Number <br><img width=200/>|  |否|标记显示的内容，支持Number与String,String可传html片段，默认为空，不显示
+placement|String| |Yes|marked position，v 1.8.225-v 1.8.230 only supports leftNav，v 1.8.237+ only supports toolbar.
+command|String| |Yes|The command corresponding to the mark position, if it is the mark of the extension's entry point, the command will bind to entry point's command.
+content|<img width=200/><br> String｜Number <br><img width=200/>|  |No|Mark the displayed content, support Number and String. String can pass html fragments, the default is empty.
 
 #### flashFrame
+**New in v 1.8.239+**
 
-**新增于：1.8.239**
+Starts or stops flashing the window to attract user's attention
 
-启动或停止闪烁窗口, 以吸引用户的注意
+**Request**
 
-**请求**
-
-参数|类型|默认值|必填|说明
+Parameter|Type|Default|Required|Description
 --|:--|:--|:--|:--
-isFlash | Boolean  |   | 是  |true：启动窗口闪烁；false：停止窗口闪烁
+isFlash | Boolean  |   | Yes  |	true：Starts flashing the window ；false： stops flashing the window
 
 #### isFocused
 
-**新增于：1.8.239**
+**New in v 1.8.239+**
 
-当前Goby窗口是否聚焦
+Whether the Goby window is focused
 
-**返回**
+**Response**
 
-参数|类型|示例|必填|说明
+Response|Type|Example|Required|Description
 --|:--|:--|:--|:--
-isFocused | Boolean   | true | false  |true：Goby窗口聚焦； false：Goby窗口没有聚焦
+isFocused | Boolean   | true | false  |true：Goby window is focused； false：Goby window is not focused
 
-### 配置相关
+### About configuration
 #### getConfiguration
-获取当前插件的相关配置
+Get the configuration of the current extension.
 
-**请求**
+**Request**
 
-参数|类型|默认值|必填|说明
+Parameter|Type|Default Value|Required|Description
 --|:--|:--|:--|:--
-name|String| |否|获取的插件配置字段名
+name|String| |No|The obtained extension configuration field name
 
-**返回**
+**Response**
 
-返回|类型|说明
+Response|Type|Description
 --|:--|:--
-value|Object/String|获取的插件配置值，如果不传name，返回插件相关的所有配置
+value|Object/String|Show the requested configuration of extension, if name is NULL show all
 
 #### setConfiguration
-设置当前插件的相关配置
+Modify the configuration of current extension.
 
-**请求**
+**Request**
 
-参数|类型|默认值|必填|说明
+Parameter|Type|Default Value|Required|Description
 --|:--|:--|:--|:--
-name|String		||是|要设置的插件name
-value|String	|	|是|要设置的插件value
+name|String		||Yes|The extension name you want to modify
+value|String	|	|Yes|The extension value you want to modify
 
 #### showConfigurationDia
-显示当前插件所有配置的弹窗界面
+The pop-up windows to show all configurations.
 
-### 信息通知相关
+### About notification
 #### showInformationMessage
-显示普通消息通知
+Show information message for users.
 
-**请求**
+**Request**
 
-参数|类型|默认值|必填|说明
+Parameter|Type|Default value|Required|Description
 --|:--|:--|:--|:--
-message|String	|	|是|显示的信息内容
+message|String	|	|Yes|Display information content
 
 #### showWarningMessage
-给用户显示警告消息通知
+Show warning message for users.
 
-**请求**
+**Request**
 
-参数|类型|默认值|必填|说明
+Parameter|Type|Default value|Required|Description
 --|:--|:--|:--|:--
-message|String	|	|是|显示的信息内容
+message|String	|	|Yes|Display information content
 
 #### showErrorMessage
-给用户显示报错消息通知
+Show warning message for users.
 
-**请求**
+**Request**
 
-参数|类型|默认值|必填|说明
+Parameter|Type|Default value|Required|Description
 --|:--|:--|:--|:--
-message|String	|	|是|显示的信息内容
+message|String	|	|Yes|Display information content
 
 #### showSuccessMessage
-给用户显示成功消息通知
+Show success message for users.
 
-**请求**
+**Request**
 
-参数|类型|默认值|必填|说明
+Parameter|Type|Default value|Required|Description
 --|:--|:--|:--|:--
-message|String	|	|是|显示的信息内容
+message|String	|	|Yes|Display information content
 
-### 数据相关
+### About task
 #### getTaskId
-获取当前任务的id
+Get current task ID
 
-**返回**
+**Response**
 
-返回|类型|说明
+Response|Type|Description
 --|:--|:--
-taskId|String|当前任务的id
+taskId|String|Current task ID
 
 #### getScanState
 
-**新增于：1.8.230**
+**New in 1.8.230+**
 
-获取当前扫描状态
+Get current scan status
 
-**返回**
+**Response**
 
-返回|类型|示例|说明
+Response|Type|Example|Description
 --|:--|:--|:--
-scanState|Object|{state:0,progress:100}|state:当前扫描状态,0:未启动；1:扫描中；2:扫描完成；3:扫描停止中；4:扫描中止（暂停）；5:扫描异常<br>progress:当前任务进度
+scanState|Object|{state:0,progress:100}|state:current scan status,0:Not started；1:Scanning；2:Scan complete；3:Scanning is stopping；4:Scanning aborted (pause)；5:Exception found progress:current task progress
 
 #### getAsset
-获取当前任务的所有资产数据
+Get all asset data of the current task.
 
-**请求**
+**Request**
 
-参数|类型|默认值|必填|说明
+Parameter|Type|Default value|Required|Description
 --|:--|:--|:--|:--
-taskId|String	|	|是|任务id
-callback(result)|Function	|	|是|资产数据的回调函数，result即当前任务的所有资产数据
+taskId|String	|	|Yes|Task ID
+callback(result)|Function	|	|Yes|The callback function of asset data, result is all asset data of the current task
 
 **callback(result)**
 
-属性|类型|说明
+Property|Type|Description
 --|:--|:--
-statusCode|Number|状态码，200为正常
-messages|String|状态的相关信息
-data|Object/null|资产数据的对象，无数据时是null
+statusCode|Number|Status code, 200 is OK
+messages|String|Status information
+data|Object/null|Object of asset data, if there is no data, return unll
 
 **result.data**
 
-属性|类型|说明
+Property|Type|Description
 --|:--|:--
-taskId|String|任务id
-query_total|Object|资产查询信息汇总
-total|Object|资产数据相关统计
-ips|Object|资产列表
+taskId|String|Task ID
+query_total|Object|Total information for assets query
+total|Object|Asset data statistics
+ips|Object|Assets list
 
-**callback(result) 返回代码示例**
-       
+**callback(result) return code example**      
 
 ``` json
      {
@@ -1236,191 +1153,191 @@ ips|Object|资产列表
         
       
 #### addScanIps
-添加扫描ip
+Add ips to scan array.
 
-**请求**
+**Request**
 
-参数|类型|默认值|必填|说明
+Parameter|Type|Default value|Required|Description
 --|:--|:--|:--|:--
-ips|Array	|	|是|要添加的扫描ip数组
-type|Number	|	|是|添加的方式，0是追加，1是覆盖
+ips|Array	|	|Yes|Ips array you want to add
+type|Number	|	|Yes|The way of adding;0 is append, 1 is overwrite
 
 #### addScanPorts
-追加扫描端口
+Add ports to scan array.
 
-**请求**
+**Request**
 
-参数|类型|默认值|必填|说明
+Parameter|Type|Default value|Required|Description
 --|:--|:--|:--|:--
-ports|Array| |是|要添加的扫描端口数组
-type|Number	|	|是|添加的方式，0是追加，1是覆盖
+ports|Array| |Yes|Ports array you want to add
+type|Number	|	|Yes|The way of adding;0 is append, 1 is overwrite
 
 #### getPortList
+**New in 1.8.230+**
 
-**新增于：1.8.230**
+Get the list of goby's built-in and custom ports
 
-获取goby内置及自定义端口列表
+**Response**
 
-**返回**
-
-返回|类型|说明
+Response|Type|Description
 --|:--|:--
-portList|Promise|是一个Promise对象，可以通过then、catch分别捕获成功与失败的数据，也可以通过es8的async、await来获取其数据
+portList|Promise|his is a Promise object. You can capture the data of success and failure through 'then' and 'catch' respectively, or it can be obtained through 'async' and 'await' in es8.
 
-**返回Promise对象数据示例(部分)**
+**Example of returning Promise object data (partial)**
 
 ``` js
   {
-    statusCode:200, //状态码，200为正常
-    message:"",     //状态相关信息
-    data:[
-      {
-        type:"Minimal",
-        value:"21,22,80,U:137,U:161,443,445,U:1900,3306,3389,U:5353,8080"
-      },
-      {
-        type:"Backdoor Check",
-        value:"50050"
+	statusCode:200,	        //Status code, 200 is OK
+	message:"",		//Status information
+	data:[
+	 {
+		type:"Minimal",
+		value:"21,22,80,U:137,U:161,443,445,U:1900,3306,3389,U:5353,8080"
+	 },
+	 {
+		type:"Backdoor Check",
+		value:"50050"
+	 }
+	]
       }
-    ]
-  }
 ```
 #### getVulnerabilityList
 
-**新增于：1.8.230**
+**New in 1.8.230+**
 
-获取goby内置及自定义漏洞列表
+Get the list of built-in and custom vulnerabilities in goby
 
-**返回**
+**Response**
 
-返回|类型|说明
+Response|Type|	Description
 --|:--|:--
-vulnerabilityList|Promise|是一个Promise对象，可以通过then、catch分别捕获成功与失败的数据，也可以通过es8的async、await来获取其数据
+vulnerabilityList|Promise|This is a Promise object. You can capture the data of success and failure through 'then' and 'catch' respectively, or it can be obtained through 'async' and 'await' in es8.
 
-**返回Promise对象数据示例(部分)**
+**Example of returning Promise object data (partial)**
 
-``` js
-  {
-    statusCode:200,         //状态码，200为正常
-    message:"",             //状态相关信息
-    data:[
-      "General Poc",        //通用poc
-      "Brute Force",        //暴力破解
-      "Web Application Vulnerability",  //Web应用漏洞
-      "Application Vulnerability",      //应用程序漏洞
-      "All",      //全部漏洞
-      "Disabled", //禁用
-      "ACME mini_httpd Arbitrary File Read (CVE-2018-18778)"
-    ]
-  }
-```
-
-**In v 1.8.268+，更新Promise对象的 data 数据**
-
-返回Promise对象数据示例(部分)
 ``` js
 	{
-		statusCode:200,	        //状态码，200为正常
-		message:"",		//状态相关信息
+		statusCode:200,	        //Status code, 200 is OK
+		message:"",		//Status information
 		data:[
-			{
-				"name":"General Poc",		//通用poc
-				"vulnerabilityType":"0"		//漏洞扫描类型
-			},
-			{
-				"name":"Brute Force",		//暴力破解
-				"vulnerabilityType":"1"		//漏洞扫描类型
-			},
-			{
-				"name":"Web Application Vulnerability",	//Web应用漏洞
-				"vulnerabilityType":"4"			//漏洞扫描类型
-			},
-			{
-				"name":"Application Vulnerability",	//应用程序漏洞
-				"vulnerabilityType":"5"			//漏洞扫描类型
-			},
-			{
-				"name":"All",			//全部漏洞
-				"vulnerabilityType":"2" 	//漏洞扫描类型
-			},
-			{
-				"name":"Disabled",		//禁用
-				"vulnerabilityType":"-1" 	//漏洞扫描类型
-			},
-			{
-				"name":"ACME mini_httpd Arbitrary File Read (CVE-2018-18778)",
-				"vulnerabilityType":"3"
-			}
+			"General Poc",	//General Poc
+			"Brute Force",	//Brute Force
+			"Web Application Vulnerability",	//Web Application Vulnerability
+			"Application Vulnerability",		//Application Vulnerability
+			"All",	//all vulnerability
+			"Disabled",	//disable function
+			"ACME mini_httpd Arbitrary File Read (CVE-2018-18778)"
 		]
 	}
+```
+
+**In v 1.8.268+，Update the data information of the Promise object**
+
+Return Promise object data example (partial)
+``` js
+        {
+          statusCode:200,   //Status code, 200 is OK
+          message:"",	    //Status information
+          data:[
+            {
+              "name":"General Poc",		//General Poc
+              "vulnerabilityType":"0"		//Vulnerability scan type
+            },
+            {
+              "name":"Brute Force",		//Brute Force
+              "vulnerabilityType":"1"		//Vulnerability scan type
+            },
+            {
+              "name":"Web Application Vulnerability",	//Web Application Vulnerability
+              "vulnerabilityType":"4"			//Vulnerability scan type
+            },
+            {
+              "name":"Application Vulnerability",	//Application Vulnerability
+              "vulnerabilityType":"5"			//Vulnerability scan type
+            },
+            {
+              "name":"All",             //All vulnerabilities
+              "vulnerabilityType":"2" 	//Vulnerability scan type
+            },
+            {
+              "name":"Disabled",        //Disabled
+              "vulnerabilityType":"-1" 	//Vulnerability scan type
+            },
+            {
+              "name":"ACME mini_httpd Arbitrary File Read (CVE-2018-18778)",
+              "vulnerabilityType":"3"
+            }
+          ]
+        }
 
 ```
 #### getOrderList
 
-**新增于：1.8.230**
+**New in 1.8.230+**
 
-获取扫描序列列表
+Get a list of scan sequences
 
-**返回**
+**Response**
 
-返回|类型|说明
+Response|Type|Description
 --|:--|:--
-orderList|Promise|是一个Promise对象，可以通过then、catch分别捕获成功与失败的数据，也可以通过es8的async、await来获取其数据
+orderList|Promise|This is a Promise object. You can capture the data of success and failure through 'then' and 'catch' respectively, or it can be obtained through 'async' and 'await' in es8.
 
-**返回Promise对象数据示例**
+**Return Promise object data example**
 
 ``` js
   {
-    statusCode:200,     //状态码，200为正常
-    message:"",         //状态相关信息
+    statusCode:200,     //Status code, 200 is OK
+    message:"",         //Status information
     data:[
-      "Assets first",   //资产优先
-      "Simultaneously"  //同时扫描
+      "Assets first",   //assets first
+      "Simultaneously"  //scan simultaneously
     ]
   }
 ```
 #### startScan
 
-**新增于：1.8.230**
+**New in 1.8.230+**
 
-开启一个新扫描任务
+Start a new task
 
-**请求**
+**Request**
 
-参数|类型|默认值|必填|说明
+Parameter|Type|Default Value|Required|Description
 --|:--|:--|:--|:--
-Options|Object| |是|开启一个扫描任务所需要的信息
+Options|Object| |Yes|Information needed to start a scan task
 
 **Options**
 
-属性|类型|默认值|必填|说明
+Property|Type|Default Value|Required|Description
 --|:--|:--|:--|:--
-ip|Array| |是|扫描任务的ip或域名
-port|String| |是|扫描任务的端口，不同的端口用" , "连接
-vulnerability|String|General Poc|否|扫描任务的漏洞
-order|String|Assets first|否|扫描任务的扫描序列
-taskName|String| |否|扫描任务的名称
+ip|Array| |Yes|The ip or domain name of the task
+port|String| |Yes|Scan task port, use "," to connect to different ports
+vulnerability|String|General Poc|No|Vulnerabilities in task
+order|String|Assets first|No|Scan sequence of task
+taskName|String| |No|The name of the task
 
-**In v 1.8.268+ Options 新增 vulnerabilityType 与更新 vulnerability**
+**In v 1.8.268+ Options add vulnerabilityType and update vulnerability**
 
 **Options**
-属性|类型|默认值|必填|说明
+
+Property|Type|Default Value|Required|Description
 --|:--|:--|:--|:--
-vulnerabilityType|Number|0|是|扫描漏洞的类型
-vulnerability|Object|{}|否|当vulnerabilityType为3时，该参数有效，参数中的漏洞可多选，例如:{"Elasticsearch unauthorized":null,"Harbor Default Credentials":null}，值当前仅为null
+vulnerabilityType|Number|0|Yes|Types of scan vulnerabilities
+vulnerability|Object|{}|No|When vulnerabilityType is 3, this parameter is valid, and multiple vulnerabilities in the parameter can be selected, for example:{"Elasticsearch unauthorized":null,"Harbor Default Credentials":null}，the value is currently only null
 
-**返回**
+**Response**
 
-返回|类型|说明
+Response|Type|Description
 --|:--|:--
-data|Promise|开启扫描返回的信息，是一个Promise对象，可以通过then、catch分别捕获成功与失败的数据，也可以通过es8的async、await来获取其数据
+data|Promise|This is a Promise object. You can capture the data of success and failure through 'then' and 'catch' respectively, or it can be obtained through 'async' and 'await' in es8.
 
-**返回Promise对象数据示例**
+**Example of returning Promise object data**
 
 ``` js
   {
-    statusCode:200, //状态码，200为正常
-    messages:"",    //状态相关信息
+    statusCode:200, //Status code, 200 is OK
+    messages:"",    //Status information
     data:{
       taskId: "20201207192026"
     }
@@ -1429,50 +1346,50 @@ data|Promise|开启扫描返回的信息，是一个Promise对象，可以通过
 
 #### stopScan
 
-**新增于：1.8.230**
+**New in 1.8.230+**
 
-停止当前扫描任务
+Stop current scan
 
-**返回**
+**Response**
 
-返回|类型|说明
+Response|Type|Description
 --|:--|:--
-data|Promise|停止扫描返回的信息，是一个Promise对象，可以通过then、catch分别捕获成功与失败的数据，也可以通过es8的async、await来获取其数据
+data|Promise|Returned information when scan stop，This is a Promise object. You can capture the data of success and failure through 'then' and 'catch' respectively, or it can be obtained through 'async' and 'await' in es8.
 
-**返回Promise对象数据示例**
+**Example of returning Promise object data**
 
 ``` js
 	{
-		statusCode:200, //状态码，200为正常
-		messages:"",    //状态相关信息
+		statusCode:200, //Status code, 200 is OK
+		messages:"",    //Status information
 		data:{
 			taskId:"20201207192026"
 		}
 	}
 ```
 
-### 事件通知
+###  Event notification
 
 #### bindEvent
 
-**新增于：1.8.225**
+**New in 1.8.225+**
 
-绑定事件通知
+Binding event notification
 
-[观看本节视频讲解](https://www.bilibili.com/video/BV1Py4y1q7LD?from=search&seid=12528056831390729887)
+[Watch the video to learn more](https://www.bilibili.com/video/BV1Py4y1q7LD?from=search&seid=12528056831390729887)
 
-**请求**
+**Request**
 
-参数|类型|默认值|必填|说明
+Parameter|Type|Default Value|Required|Description
 --|:--|:--|:--|:--
-type|String|  |是|事件通知类型，包含︰onApp，onPort，onProtocol，onVulnerable，onStartScan，onEndScan，onBackIndex，onPauseScan，onContinueScan，onRescan，onRescanVulnerability
-callback(content)|Function| |是|绑定事件的回调函数，不同的type类型，content数据也不同
+type|String|  |Yes|Type of notification included︰onApp，onPort，onProtocol，onVulnerable，onStartScan，onEndScan，onBackIndex，onPauseScan，onContinueScan，onRescan，onRescanVulnerability
+callback(content)|Function| |Yes|The callback function of the binding event, different types and content data are also different
 
-callback(content) 返回数据示例
+Example of callback(content) Return data
 
-以下type类型与扫描数据相关，其对应返回的content数据如下
+The following types are related to the scanned data, and the content data returned is as follows:
 
-type︰onApp，返回app相关数据
+type:onAPP, return App-related data
 
 ``` json
     {
@@ -1481,7 +1398,7 @@ type︰onApp，返回app相关数据
     }
 ```
 
-type︰onPort，返回port相关数据
+type:onPort, return port-related data
 
 ``` json
   {
@@ -1494,7 +1411,7 @@ type︰onPort，返回port相关数据
   }
 ```
 
-type︰onProtocol，返回protocol相关数据
+type:onPortocol, return protocol-related data
 
 ``` json
   {
@@ -1503,7 +1420,7 @@ type︰onProtocol，返回protocol相关数据
   }
 ```
 
-type︰onVulnerable，返回vulnerable相关数据
+type:onVulnerable, return vulnerable-related data
 
 ``` json
   {
@@ -1512,72 +1429,73 @@ type︰onVulnerable，返回vulnerable相关数据
   }
 ```
 
-以下type类型与扫描状态相关，其对应返回的content数据一致，示例如下
+The following types are related to the scanning status, and the corresponding content data returned are consistent. Examples are as follows
 
-type : onStartScan 开始扫描
+type : onStartScan start scan
 
-type : onEndScan 结束扫描
+type : onEndScan stop scan
 
-type : onPauseScan 暂停扫描
+type : onPauseScan pause scan
 
-type : onContinueScan 继续扫描
+type : onContinueScan continue scan
 
-type : onBackIndex 返回首页
+type : onBackIndex back to index page
 
-type : onRescan 重新扫描
+type : onRescan restart scan
 
-type : onRescanVulnerability 重新扫描漏洞
-
-``` 
-  {
-    "taskId":"20201113102303",  //任务id
-    "taskName":""               //任务名称
-  }
-```
-
-type︰onError，当Goby发生错误时，返回报错相关数据
-
-**新增于：1.8.239**
+type : onRescanVulnerability restart vulnerability scan
 
 ``` 
   {
-    "taskId":"20201113102303",  //任务id
-    "taskName":""               //任务名称
-    "statusCode":"501",         //状态码
-    "message":"service error"   //错误信息
+    "taskId":"20201113102303",  //task id
+    "taskName":""               //task name
   }
 ```
-type：onChangeLang，当Goby语言发生变化时，返回当前语言
 
-**新增于：1.8.282**
+type：onError,When an error occurs in Goby, return the error-related data
+
+**New in 1.8.239+**
+
+``` 
+  {
+    "taskId":"20201113102303",  //task id
+    "taskName":""               //task name
+    "statusCode":"501",         //Status code
+    "message":"service error"   //error message
+  }
+```
+type : onChangeLang, When the Goby language changes, return to the current language
+
+**New in 1.8.292+**
 
 ```
 	EN
 ```
-### 语言相关
+
+### Language related
 
 #### getLang
 
-**新增于：1.8.225**
+Get the current language of Goby
 
-获取Goby当前语言
+**New in 1.8.292+**
 
-**返回**
+**Response**
 
-返回|类型|说明
+Response|Type|Description
 --|:--|:--
-lang|String|Goby当前语言，例如：EN、CN、DE、JA、KO、FR
+lang|String|Goby current language, for example: EN, CN, DE, JA, KO, FR
 
-## 发布内容配置
-发布内容配置即插件清单package.json中的contributes字段，格式为JSON，这个字段包含两个部分：
+## Publishing configuration
+The publishing configuration is the contributions field in the extension list package.json, the format is JSON, this field contains two parts:
 
   - configuration
   - views
 
 ### configuration
-在configuration中配置的内容会暴露给用户，用户可以从“插件设置”中修改你暴露的选项。
+The content configured in the configuration allows user to modify the options you allow from the "extension settings".
 
-**配置示例**
+**Example**
 
 ``` xquery
      "configuration": {
@@ -1594,63 +1512,58 @@ lang|String|Goby当前语言，例如：EN、CN、DE、JA、KO、FR
           }
 ```
         
-      
-你可以用goby.getConfiguration读取配置值。
+You can use goby.getConfiguration to get configurations.
 
- **配置结构**
- 
-你的配置内容同时也决定了在goby设置UI中的显示方式。
+**Extensions Settings**
+
+Your configuration content also determines the display mode in the goby settings UI.      
 
 ![](./img/setting.png)
 
+**Configuration field description**
 
-**配置字段说明**
-
-字段|类型|说明
+Field|Type|Description
 --|:--|:--
-Name|String|配置的JSON对象的Name即图中1的位置，表示配置的字段名
-Value|Object|Name对应的值
+Name|String|The Name of the configured JSON object is the position of 1 in the image, indicating the configured field name
+Value|Object|The value of name
 
 **Value**
 
-字段|类型|说明
+Field|Type|Description
 --|:--|:--
-type|String|配置项的类型，目前只支持string
-default|String|配置项的值，即图中2的位置
-description|String|关于配置项的描述，即图中3的位置，划过会显示该内容的tips
-fromDialog|Boolean|该配置参数是否可以通过读取文件路径设置
+type|String|The type of configuration item, currently only supports String
+default|String|The value of the configuration item, it is the position of 2 in the image
+description|String|The description of the configuration item, it is the position of 3 in the image, the tips of the content will be displayed when you pass it
+fromDialog|Boolean|Whether the configuration parameter can be set by reading the file path
 
 ### views
-views即用户可配置的自定义视图入口点，目前可配置的UI部分如下：
+Views are user-configurable entry points for custom views. The currently configurable UI parts are as follows:
 
- - 扫描弹窗页 - scanDia
- - 扫描结果页 - scanRes
- - 更多下拉菜单 - moreOptions (废弃于： v 1.8.237)
- - ip详情页 - ipDetail
- - banner列表的标题栏 - bannerTop
- - 漏洞列表页 - vulList
- - Webfinder页 - webfinder
- - 左侧导航页 - leftNav (新增于：v 1.8.225   废弃于： v 1.8.237 )
- - toolbar - toolbar (新增于：v 1.8.230   )
+ - Pop-up scan page - scanDia
+ - Scan result page - scanRes
+ - Drop-down menu - moreOptions (Deprecated in：v 1.8.237)
+ - IP detail page - ipDetail
+ - The title bar of the banner list - bannerTop
+ - Vulnerability list - vulList
+ - Webfinder page - webfinder
+ - Left navigation page - LeftNav (New in：v 1.8.225   Deprecated in：v 1.8.237)
+ - toolbar - toolbar (New in：v 1.8.230)
 
-**配置字段说明**
+**Configuration field description**
 
-字段|类型|默认值|必填|说明
+Field|Type|Default value|Required|Description
 --|:--|:--|:--|:--
-command|String	|	|是|view绑定的命令
-title|String	|	|否|自定义组件显示的文字内容
-icon|String	|	|否|自定义组件显示的icon
-tips|String	|默认显示title字段，如果title字段不存在，默认显示插件名称	|否	|自定义组件划过显示的tips
-visible|	String|	默认显示|	否	|控制自定义组件是否显示的命令，返回true显示，返回false不显示
+command|String	|	|Yes|Commands binding to views
+title|String	|	|No|The text content displayed by the custom component
+icon|String	|	|No|The text icon displayed by the custom component
+tips|String	|Displayed the default title, if the title field does not exist, display the extension name instead	|No	|The displayed tips when swipe over custom components
+visible|	String|	Display|	No	|Commands that controls the display of custom components, Return true to display, return false to not display
 
-## 初始化事件
-在插件安装成功后，如果你想直接执行一些操作，那就必须用到初始化事件，即initEvents。绑定要执行的命令名称，支持String与Array，如果要执行多个命令，需要将命令依次放到数组里，goby会在安装插件成功后，主动执行指定命令。
+## Initialization
+After the extension is installed successfully, if you want to perform some operations directly, you must use initialization events which is called initEvents. Then bind the name of the command to be executed, the name supports String and Array. If you want to execute multiple commands, you need to put the commands in the array one by one, goby will actively execute the specified command after installation.
 
-### 相关示例
-第一步，注册要自动执行的命令
-
-        
-     
+### Example
+First, register the commands to be executed automatically
 
 ``` scilab
     function activate (content) {
@@ -1662,11 +1575,7 @@ visible|	String|	默认显示|	否	|控制自定义组件是否显示的命令�
 	exports.activate = activate;
 ```
         
-      
-第二步，initEvents绑定该命令
-
-        
-      
+Second, use initEvents to bind the command.
 
 ``` json
        {
@@ -1676,19 +1585,16 @@ visible|	String|	默认显示|	否	|控制自定义组件是否显示的命令�
             "initEvents": "hello"
          }
 ```
-        
-      
-最终效果如下：当你下载安装该插件后，会直接执行hello命令，弹出信息提示。
+
+The final effect is as follows: when you download and install the extension, the hello command will be executed automatically and push notification.
 
 ![](./img/init.gif)
 
-## 插件翻译
+## Extension translation
+The default language of the plug-in needs to be English. If you need to adapt to other languages in Goby, you need to set a translation file; if no translation is set, Goby uses the default language.
 
-插件默认语言需要为英文，如果需要适配Goby内其它语言，则需要设置翻译文件；如果未设置翻译，则Goby使用默认语言。
-
-### 相关示例
-
-package.json中配置翻译文件路径
+### Example
+Configure the translation file path in package.json
 
 ```
 	{
@@ -1701,18 +1607,22 @@ package.json中配置翻译文件路径
 	  }
 	} 
 ```
-翻译文件：translate.json
 
- - 必须为json格式且内容与package.json相同。
- - 内容包括：description、contributes、readme以及changelog。
- - readme与changelog的值是对应文件与当前语言translate.json的相对路径。
- - 自定义弹窗中内容的翻译推荐使用i18n，可参考FOFA插件。
- 
- 例如：中文翻译
+Translation file：translate.json
+
+ - It must be in JSON format and the content is the same as package.json.
+
+ - content include:description、contributes、readme and changelog.
+
+ - The value of readme and changelog is the relative path between the corresponding file and the current language translate.json.
+
+ - It is recommended to use i18n for the translation of the content in the custom pop-up window, please refer to the FOFA plugin.
+
+For example: Chinese translation
  
 ```
 	{
-		"description":"将通过FOFA查询的IP和端口，快速导入goby进行扫描。",
+		"description":"The IP and port queried by FOFA will be quickly imported into goby for scanning。",
 		"contributes":{
 			"configuration":{
 			   "Email": {
@@ -1722,7 +1632,7 @@ package.json中配置翻译文件路径
 					"description": "FOFA Key"
 				},
 				"Size": {
-					"description": "查询返回到每页的数量，默认100条，最大可设置为10000条。"
+					"description": "The query returns the number of each page, the default is 100, and the maximum can be set to 10000。"
 				} 
 			},
 			"views":{
@@ -1739,34 +1649,33 @@ package.json中配置翻译文件路径
 	}
 ```
 
+## Extension list
+Every goby extension needs an extension list (package.json), which must be placed in the extension's root directory.
 
+### Field description
 
-## 插件清单
-每一个goby插件都需要一份插件清单（package.json），必须放在插件根目录下。
-
-### 字段说明
-名称|必须|类型|详细
+Field|Required|Type|Detail
 --|:--|:--|:--
-name|Y|String|插件的名称
-publisher|Y|String|发布者的名称
-engines|Y|String|插件依赖的最低goby版本，比如1.6.170
-version|Y|String|插件的版本号，插件每次更新时，版本号都必须比之前高
-main|Y|String|插件主入口文件
-description|Y|String|简单地描述一下插件的功能
-initEvents	|	|String｜Array|初始化事件，插件安装后自动执行的命令
-icon	|	|String|插件的logo，建议使用32 * 32的尺寸
-contributes|Y|Object|插件自定义组件的入口和配置等
-scripts	|	|Object|等同于npm的scripts
-devDependencies	| |Object	|等同于npm的devDependencies
+name|Yes|String|Name of extension
+publisher|Yes|String|Name of publisher
+engines|Yes|String|The lowest goby version the extension depends on, such as 1.6.170
+version|Yes|String|The version number of the extension, each time the extension is updated, the version must be newer than before
+main|Yes|String|The main entrance of extension
+description|Y|String|The description of extension
+initEvents	|No	|String｜Array|Initialization events, commands that are automatically executed after the extension is installed
+icon	|No	|String|The icon of extension,32*32 is recommended
+contributes|Yes|Object|Entry and configuration of extension custom components, etc
+scripts	|No	|Object|Equivalent to npm's scripts
+devDependencies	| |Object	|Equivalent to npm's devDependencies
 
-### 完整示例
+### Complete example
            
 
 ``` json
     {
             "name": "FOFA",
             "publisher": "Goby Team",
-            "description": "将通过fofa查询的IP和端口，快速导入goby进行扫描。",
+            "description": "The IP and port queried by FOFA will be quickly imported into goby for scanning。",
             "version": "0.1.0",
             "icon": "src/assets/img/fofa.png",
             "engines": "1.6.170",
