@@ -1,13 +1,13 @@
 {
- "name": "ExportCsv",
- "publisher": "GobySec",
- "description": "可以选择IP、端口、协议字段，导出对应csv文件。",
- "version": "0.1.4",
- "engines": "1.8.237",
- "initEvents": "",
- "icon": "src/assets/img/import.png",
- "main": "./src/extension.js",
- "contributes": {
+  "name": "ExportCsv",
+  "publisher": "GobySec",
+  "description": "You can select the IP, Port  and Protocol fields to export the csv file.",
+  "version": "0.1.5",
+  "engines": "1.8.237",
+  "initEvents": "",
+  "icon": "src/assets/img/import.png",
+  "main": "./src/extension.js",
+  "contributes": {
   "views": {
       "toolbar": [
         {
@@ -17,8 +17,11 @@
         }
       ]
   }
- },
- "scripts": {},
- "devDependencies": {},
- "dependencies": {}
+  },
+  "language":{
+    "CN":"src/assets/translate/CN/translate.json"
+  },
+  "scripts": {},
+  "devDependencies": {},
+  "dependencies": {}
 }

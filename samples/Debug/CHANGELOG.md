@@ -1,2 +1,7 @@
 ## 0.1.0 - 16th Mar, 2021
-通过点击工具栏插件入口，打开Goby的Debug窗口
+
+Updated the extension call method. Now, you can click the extension Logo on the `Extensions` tab to open the Goby Debug Window.
+
+## 0.1.1 - 25th Oct, 2021
+
+Multi language in Chinese and English

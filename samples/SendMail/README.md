@@ -1,27 +1,28 @@
-## 快速开始
-1.安装
+## Quick start
 
-2.在配置页面配置相关项
+1.Install
 
-插件采用的是通过用户自己给自己发送邮件。所以需要配置Smtp、Port、Email、Auth Code
+2.Configure related items
 
-[点击查看常见邮箱的SMTP地址及Port](https://blog.csdn.net/o_o814222198/article/details/100110288)
+The principle of this extension is to send emails to themselves by users themselves. Therefore, you need to configure `Smtp`, `Port`, `Email` and `Auth Code`.
 
-配置项中的Switch可通过on / off 控制插件是否开启
+[Click here  to view the configuration methods of common mailboxes.](https://blog.csdn.net/o_o814222198/article/details/100110288)
 
-以腾讯企业邮箱为例
+The `Switch` field in the configuration item can control whether the extension is enabled by entering `on/off`.
+
+Take `Tencent Exmail` as an example:
 ![](https://gobies.org//SendMail_1.jpg)
 
-配置完成后可以在工具栏点击测试，查看当前配置是否可以正常发送接收邮件，如果配置成功，会收到一封通知邮件
+After the configuration is completed, you can click the extension Logo on the `Extensions` tab to check whether the current configuration can send and receive emails normally. If the configuration is correct, you will receive a notification email.
 ![](https://gobies.org//SendMail_2.gif)
 
 ![](https://gobies.org//SendMail_3.jpg)
 
-3.使用
+3.Usage 
 ![](https://gobies.org//SendMail_4.gif)
 
-4.邮件内容
+4.Email content
 
 <img src="https://gobies.org//SendMail_5.jpg" style="margin:15px auto;display:block;" />
 
-5.Github: [https://github.com/gobysec/GobyExtension/tree/master/samples/SendMail](https://github.com/gobysec/GobyExtension/tree/master/samples/SendMail)，也可以从git或者[官网](https://gobies.org/extension.html)上下载插件，手动放入到 /extensions 目录，然后重启Goby
+5.Github: [https://github.com/gobysec/GobyExtension/tree/master/samples/SendMail](https://github.com/gobysec/GobyExtension/tree/master/samples/SendMail),You can also download the extension from git,manually put it into the/Golb/external directory, and restart Goby.

@@ -1,0 +1,5 @@
+{
+      "description": "Java 反序列化漏洞 Payload 生成工具。",
+      "readme": "./README.md",
+      "changelog": "./CHANGELOG.md"
+}

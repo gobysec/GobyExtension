@@ -1,8 +1,8 @@
 {
     "name": "AWVS",
     "publisher": "GobySec",
-    "description": "联动awvs对goby扫出的web页面进行扫描，可以生成awvs的报告。",
-    "version": "0.1.1",
+    "description": "This extension can scan web pages scanned by Goby in conjunction with `AWVS` and generate AWVS reports.",
+    "version": "0.1.2",
     "icon": "./src/assets/img/awvs.png",
     "engines": "1.6.170",
     "initEvents": "",
@@ -12,22 +12,22 @@
             "API Key": {
                 "type": "string",
                 "default": "",
-                "description": "请输入AWVS的API Key"
+                "description": "Please enter the API Key of AWVS"
             },
-            "AWVS Web Address":{
+            "AWVS Web Address": {
                 "type": "string",
                 "default": "",
-                "description": "请输入AWVS的Web Address"
+                "description": "Please enter the Web Address of AWVS"
             }
         },
         "views": {
-            "ipDetail":{
-                "bannerTop":[
+            "ipDetail": {
+                "bannerTop": [
                     {
                         "command": "awvs",
                         "title": "awvs",
                         "icon": "./src/assets/img/awvs.png",
-                        "visible":"isShow"
+                        "visible": "isShow"
                     }
                 ]
             },
@@ -38,7 +38,7 @@
                     "icon": "./src/assets/img/awvs.png"
                 }
             ],
-            "toolbar":[
+            "toolbar": [
                 {
                     "command": "showData",
                     "title": "awvs",
@@ -46,6 +46,9 @@
                 }
             ]
         }
+    },
+    "language": {
+        "CN": "src/assets/translate/CN/translate.json"
     },
     "scripts": {},
     "devDependencies": {},

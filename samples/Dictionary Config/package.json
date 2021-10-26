@@ -1,8 +1,8 @@
 {
     "name": "Dictionary Config",
     "publisher": "GobySec",
-    "description": "对Goby内置的暴力破解漏洞进行字典替换，可批量替换与自定义替换。",
-    "version": "0.1.2",
+    "description": "Replace the dict of Goby's built-in brute force vulnerability, which can be replaced in batches and customized.",
+    "version": "0.1.3",
     "icon": "./src/assets/img/dictionaries.png",
     "engines": "1.8.237",
     "initEvents": "",
@@ -13,10 +13,13 @@
                 {
                     "command": "Dictionary Config",
                     "title": "Dictionary Config",
-                    "icon":"./src/assets/img/dictionaries.png"
+                    "icon": "./src/assets/img/dictionaries.png"
                 }
             ]
         }
+    },
+    "language": {
+        "CN": "src/assets/translate/CN/translate.json"
     },
     "scripts": {},
     "devDependencies": {},

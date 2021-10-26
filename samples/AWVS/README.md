@@ -1,19 +1,19 @@
-## 快速开始
+## Quick start
 
-1.安装
+1.Install
 
-2.插件需要调用AWVS 13的API，所以本地需安装AWVS 13版本并确保AWVS正常可用。
+2.The extension needs to call the API of AWVS 13, so you need to install AWVS 13 locally and ensure that AWVS is available properly.
 
-3.配置AWVS的Key、Web Address。
+3.Configure `AWVS Key` and `AWVS Web Address`.
 
 ![](https://gobies.org/awvs1.gif)
 
-4.使用
+4.Usage
 
-4.1 在webfinder页、ip详情页点击插件对应的按钮，即可扫描当前web页面。
+4.1 On the `Web Finder` tab or ip details page, click the button corresponding to the extension to scan the current web page.
 ![](https://gobies.org/awvs2.gif)
 
-4.2 在toolbar点击插件对应按钮，可查看扫描任务，并对已完成的扫描进行报告的生成和导出。
+4.2 In the `Extensions` tab, click the button corresponding to the plug-in to view the scan task, and generate and export the report of the completed scan. 
 ![](https://gobies.org/awvs3.gif)
 
-5.Github: [https://github.com/gobysec/GobyExtension/tree/master/samples/AWVS](https://github.com/gobysec/GobyExtension/tree/master/samples/AWVS)，也可以从git上下载插件，手动放入到 /extensions 目录，然后重启Goby
+5.Github: [https://github.com/gobysec/GobyExtension/tree/master/samples/AWVS](https://github.com/gobysec/GobyExtension/tree/master/samples/AWVS),You can also download the extension from git,manually put it into the/Golb/external directory, and restart Goby.

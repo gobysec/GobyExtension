@@ -1,23 +1,26 @@
 {
     "name": "Debug",
     "publisher": "GobySec",
-    "description": "打开Goby的Debug窗口，开发插件不用再下载开发版。",
-    "version": "0.1.0",
+    "description": "This extension can open the Debug window of Goby. Use it to develop extension without downloading dedicated Goby development versions.",
+    "version": "0.1.1",
     "icon": "./src/debug.png",
     "engines": "1.6.170",
     "initEvents": "",
     "main": "./src/extension.js",
     "contributes": {
         "views": {
-            "toolbar":[
+            "toolbar": [
                 {
-                    "command":"openDevTools",
-                    "title":"Debug",
-                    "icon":"./src/debug.png",
-                    "tips":"Debug"
+                    "command": "openDevTools",
+                    "title": "Debug",
+                    "icon": "./src/debug.png",
+                    "tips": "Debug"
                 }
             ]
         }
+    },
+    "language": {
+        "CN": "src/assets/translate/CN/translate.json"
     },
     "scripts": {},
     "devDependencies": {},

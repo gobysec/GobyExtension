@@ -1,0 +1,5 @@
+{
+      "description": "打开Goby的Debug窗口，开发插件不用再下载开发版。",
+      "readme": "./README.md",
+      "changelog": "./CHANGELOG.md"
+}

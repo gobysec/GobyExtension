@@ -5,7 +5,7 @@ function activate (content) {
             // console.clear();
             require('electron').remote.getCurrentWindow().openDevTools();
         }else{
-            goby.showInformationMessage('Debug已经打开，无需再次打开。')
+            goby.showInformationMessage('Debug has been opened, there is no need to open it again.')
         }
     });
 }

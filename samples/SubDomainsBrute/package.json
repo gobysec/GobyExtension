@@ -1,8 +1,8 @@
 {
 	"name": "SubDomainsBrute",
 	"publisher": "GobySec",
-	"description": "输入根域名，暴力破解子域名。",
-	"version": "0.2.3",
+	"description": "Enter the root domain and brute force the subdomain.",
+	"version": "0.2.5",
 	"icon": "src/assets/img/logo.png",
 	"engines": "1.6.170",
 	"initEvents": "",
@@ -12,7 +12,7 @@
 			"dictFilePath": {
 				"type": "string",
 				"default": "",
-				"description": "请输入自定义字典文件的完整路径"
+				"description": "Please enter the full path of the custom dictionary file"
 			}
 		},
 		"views": {
@@ -24,6 +24,9 @@
 				}
 			]
 		}
+	},
+	"language":{
+		"CN":"src/assets/translate/CN/translate.json"
 	},
 	"scripts": {},
 	"devDependencies": {},

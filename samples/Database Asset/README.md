@@ -1,8 +1,8 @@
-## 快速开始
-1.安装
+## Quick start
+1.Install
 
-2.点击开始按钮，启动扫描任务，当扫描出有数据库资产的相关ip时，对应左侧导航标记数字会同步更新，点击即可看到相关列表和详情
+2.Click the `Start` button to start the scan task. When the relevant ip addresses of database assets are scanned, the corresponding toolbar will mark numbers and update them synchronously. Click to see the relevant list and details.
 
-![](https://gobies.org/images/ex-datebaseAsset.gif)
+![](https://gobies.org/Database1.gif)
 
-3.Github: [https://github.com/gobysec/GobyExtension/tree/master/samples/Database Asset](https://github.com/gobysec/GobyExtension/tree/master/samples/Database%20Asset)，也可以从git上下载插件，手动放入到 /extensions 目录，然后重启Goby
+3.Github: [https://github.com/gobysec/GobyExtension/tree/master/samples/Database Asset](https://github.com/gobysec/GobyExtension/tree/master/samples/Database%20Asset),You can also download the extension from git,manually put it into the/Golb/external directory, and restart Goby.

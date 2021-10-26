@@ -36,7 +36,7 @@
       </thead>
     </table>
     <div class="noData">
-      暂无数据
+      No data
     </div>
   </div>
 </body>
@@ -46,7 +46,7 @@
   let app = ["mysql" ,"redis", "MongoDB", "Elasticsearch"];
 
   //重启页面Badge初始化
-  goby.changeBadge('leftNav','left-nav');
+  goby.changeBadge('toolbar','openDatabase');
 
   //消息通知
   let num =0;
@@ -66,12 +66,12 @@
 
   goby.bindEvent('onStartScan',function(content){
     num=0;
-    goby.changeBadge('leftNav','left-nav');
+    goby.changeBadge('toolbar','openDatabase');
   })
 
   goby.bindEvent('onBackIndex',function(){
     num=0;
-    goby.changeBadge('leftNav','left-nav');
+    goby.changeBadge('toolbar','openDatabase');
   })
   
   goby.bindEvent('onApp',function(content){
@@ -82,7 +82,7 @@
     initPort(ip,port,content);
     if(app.map((v,k)=>v.toLowerCase()).includes(content.product.toLowerCase())){
       num++;
-      goby.changeBadge('leftNav','left-nav',num);
+      goby.changeBadge('toolbar','openDatabase',num);
       let tbody = $(`#${taskId}`)[0];
       if(!tbody){
         let ttbody = $(`<tbody id="${taskId}" class="${taskId}">

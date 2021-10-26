@@ -1,24 +1,29 @@
 {
-  "name": "Database Asset",
-  "publisher": "GobySec",
-  "description": "实时统计扫描过程中有数据库（目前仅支持mysql，redis，MongoDB，Elasticsearch）资产的ip信息，并且可以查看详情",
-  "version": "0.1.3",
-  "icon": "src/assets/img/logo.png",
-  "engines": "1.8.225",
-  "initEvents": ["left-nav"],
-  "main": "./src/extension.js",
-  "contributes": {
-    "views": {
-      "leftNav": [
-        {
-          "command":"left-nav",
-          "title": "Database",
-          "icon": "src/assets/img/logo.png"
+    "name": "Database Asset",
+    "publisher": "GobySec",
+    "description": "This extension can perform statistics on the ip information of database assets in the scanning process in real time, and can view the details. (Currently only supports `Mysql`, `Redis`, `MongoDB`, `Elasticsearch`) ",
+    "version": "0.2.0",
+    "icon": "src/assets/img/logo.png",
+    "engines": "1.8.237",
+    "initEvents": [
+        "openDatabase"
+    ],
+    "main": "./src/extension.js",
+    "contributes": {
+        "views": {
+            "toolbar": [
+                {
+                    "command": "openDatabase",
+                    "title": "Database",
+                    "icon": "src/assets/img/logo.png"
+                }
+            ]
         }
-      ]
-    }
-  },
-  "scripts": {},
-  "devDependencies": {},
-  "dependencies": {}
+    },
+    "language": {
+        "CN": "src/assets/translate/CN/translate.json"
+    },
+    "scripts": {},
+    "devDependencies": {},
+    "dependencies": {}
 }

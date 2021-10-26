@@ -1,0 +1,24 @@
+{
+      "description": "当扫描任务结束后，给用户发送邮件通知用户扫描完成，并且将资产和漏洞分别生成excel文件发给用户",
+      "contributes": {
+            "configuration": {
+                  " Smtp ": {
+                        "description": "请输入邮箱SMTP服务器地址"
+                  },
+                  " Port ": {
+                        "description": "请输入邮箱SMTP服务器的端口"
+                  },
+                  " Email ": {
+                        "description": "请输入邮箱地址"
+                  },
+                  " Auth Code ": {
+                        "description": "请输入邮箱的授权码"
+                  },
+                  " Switch ": {
+                        "description": "请输入on / off 来开启或关闭SendMail插件"
+                  }
+            }
+      },
+      "readme": "./README.md",
+      "changelog": "./CHANGELOG.md"
+}

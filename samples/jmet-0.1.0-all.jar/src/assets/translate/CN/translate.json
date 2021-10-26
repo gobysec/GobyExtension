@@ -1,0 +1,8 @@
+{
+      "description": "Java 反序列化漏洞利用工具。",
+      "contributes": {
+            "configuration": {}
+      },
+      "readme": "./README.md",
+      "changelog": "./CHANGELOG.md"
+}

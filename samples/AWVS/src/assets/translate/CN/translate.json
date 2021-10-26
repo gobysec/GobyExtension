@@ -1,0 +1,15 @@
+{
+      "description": "联动awvs对goby扫出的web页面进行扫描，可以生成awvs的报告。",
+      "contributes": {
+            "configuration": {
+                  "API Key": {
+                        "description": "请输入AWVS的API Key"
+                  },
+                  "AWVS Web Address": {
+                        "description": "请输入AWVS的Web Address"
+                  }
+            }
+      },
+      "readme": "./README.md",
+      "changelog": "./CHANGELOG.md"
+}

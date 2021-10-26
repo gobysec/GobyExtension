@@ -1,8 +1,8 @@
 {
     "name": "MSF Sploit",
     "publisher": "GobySec",
-    "description": "Metasploit安全漏洞检测工具 demo",
-    "version": "0.1.11",
+    "description": "Metasploit security vulnerability detection tool demo",
+    "version": "0.1.14",
     "icon": "./src/assets/img/metasploit.png",
     "engines": "1.6.170",
     "initEvents": "",
@@ -12,7 +12,7 @@
             "Path": {
                 "type": "string",
                 "default": "",
-                "description": "请输入MSF安装路径",
+                "description": "Please enter the MSF installation path",
                 "fromDialog": true
             }
         },
@@ -25,6 +25,9 @@
                 }
             ]
         }
+    },
+    "language": {
+        "CN": "src/assets/translate/CN/translate.json"
     },
     "scripts": {},
     "devDependencies": {},

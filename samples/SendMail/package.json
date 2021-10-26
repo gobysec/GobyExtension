@@ -1,8 +1,8 @@
 {
     "name": "SendMail",
     "publisher": "GobySec",
-    "description": "当扫描任务结束后，给用户发送邮件通知用户扫描完成，并且将资产和漏洞分别生成excel文件发给用户",
-    "version": "0.1.0",
+    "description": "After the scanning task is completed, send the corresponding notification email to the user, and generate Excel files for the assets and vulnerabilities to the user respectively.",
+    "version": "0.1.1",
     "icon": "./src/email.png",
     "engines": "1.6.170",
     "initEvents": "",
@@ -12,30 +12,30 @@
             " Smtp ": {
                 "type": "string",
                 "default": "",
-                "description": "请输入邮箱SMTP服务器地址"
+                "description": "Please enter the email SMTP server address"
             },
             " Port ": {
                 "type": "string",
                 "default": "",
-                "description": "请输入邮箱SMTP服务器的端口"
+                "description": "Please enter the port of the mailbox SMTP server"
             },
             " Email ": {
                 "type": "string",
                 "default": "",
-                "description": "请输入邮箱地址"
+                "description": "Please input the email address"
             },
             " Auth Code ": {
                 "type": "string",
                 "default": "",
-                "description": "请输入邮箱的授权码"
+                "description": "Please enter the authorization code of the mailbox"
             },
             " Switch ": {
                 "type": "string",
                 "default": "on",
-                "description": "请输入on / off 来开启或关闭SendMail插件"
+                "description": "Please enter on / off to turn on or off the SendMail extension"
             }
         },
-        "views":{
+        "views": {
             "toolbar": [
                 {
                     "command": "test",
@@ -44,6 +44,9 @@
                 }
             ]
         }
+    },
+    "language": {
+        "CN": "src/assets/translate/CN/translate.json"
     },
     "scripts": {},
     "devDependencies": {},

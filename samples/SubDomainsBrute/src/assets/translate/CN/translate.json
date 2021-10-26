@@ -1,0 +1,12 @@
+{
+    "description": "输入根域名，暴力破解子域名。",
+    "contributes":{
+        "configuration":{
+            "dictFilePath":{
+                "description":"请输入自定义字典文件的完整路径"
+            }
+        }
+    },
+    "readme":"./README.md",
+    "changelog":"./CHANGELOG.md"
+}

@@ -26,21 +26,19 @@ function activate(content) {
 
         if (!urlDefault) return goby.showInformationMessage('Please set the plug-in installation path');
 
-        let url = `${urlDefault} -x "use ${identical[content.name]}; set rhosts ${ip} ; run"`
+        let url = `${urlDefault} -x "use ${identical[content.name]}; set rhost ${ip} ; run"`
         if (os.type() == 'Windows_NT') {
             //windows
             cp.exec(`start ${url}`)
         } else if (os.type() == 'Darwin') {
             //mac
             var onlyPath = require('path').dirname(urlDefault)
-            url = `cd ${onlyPath}; ./msfconsole -x \\"use ${identical[content.name]}; set rhosts ${ip} ; run\\"`
+            url = `cd ${onlyPath}; ./msfconsole -x \\"use ${identical[content.name]}; set rhost ${ip} ; run\\"`
             cmd = `osascript -e 'tell application "Terminal" to do script "${url}"'`
             cp.exec(cmd)
         } else if (os.type() == 'Linux') {
             //Linux
-            //cp.exec(`bash -c "${url}"`)
-            cp.exec(`echo '${url}' > msf_sploit.sh`)
-            cp.exec(`x-terminal-emulator -e sh msf_sploit.sh`)
+            cp.exec(`bash -c "${url}"`)
         }
     });
 

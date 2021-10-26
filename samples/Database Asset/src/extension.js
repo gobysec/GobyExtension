@@ -1,7 +1,7 @@
 
 function activate(content) {
 	
-	goby.registerCommand('left-nav',function(){
+	goby.registerCommand('openDatabase',function(){
 		goby.showPage('./assets/index.html',true);	
 		
 	})

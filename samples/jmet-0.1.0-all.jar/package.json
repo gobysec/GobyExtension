@@ -1,15 +1,17 @@
 {
- "name": "jmet-0.1.0-all.jar",
- "publisher": "GobySec",
- "description": "Java 反序列化漏洞利用工具。",
- "version": "0.1.2",
- "engines": "1.6.170",
- "icon": "src/logo.png",
- "initEvents": "init",
- "main": "./src/extension.js",
- "contributes": {
- },
- "scripts": {},
- "devDependencies": {},
- "dependencies": {}
+    "name": "jmet-0.1.0-all.jar",
+    "publisher": "GobySec",
+    "description": "Java deserialization exploit jar tool. ",
+    "version": "0.1.3",
+    "engines": "1.6.170",
+    "icon": "src/logo.png",
+    "initEvents": "init",
+    "main": "./src/extension.js",
+    "contributes": {},
+    "language": {
+        "CN": "src/assets/translate/CN/translate.json"
+    },
+    "scripts": {},
+    "devDependencies": {},
+    "dependencies": {}
 }

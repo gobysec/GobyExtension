@@ -1,16 +1,15 @@
-## 快速开始
-1.安装
+1.Install
 
-2.在扫描配置弹窗里，点击标题栏的对应Logo，显示查询界面，在输入根域名，获得爆破结果后，点击导入即可
+2.In the `New Scan Task` window, click the corresponding Logo of the title bar to display the query interface. Then enter the root domain name, obtain the blasting result, and then click `Import subdomain` button.
 
-![](static/img/extension/ex-subdomain.gif)
+![img](static/img/extension/ex-subdomain.gif)
 
-3.可以自定义字典爆破：配置自定义字典的完整路径，比如 E:\test\src\dict.txt，然后点开查询界面，选择自定义即可
+3.Users can customize the dict to brute: configure the full path of the custom dict, such as `E:\test\src\dict.txt`, then click on the query interface and select custom 
 
-  *** 需要注意：自定义字典必须为txt文件，换行分割 ***
+*** Note: The format of the custom dictionary must be txt, and the data needs to be line-wrapped***
 
-  *** 自定义字典最大为50M ***
+*** The maximum size of a custom dict is 50MB  ***
 
-![](static/img/extension/ex-subdomain1.gif)
+![img](static/img/extension/ex-subdomain1.gif)
 
-4.Github: [https://github.com/gobysec/GobyExtension/tree/master/samples/SubDomainsBrute](https://github.com/gobysec/GobyExtension/tree/master/samples/SubDomainsBrute)，也可以从git上下载插件，手动放入到 /extensions 目录，然后重启Goby
+4.Github: [https://github.com/gobysec/GobyExtension/tree/master/samples/SubDomainsBrute](https://github.com/gobysec/GobyExtension/tree/master/samples/SubDomainsBrute),You can also download the extension from git,manually put it into the/Golb/external directory, and restart Goby.

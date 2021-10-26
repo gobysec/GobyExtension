@@ -1,8 +1,9 @@
-## 快速开始
-1.安装
+## Quick start
 
-2.在右侧工具栏点击插件按钮，显示导出界面，选择对应的字段，点击导出即可获得当前任务选择字段的Csv文件
+1.Install
+
+2.Click the extension Logo on the right `Extensions` toolbar to display the export page. The user can select the corresponding field and click the `Export` button to obtain the Csv file containing the selected fields of the current task 
 
 ![](https://gobies.org/ExportCsv237.gif)
 
-3.Github: [https://github.com/gobysec/GobyExtension/tree/master/samples/ExportCsv](https://github.com/gobysec/GobyExtension/tree/master/samples/ExportCsv)，也可以从git上下载插件，手动放入到 /extensions 目录，然后重启Goby
+3.Github: [https://github.com/gobysec/GobyExtension/tree/master/samples/ExportCsv](https://github.com/gobysec/GobyExtension/tree/master/samples/ExportCsv),You can also download the extension from git,manually put it into the/Golb/external directory, and restart Goby.

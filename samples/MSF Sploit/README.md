@@ -1,12 +1,11 @@
-## 快速开始
-1.安装
+1.Install
 
-必须安装metasploit环境
+  The metasploit environment must be installed. Download link is [here](https://www.rapid7.com/products/metasploit/download/).
 
-2.配置metasploit安装路径
+2.Configure metasploit installation path.
 
-3.在漏洞相关页点击MSF按钮
+3.On the vulnerability details page, click the MSF button.
 
 ![](static/img/extension/ex-msf.gif)
 
-4.Github: [https://github.com/gobysec/GobyExtension/tree/master/samples/MSF%20Sploit](https://github.com/gobysec/GobyExtension/tree/master/samples/MSF%20Sploit)，也可以从git上下载插件，手动放入到 /extensions 目录，然后重启Goby
+4.Github: [https://github.com/gobysec/GobyExtension/tree/master/samples/MSF Sploit](https://github.com/gobysec/GobyExtension/tree/master/samples/MSF%20Sploit),You can also download the extension from git,manually put it into the/Golb/external directory, and restart Goby.

@@ -1,0 +1,12 @@
+{
+    "description": "Metasploit安全漏洞检测工具 demo",
+    "contributes":{
+        "configuration":{
+            "Path":{
+                "description":"请输入MSF安装路径"
+            }
+        }
+    },
+    "readme":"./README.md",
+    "changelog":"./CHANGELOG.md"
+}
