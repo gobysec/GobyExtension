@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xray report</title>
+    <link rel="stylesheet" href="assets/lib/layui/css/layui.css">
+    <link rel="stylesheet" href="assets/css/index.css">
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/font/iconfont.css">
+    <link rel="stylesheet" href="assets/css/mouseRightMenu.css">
+
+    <style>
+        /* .layui-table-wrap {
+            max-height: 360px;
+            overflow: auto;
+            margin-top: -15px;
+        } */
+
+
+        .layui-table-cell tr td {
+            font-size: 12px;
+            height: auto;
+            overflow: visible;
+            text-overflow: inherit;
+            white-space: normal;
+            word-break: break-all;
+        }
+
+        .layui-table th {
+            text-align: center;
+        }
+
+        .layui-btn {
+            margin-left: 823px;
+            width: 95px;
+            height: 25px;
+            font-size: 13px;
+            line-height: 3px;
+
+        }
+    </style>
+</head>
+
+<body class="layui-layout-body">
+<div class="layui-layout">
+    <!-- <div class="layui-body" style="top:0px"> -->
+    <!-- 内容主体区域 -->
+    <div class="layui-tab layui-tab-brief" lay-filter="demo1" lay-allowclose="true">
+        <ul class="layui-tab-title">
+            <li class="layui-this" lay-id="carInformation" data-i18n="Shells management"></li>
+
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div style="margin-top: -10px;">
+                    <table lay-filter="li1" id="ip-table" class="layui-table">
+                        <thead>
+                        <tr class="layui-table-cell">
+                            <th width="30px">ID</th>
+                            <th width="400px">URL</th>
+                            <th width="200px">CPath</th>
+                            <th width="200px">DriveList</th>
+                            <th width="150px">Script</th>
+                            <th width="200px">Time</th>
+                            <th width="200px">Status</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div class="layui-table-wrap" style="position: absolute;margin-top:-12px">
+                    <table lay-filter="demo1" id="ip-table" class="layui-table">
+                        <tbody class="layui-table-cell">
+                        <!-- <tr>
+                </tr> -->
+                        </tbody>
+                    </table>
+                    <div class="no-json-data">
+                    </div>
+                </div>
+                <div id="page"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="assets/lib/layui/layui.all.js"></script>
+<script src="assets/js/jquery-3.3.1.min.js"></script>
+<script src="assets/js/jquery.i18next.js"></script>
+<script>
+    const fs = top.require('fs')
+
+    function randomRange(min, max) {
+        var returnStr = "",
+            range = (max ? Math.round(Math.random() * (max - min)) + min : min),
+            arr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        for (var i = 0; i < range; i++) {
+            var index = Math.round(Math.random() * (arr.length - 1));
+            returnStr += arr[index];
+        }
+        return returnStr;
+    }
+
+    function formatDateTime(inputTime) {
+        var date = new Date(inputTime);
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        m = m < 10 ? ('0' + m) : m;
+        var d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        var h = date.getHours();
+        h = h < 10 ? ('0' + h) : h;
+        var minute = date.getMinutes();
+        var second = date.getSeconds();
+        minute = minute < 10 ? ('0' + minute) : minute;
+        second = second < 10 ? ('0' + second) : second;
+        return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+    }
+
+    function lang() {
+        //获取当前Languzge
+        let language = goby.getLang();
+
+        //判断翻译文件是否存在
+        let translateState = fs.existsSync(goby.__dirname + '/assets/translate/' + language + '/html.json');
+
+        //翻译文件存在则使用翻译文件,否则使用默认EN翻译
+        let lang = translateState ? language : 'EN';
+
+        let a = $.i18n.init({
+            lng: language, //指定语言
+            useCookie: false,
+            resGetPath: './assets/translate/' + lang + '/html.json',//语言包的路径
+        }, function (err, t) {
+            if (!err) {
+                $('[data-i18n]').i18n(); // 通过选择器集体翻译
+                return;
+            }
+        });
+    }
+
+    //当lang改变时更新页面内容
+    goby.bindEvent('onChangeLang', () => {
+        lang();
+    })
+    lang()
+
+    //JavaScript代码区域
+    layui.config({base: './assets/js/'})
+    layui.use(['mouseRightMenu', 'element', 'layer'], function () {
+            var mouseRightMenu = layui.mouseRightMenu
+            var element = layui.element;
+            var $ = layui.jquery;
+            $('head').prepend(`
+            <style>
+                :root{
+                        ${parent.document.querySelector('html').style.cssText}
+                    }
+            </style>
+            `)
+            $(window).on('unload', function () {
+                parent.ShellsManagerX.cleanJar()
+            })
+
+            function getData(page, type) {
+                let results = parent.ShellsManagerX.shellsInfo();
+                console.log(results);
+                if (results && results.length > 0) {
+                    let html = "";
+                    let count = results.length;
+                    res = results.slice(7 * (page - 1), page * 7);
+                    res.forEach((dictv, listk) => {
+                        html += `
+          <tr class="layui-table-cell-${(7 * (page - 1) + listk + 1)}">
+              <td  width="30px" style="text-align: center;">${(7 * (page - 1) + listk + 1)}</td>
+              <td  width="400px" ><a class="open_url" style="color:var(--main-color);" href="#">${dictv.URL}</a></td>
+              <td  width="200px" style="text-align: center;">${dictv.CPath}</td>
+              <td  width="200px" style="text-align: center;">${dictv.DList}</td>
+              <td  width="150px" style="text-align: center;">${dictv.Script}</td>
+              <td  width="200px" style="text-align: center;">${formatDateTime(dictv.Time)}</td>
+              <td  width="200px" class="layui-table-status-${listk + 1}" style="text-align: center;">${dictv.Status}</td>
+          </tr>
+
+                `
+                    });
+                    $("#ip-table tbody").html(html);
+                    if (type) {
+                        let laypage = layui.laypage;
+                        laypage.render({
+                            elem: 'page',
+                            limit: 7,
+                            curr: page,
+                            count: count,
+                            prev: "prev",
+                            next: "next",
+                            jump: function (obj, first) {
+                                getData(obj.curr);
+                            }
+                        });
+                    }
+                } else {
+                    $(".no-json-data").show();
+                    $("#ip-table tbody").html("");
+                    $(".no-json-data").html($.t('No data'));
+                }
+            }
+
+            getData(1, 1);
+            //触发事件
+            var active = {
+                //在这里给active绑定几项事件，后面可通过active调用这些事件
+                tabAdd: function (url, id, name) {
+                    //新增一个Tab项 传入三个参数，分别对应其标题，tab页面的地址，还有一个规定的id，是标签中data-id的属性值
+                    //关于tabAdd的方法所传入的参数可看layui的开发文档中基础方法部分
+                    element.tabAdd('demo1', {
+                        title: name,
+                        // content: '<iframe data-frameid="' + id + '" scrolling="no" frameborder="0" src="' + url + '" style="width:100%;height:500px"></iframe>',
+                        content: '<iframe id="' + id + '" frameborder="0" src="' + url + '" style="width:100%;height:100%"></iframe>',
+                        // content: getData(1, 1),
+                        id: id //规定好的id
+                    })
+                    element.render('tab');
+
+                },
+                tabChange: function (id) {
+                    //切换到指定Tab项
+                    element.tabChange('demo1', id); //根据传入的id传入到指定的tab项
+                },
+                tabDelete: function (id) {
+                    element.tabDelete("demo1", id);//删除
+                }
+                , tabDeleteAll: function (ids) {//删除所有
+                    $.each(ids, function (i, item) {
+                        element.tabDelete("demo1", item); //ids是一个数组，里面存放了多个id，调用tabDelete方法分别删除
+                    })
+                }
+            };
+
+
+            //当点击有site-demo-active属性的标签时，即左侧菜单栏中内容 ，触发点击事件
+            function addTab(url, id, title) {
+
+                //这时会判断右侧.layui-tab-title属性下的有lay-id属性的li的数目，即已经打开的tab项数目
+                if ($(".layui-tab-title li[lay-id]").length <= 0) {
+                    //如果比零小，则直接打开新的tab项
+                    active.tabAdd(url, id, title);
+                } else {
+                    //否则判断该tab项是否以及存在
+
+                    var isData = false; //初始化一个标志，为false说明未打开该tab项 为true则说明已有
+                    $.each($(".layui-tab-title li[lay-id]"), function () {
+                        //如果点击左侧菜单栏所传入的id 在右侧tab项中的lay-id属性可以找到，则说明该tab项已经打开
+                        if ($(this).attr("lay-id") == id) {
+                            isData = true;
+                        }
+                    })
+                    if (isData == false) {
+                        //标志为false 新增一个tab项
+                        active.tabAdd(url, id, title);
+                    }
+                }
+                //最后不管是否新增tab，最后都转到要打开的选项页面上
+                active.tabChange(id);
+            }
+
+
+            $('table').delegate('tr', 'contextmenu', function (e) {
+                let data = $(this).attr('class').split("-");
+                console.log(data[3]);
+                let menu_data = [
+                    {'data': "", 'type': 1, 'title': $.t('Check alive')},
+                    {'data': "./tabs/auto_basic_info.html", 'type': "baseInfo", 'title': $.t('Basic Information')},
+                    {'data': "./tabs/auto_file_oper.html", 'type': "fileOper", 'title': $.t('File management')},
+                    {'data': "./tabs/auto_run_exec.html", 'type': "runCmd", 'title': $.t('Virtual terminal')},
+                    // {'data': "./tabs/basic_info.html", 'type': 2, 'title': '基本信息'},
+                    // {'data': "./tabs/file_oper.html", 'type': 'fileOper', 'title': '文件管理'},
+                    // {'data': "./tabs/run_exec.html", 'type': 'runCmd', 'title': '虚拟终端'},
+                    // {'data': "url", 'type': 5, 'title': '交互终端'},
+                    // {'data': "data", 'type': 6, 'title': '数据库管理'},
+                ]
+                let shellInfo = parent.ShellsManagerX.shellsInfo()
+                mouseRightMenu.open(menu_data, false, function (d) {
+                    // layer.alert(JSON.stringify(d));
+                    console.log(d.data, d.type, d.title);
+                    parent.ShellsManagerX.init(data[3] - 1)
+                    let randNum = randomRange(30, 200)
+                    if (d.title === $.t('Check alive')) {
+                        console.log(shellInfo[data[3] - 1])
+                        if (shellInfo[data[3] - 1].Script === "php") {
+                            parent.ShellsManagerX.echo(randNum, "false").then(res => {
+                                console.log(res)
+                                if (res === undefined) {
+                                    res = ""
+                                }
+                                if (res.indexOf("status") !== -1) {
+                                    shellInfo[data[3] - 1].Status = $.t("Up")
+                                    parent.ShellsManagerX.fixShellsInfo(shellInfo).then(ree => {
+                                        getData(1, 1)
+                                        $('.layui-table-status-' + data[3]).html($.t("Up"))
+                                    })
+                                } else {
+                                    shellInfo[data[3] - 1].IsXor = true
+                                    parent.ShellsManagerX.fixShellsInfo(shellInfo).then(ree => {
+                                        parent.ShellsManagerX.init(data[3] - 1)
+                                        parent.ShellsManagerX.echo(randNum, "false").then(res => {
+                                            if (res.indexOf("status") !== -1) {
+                                                shellInfo[data[3] - 1].Status = $.t("Up")
+                                                parent.ShellsManagerX.fixShellsInfo(shellInfo).then(ree => {
+                                                    getData(1, 1)
+                                                    $('.layui-table-status-' + data[3]).html($.t("Up"))
+                                                })
+                                            } else {
+                                                shellInfo[data[3] - 1].Status = $.t("Down")
+                                                shellInfo[data[3] - 1].IsXor = false
+                                                parent.ShellsManagerX.fixShellsInfo(shellInfo).then(ree => {
+                                                    getData(1, 1)
+                                                    $('.layui-table-status-' + data[3]).html($.t("Down"))
+                                                })
+
+                                            }
+                                        });
+                                    })
+                                }
+                            });
+                        } else {
+                            parent.ShellsManagerX.echo(randNum, "false").then(res => {
+                                console.log(res)
+                                if (res.indexOf("status") !== -1) {
+                                    shellInfo[data[3] - 1].Status = $.t("Up")
+                                    parent.ShellsManagerX.fixShellsInfo(shellInfo).then(ree => {
+                                        getData(1, 1)
+                                        $('.layui-table-status-' + data[3]).html($.t("Up"))
+                                    })
+                                } else {
+                                    shellInfo[data[3] - 1].Status = $.t("Down")
+                                    parent.ShellsManagerX.fixShellsInfo(shellInfo).then(ree => {
+                                        getData(1, 1)
+                                        $('.layui-table-status-' + data[3]).html($.t("Down"))
+                                    })
+
+                                }
+                            }).catch((error) => {
+                                goby.showErrorMessage("ShellHub :" + error.message)
+                            })
+                        }
+                    } else if (d.title === $.t("Basic Information")) {
+                        let id = data[3] - 1
+                        addTab(d.data + "?" + id, d.type, d.title)
+
+
+                    } else if (d.title === $.t("File management")) {
+                        let id = data[3] - 1
+                        addTab(d.data + "?" + id, d.type, d.title)
+
+                        // if ((shellInfo[data[3] - 1].CPath).length !== 0) {
+                        //     let cPath = shellInfo[data[3] - 1].CPath
+                        //     let dlist = shellInfo[data[3] - 1].DList
+                        //     let fileOper = btoa(unescape(encodeURIComponent(cPath))) + "|" + btoa(unescape(encodeURIComponent(dlist)))
+                        //     addTab(d.data + "?" + fileOper, d.type, d.title)
+                        // } else {
+                        //     parent.ShellsManagerX.getBasicInfo(randNum, "false").then(res => {
+                        //         console.log(res);
+                        //         if ((res.basicInfo).length !== 0) {
+                        //             let cPath = shellInfo[data[3] - 1].CPath
+                        //             let dlist = shellInfo[data[3] - 1].DList
+                        //             let fileOper = btoa(unescape(encodeURIComponent(cPath))) + "|" + btoa(unescape(encodeURIComponent(dlist)))
+                        //             addTab(d.data + "?" + fileOper, d.type, d.title)
+                        //         } else {
+                        //             $('.layui-table-status-' + data[3]).html("未存活")
+                        //         }
+                        //     });
+                        // }
+                    } else if (d.title === $.t("Virtual terminal")) {
+                        let id = data[3] - 1
+                        console.log(id);
+                        addTab(d.data + "?" + id, d.type, d.title)
+                    }
+
+                })
+                return false;
+            });
+        }
+    );
+</script>
+</body>
+
+</html>

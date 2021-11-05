@@ -1,0 +1,23 @@
+{
+  "id": "2262139",
+  "name": "aa",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "8870486",
+      "name": "垃圾桶-01",
+      "font_class": "lajitong-",
+      "unicode": "e63f",
+      "unicode_decimal": 58943
+    },
+    {
+      "icon_id": "10664819",
+      "name": "icon-edit",
+      "font_class": "icon-edit",
+      "unicode": "e63d",
+      "unicode_decimal": 58941
+    }
+  ]
+}

@@ -1,0 +1,208 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+    <title>zzz树</title>	
+    <link rel="stylesheet" href="css/zTreeStyle/zTreeStyle.css">
+	
+    <script src="https://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="js/jquery.ztree.core.min.js"></script>
+    <style>
+        .level2 a
+        {
+            color:red
+        }
+    </style>
+</head>
+
+<body>
+    <ul id="treeDemo" class="ztree"></ul>
+    <script>
+
+        //设置
+        var setting = {
+            data: {
+                key: {
+                    title: "t",
+                    name: "name"
+                },
+                view:{
+                    fontCss:setFontCss  
+                },
+                simpleData: {
+                    enable: true,
+                    idKey: "id",
+                    pIdKey: "pId",
+                    rootPId: 0
+                }
+            },
+            callback: {
+                beforeClick: beforeClick,
+                onClick: onClick,
+
+            }
+
+        };
+        function setFontCss(treeId,treeNode){
+            return node.font ? node.font : {};
+        }
+
+        //数据  id和pId是做父子判定的  name是显示的文字,其余的就无所谓了  
+        //如果后台传来的数据没有这些要自己手动处理添加,
+        //肯定会有类似父子这样的关系，只是可能不是id和pId而已，比如我的就不是，而是parentCode 和 orgCode
+        let data = [
+    {
+        "name": "D:/",
+        "id": 1,
+        "pId": 0,
+        
+        "open": true
+        
+        
+    },
+    {
+        "id": 11,
+        "pId": 1,
+        "name": "Jdk"
+    },
+    {"name": "19971007",
+        "id": 111,
+        "pId": 11,
+        "font":{"color":"red"},
+        "icon":"css/zTreeStyle/img/diy/10.png"
+    },
+    {
+        "id": 112,
+        "pId": 11,
+        "name": "19971007"
+    },
+    {
+        "id": 113,
+        "pId": 11,
+        "name": "19971007"
+    },
+    {
+        "id": 114,
+        "pId": 11,
+        "name": "19971007"
+    },
+    {
+        "id": 12,
+        "pId": 1,
+        "name": "B区"
+    },
+    {
+        "id": 121,
+        "pId": 12,
+        "name": "19971007"
+    },
+    {
+        "id": 122,
+        "pId": 12,
+        "name": "19971007"
+    },
+    {
+        "id": 123,
+        "pId": 12,
+        "name": "19971007"
+    },
+    {
+        "id": 124,
+        "pId": 12,
+        "name": "19971007"
+    },
+    {
+        "id": 13,
+        "pId": 1,
+        "name": "C区"
+    },
+    {
+        "id": 131,
+        "pId": 13,
+        "name": "19971007"
+    },
+    {
+        "id": 132,
+        "pId": 13,
+        "name": "19971007"
+    },
+    {
+        "id": 133,
+        "pId": 13,
+        "name": "19971007"
+    },
+    {
+        "id": 134,
+        "pId": 13,
+        "name": "19971007"
+    },
+    {
+        "id": 14,
+        "pId": 1,
+        "name": "D区"
+    },
+    {
+        "id": 141,
+        "pId": 14,
+        "name": "19971007"
+    },
+    {
+        "id": 142,
+        "pId": 14,
+        "name": "19971007"
+    },
+    {
+        "id": 143,
+        "pId": 14,
+        "name": "19971007"
+    },
+    {
+        "id": 144,
+        "pId": 14,
+        "name": "19971007"
+    }
+]
+        $(document).ready(function () {
+            
+            <!-- $.ajax({ -->
+                <!-- type:'GET', -->
+                <!-- url:'data/zt.json', -->
+                <!-- dataType:'json', -->
+                <!-- success:function(data){ -->
+                    <!-- $.fn.zTree.init($("#treeDemo"), setting, data); -->
+                <!-- }, -->
+                <!-- error:function(error){ -->
+                    <!-- console.log(error); -->
+                <!-- } -->
+            <!-- }) -->
+			$.fn.zTree.init($("#treeDemo"), setting, data);
+            
+        });
+
+        var log, className = "dark";
+        function beforeClick(treeId, treeNode, clickFlag) {
+            className = (className === "dark" ? "" : "dark");
+            showLog("[ " + getTime() + " beforeClick ]&nbsp;&nbsp;" + treeNode.name);
+            return (treeNode.click != false);
+        }
+        function onClick(event, treeId, treeNode, clickFlag) {
+            showLog("[ " + getTime() + " onClick ]&nbsp;&nbsp;clickFlag = " + clickFlag + " (" + (clickFlag === 1 ? "普通选中" : (clickFlag === 0 ? "<b>取消选中</b>" : "<b>追加选中</b>")) + ")");
+        }
+        function showLog(str) {
+            if (!log) log = $("#log");
+            log.append("<li class='" + className + "'>" + str + "</li>");
+            if (log.children("li").length > 8) {
+                log.get(0).removeChild(log.children("li")[0]);
+            }
+        }
+        function getTime() {
+            var now = new Date(),
+                h = now.getHours(),
+                m = now.getMinutes(),
+                s = now.getSeconds();
+            return (h + ":" + m + ":" + s);
+        }
+    </script>
+</body>
+
+</html>

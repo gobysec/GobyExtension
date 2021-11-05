@@ -1,0 +1,35 @@
+{
+  "name": "ShellHub",
+  "publisher": "GobySec",
+  "description": "WebShell Tools,Support Behinder tool",
+  "version": "0.0.1",
+  "engines": "1.9.306",
+  "icon": "src/assets/img/shells.png",
+  "initEvents": "",
+  "main": "./src/extension.js",
+  "contributes": {
+    "configuration": {
+      "Proxy": {
+        "type": "string",
+        "default": "",
+        "description": "http://127.0.0.1:9999"
+      }
+    },
+    "views": {
+      "toolbar": [
+        {
+          "command": "ShellsManager",
+          "title": "WebShell Tool",
+          "icon": "src/assets/img/shells.png",
+          "tips": "ShellHub"
+        }
+      ]
+    }
+  },
+  "scripts": {},
+  "devDependencies": {},
+  "dependencies": {
+    "request": "^2.88.2",
+    "vue-contextmenu": "^1.5.10"
+  }
+}

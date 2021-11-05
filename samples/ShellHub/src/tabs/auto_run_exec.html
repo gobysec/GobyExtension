@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link href="../assets/css/main.css" rel="stylesheet"/>
+    <title>CMD</title>
+    <style>
+        #sign {
+            color: #FF5454;
+        }
+    </style>
+</head>
+
+<body>
+<div id="main">
+    <p id="info">BaseInfo:</p>
+    <p id="info">Dir: <span id="currpath"></span></p>
+    <p id="info">Disk: <span id="dlist"></span></p>
+    <p id="info">OS: <span id="osinfo"></span></p>
+
+    <!-- <span class="prefix">[<span id='usr'>root</span>@<span class="host">kali</span> <span id="pos">~</span>]% <span
+            class="info"></span></span> </br> -->
+
+</div>
+<span class="prefix"><span class="currpath"></span><span id="sign"> > </span> </span>
+<input type="text" class="input-text">
+
+
+<script src="../assets/js/jquery-3.3.1.min.js"></script>
+<script>
+    function htmlEncodeByRegExp(str) {
+        var s = "";
+        if (str.length === 0) return "";
+        s = str.replace(/&/g, "&amp;");
+        s = s.replace(/</g, "&lt;");
+        s = s.replace(/>/g, "&gt;");
+        s = s.replace(/ /g, "&nbsp;");
+        s = s.replace(/\'/g, "&#39;");
+        s = s.replace(/\"/g, "&quot;");
+        return s;
+    }
+
+
+    let cour = 0
+    let isInHis = 0
+    let e_main = $('#main')
+    let e_input = $('.input-text')
+    let e_html = $('body,html')
+
+    let id = window.location.href.split("?")[1];
+    let shellInfo = top.ShellsManagerX.shellsInfo()
+    let data
+    if (id === undefined) {
+        data = shellInfo[shellInfo.length - 1]
+    } else {
+        data = shellInfo[id]
+    }
+    let currpath = data.CPath.replace(/\\/g, "/")
+    // console.log(currpath);
+    // if (currpath.length === 0) {
+    //     location.reload()
+    // }
+    $('#currpath').html(currpath);
+    $('#dlist').html(data.DList);
+    $('#osinfo').html(data.OS);
+    $('.currpath').html(currpath);
+    $(document).ready(function () {
+        let classId = 0
+        let mainFunc = (input) => {
+            input = input.replace(/\//g, "\\")
+            // console.log(input);
+            currpath = $('.currpath').text()
+            classId += 1
+            let force = "false"
+            let cmd
+            if (currpath.substr(0, 1) === "/") {
+                cmd = "cd " + currpath + ";" + input
+            } else {
+                cmd = `"cd /d "${currpath}"&${input}"`
+            }
+            if (input === '') {
+                e_main.html($('#main').html() + `<span class="currpath${classId}">${basepath}</span><span id="sign"> > </span>  ` + '</br>')
+                e_html.animate({scrollTop: $(document).height()}, 0)
+
+            } else if (input === "cd ..") {
+                let pathList = currpath.split("/")
+                if (pathList.length > 1) {
+                    pathList.pop()
+                }
+                // console.log(pathList);
+                // console.log(currpath);
+                e_main.html($('#main').html() + `<span class="currpath${classId}">${currpath}</span> <span id="sign"> > </span> ` + input + '<br/>')
+                let cdpath = pathList.join("/")
+                $(".currpath").html(cdpath);
+                e_html.animate({scrollTop: $(document).height()}, 0)
+            } else {
+                top.ShellsManagerX.runCmd(cmd, currpath, force).then(res => {
+                    if (res.status.length !== 0) {
+                        // let result = res.msg.replace(/\r\n\r\n/g, "</p><p>").replace(/\n\n/g, "</p><p>");
+                        if (input.indexOf("cd") === -1) {
+                            let result = htmlEncodeByRegExp(res.msg).replace(/\r\n/g, "<br />").replace(/\n/g, "<br />");
+                            // console.log(result);
+                            // result = result.replace(/\r\n/g, "<br />").replace(/\n/g, "<br />");
+                            e_main.html($('#main').html() + `<span class="currpath${classId}">${currpath}</span>  <span id="sign"> > </span>` + input + '<br/>' + result);
+                            e_html.animate({scrollTop: $(document).height()}, 0);
+                        } else {
+                            cmd = cmd + "&cd"
+                            e_main.html($('#main').html() + `<span class="currpath${classId}">${currpath}</span> <span id="sign"> > </span> ` + input + '<br/>')
+                            $(".currpath").html(input.split(" ")[1]);
+                            e_html.animate({scrollTop: $(document).height()}, 0)
+                        }
+                    }
+                }).catch((error) => {
+                    parent.goby.showErrorMessage("ShellHub :" + error.message)
+                })
+
+            }
+
+        }
+        window.onresize = function () {
+            e_input.width($(document).width() - $('.prefix').width() - 160)
+        };
+
+        let historyCmd = (k) => {
+            $('body,html').animate({scrollTop: $(document).height()}, 0)
+
+            if (k !== 'up' || isInHis) {
+                if (k === 'up' && isInHis) {
+                    if (cour >= 1) {
+                        cour--
+                        e_input.val(hisCommand[cour])
+                    }
+                }
+                if (k === 'down' && isInHis) {
+                    if (cour + 1 <= hisCommand.length - 1) {
+                        cour++
+                        $(".input-text").val(hisCommand[cour])
+                    } else if (cour + 1 === hisCommand.length) {
+                        $(".input-text").val(inputCache)
+                    }
+                }
+            } else {
+                inputCache = e_input.val()
+                e_input.val(hisCommand[hisCommand.length - 1])
+                cour = hisCommand.length - 1
+                isInHis = 1
+            }
+        }
+
+        $(document).bind('keydown', (b) => {
+            e_input.focus()
+            if (b.keyCode === 13) {
+                e_main.html($('#main').html())
+                e_html.animate({scrollTop: $(document).height()}, 0)
+                if (e_input.val() == "cd ..") {
+                    mainFunc(e_input.val())
+                    // hisCommand.push(e_input.val())   //history
+                    isInHis = 0
+                    e_input.val('')
+                    // mainFunc("")
+                } else {
+                    mainFunc(e_input.val())
+                    // hisCommand.push(e_input.val())   //history
+                    isInHis = 0
+                    e_input.val('')
+                }
+                // mainFunc(e_input.val())
+                // // hisCommand.push(e_input.val())   //history
+                // isInHis = 0
+                // e_input.val('')
+                // mainFunc("")
+
+            }
+            if (b.keyCode === 9) {
+                pressTab(e_input.val())
+                b.preventDefault()
+                e_html.animate({scrollTop: $(document).height()}, 0)
+                e_input.focus()
+            }
+
+            if (b.keyCode === 38) historyCmd('up')
+            if (b.keyCode === 40) historyCmd('down')
+
+            // Ctrl + U 清空输入快捷键
+            if (b.keyCode === 85 && b.ctrlKey === true) {
+                e_input.val('')
+                e_input.focus()
+            }
+        })
+    })
+
+</script>
+</body>
+
+</html>

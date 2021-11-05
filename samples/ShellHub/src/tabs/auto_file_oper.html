@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../assets/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<div id="app" v-cloak>
+    <div id="tree">
+        <p class="lv3font">{{ $t('File Directory') }}</p>
+        <el-tree
+                ref="tree"
+                :props="props"
+                :data="treeData"
+                :load="loadNode"
+                :expand-on-click-node="false"
+                @node-click="nodeClick"
+                node-key="path"
+                accordion
+                lazy
+        >
+        </el-tree>
+    </div>
+    <div id="table">
+        <p class="lv3font">
+            {{ $t('Current path') }}: {{ currentPath || "" }}
+
+
+            <el-select v-model="decode" size="mini" class="decode">
+                <el-option
+                        v-for="item in decodeOptions"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                </el-option>
+            </el-select>
+            <span class="decode_title">{{ $t('encode') }}: </span>
+
+        </p>
+        <el-table
+                :data="currTableData"
+                style="width: 100%"
+                @row-contextmenu="onContextmenu"
+                @row-dblclick="dblclick"
+                :empty-text="$t('No data')"
+        >
+            <el-table-column
+                    prop="name"
+                    label="Name"
+
+            >
+                <template slot-scope="scope">
+                    <i :class="{
+                            'el-icon-folder':scope.row.type=='directory',
+                            'el-icon-tickets':scope.row.type=='file'
+                        }"></i>
+                    <span v-text="scope.row.name"></span>
+                </template>
+            </el-table-column>
+            <el-table-column
+                    prop="size"
+                    label="Size"
+
+                    width="180">
+            </el-table-column>
+            <el-table-column
+                    prop="lastModified"
+                    label="lastModified"
+
+                    width="180">
+            </el-table-column>
+            <el-table-column
+                    prop="perm"
+                    label="perm"
+
+                    width="180">
+            </el-table-column>
+        </el-table>
+        <el-pagination
+                @current-change="handleCurrentChange"
+                :current-page="page"
+                :page-sizes="[10,20,30,40]"
+                :page-size="size"
+                layout="total,prev, pager, next, jumper"
+                :total="total">
+        </el-pagination>
+    </div>
+    <el-dialog
+            :title="fileCon.name"
+            :visible.sync="isShowFileCon"
+            width="70%"
+    >
+        <span class="fileCon" v-text="fileCon.con"></span>
+        <span slot="footer" class="dialog-footer">
+                <el-button type="primary" size="small" @click="isShowFileCon = false">Confirm</el-button>
+            </span>
+    </el-dialog>
+</div>
+</body>
+<script src="../assets/js/vue.min.js"></script>
+<script src="../assets/js/vue-i18n.js"></script>
+<script src="../assets/element-ui/lib/index.js"></script>
+<script src="../assets/js/jquery-3.3.1.min.js"></script>
+<script src="../assets/js/contextmenu.umd.js"></script>
+<script src="../assets/js/lang.js"></script>
+<script src="../assets/element-ui/lib/umd/locale/en.js"></script>
+<script src="../assets/element-ui/lib/umd/locale/zh-CN.js"></script>
+<script>
+    const messages = {
+        'EN': enObj,
+        'CN': zhObj
+    }
+    const lang = messages[parent.goby.getLang()] ? parent.goby.getLang() : 'EN'
+    const i18n = new VueI18n({
+        locale: parent.goby.getLang(), // 设置地区
+        messages, // 设置地区信息
+        missing: (locale, key, vm) => {
+            var res = vm.$i18n.messages[vm.$i18n.locale][key];
+            if (res) {
+                // 已经翻译
+                return res;
+            } else {
+                return key;
+            }
+        }
+    })
+    ELEMENT.locale(ELEMENT.lang.en)
+    parent.goby.bindEvent('onChangeLang', (lang) => {
+        i18n.locale = lang
+    })
+    new Vue({
+        data: {
+            tableData: [],
+            filePath: [],
+            props: {
+                label: 'title',
+                children: 'children',
+                // isLeaf: 'leaf'
+            },
+            treeData: [],
+            currentPath: "",
+            total: 0,
+            page: 1,
+            size: 10,
+            path: top.require('path'),
+            isShowFileCon: false,
+            fileCon: {
+                name: "",
+                con: ""
+            },
+            decode: 'UTF-8',
+            decodeOptions: [
+                {
+                    value: 'UTF-8',
+                    label: 'UTF-8'
+                },
+                {
+                    value: 'GBK',
+                    label: 'GBK'
+                }
+            ]
+        },
+        methods: {
+            pathsToTree(paths, currpath = '') {
+                let dataStr = [];
+                paths.forEach(path => {
+                    if (path.length === 0) {
+                        return
+                    }
+                    let curPoint;
+                    let parts
+                    if (path.substr(0, 1) === "/" || path.substr(0, 1) === "\\") {
+                        // Linux
+                        path = path.split('\\').join("/")
+                        parts = path.split("/");
+                        if (parts[0] === "") { // 处理根目录/的情况
+                            parts[0] = "/"
+                        }
+                    } else {
+                        // windows
+                        parts = path.split("\\");
+                    }
+
+                    for (let i = 0; i < dataStr.length; i++) {
+                        if (parts[0] === dataStr[i].title) {
+                            curPoint = dataStr[i]
+                        }
+                    }
+                    if (curPoint === undefined) {
+                        dataStr.push({})
+                        curPoint = dataStr[dataStr.length - 1]
+                    }
+
+                    // console.log(curPoint);
+                    parts.forEach((value, k) => {
+                        // console.log(k, value)
+                        if (value.length === 0) {
+                            return
+                        }
+                        if (k === 0) {
+                            curPoint.title = value
+                            curPoint.spread = true
+                            curPoint.isGetPath = false
+                            curPoint.path = `${currpath ? (currpath + '/') : ''}${value}`.replace(/^\/\//, '/')
+                        } else {
+                            if (curPoint.children === undefined) {
+                                curPoint.children = [{
+                                    title: value,
+                                    spread: true,
+                                    isGetPath: false,
+                                    path: `${currpath ? (currpath + '/') : ''}${value}`.replace(/^\/\//, '/')
+                                }]
+                                curPoint = curPoint.children[0]
+
+                            } else {
+                                let curChild;
+                                for (let i = 0; i < curPoint.children.length; i++) {
+                                    if (value === curPoint.children[i].title) {
+                                        curChild = curPoint.children[i]
+                                    }
+                                }
+                                if (curChild === undefined) {
+                                    curPoint.children.push({
+                                        title: value,
+                                        spread: true,
+                                        isGetPath: false,
+                                        path: `${currpath ? (currpath + '/') : ''}${value}`.replace(/^\/\//, '/')
+                                    })
+                                    curChild = curPoint.children[curPoint.children.length - 1]
+                                }
+                                curPoint = curChild
+                            }
+                        }
+                    });
+                })
+                return dataStr
+            },
+            getInfo() {
+                let id = window.location.href.split("?")[1];
+                let shellInfo = top.ShellsManagerX.shellsInfo()
+                // console.log(shellInfo)
+                let data
+                if (id === undefined) {
+                    data = shellInfo[shellInfo.length - 1]
+                } else {
+                    data = shellInfo[id]
+                }
+                return data
+            },
+            init() {
+                let cPath = this.getInfo().CPath
+                let dListList = this.getInfo().DList.split(";")
+                this.filePath.push(cPath)
+                dListList.forEach(element => {
+                    this.filePath.push(element)
+                });
+                this.treeData = this.pathsToTree(this.filePath)
+            },
+            getAllPath(obj, arr = []) {
+                if (obj.level > 0) {
+                    arr.push(obj.label || '')
+                    arr.concat(this.getAllPath(obj.parent, arr))
+                    return arr;
+
+                } else {
+                    arr.push(obj.label || '')
+                    return arr.filter(item => item)
+                }
+            },
+            loadNode(node, resolve) {
+                if (node.level === 0) return
+                const currentPath = this.getAllPath(node).filter(item => item).reverse().join('/').replace(/^\/\//, '/')
+                this.currentPath = currentPath;
+                let params = {
+                    "access_time_stamp": "",
+                    "char_set": "",
+                    "create_time_stamp": "",
+                    "current_path": "",
+                    "dir_name": "",
+                    "is_chunk": true,
+                    "local_path": "",
+                    "mode": "",
+                    "modify_time_stamp": "",
+                    "new_file_name": "",
+                    "old_file_name": "",
+                    "remote_path": ""
+                }
+                top.ShellsManagerX.operationFile("list", currentPath, "false", params).then(res => {
+                    if (res.msg.indexOf(",]") !== -1) {
+                        res.msg = res.msg.replace(",]", "]")
+                    }
+                    let resJson = JSON.parse(res.msg)
+                    let filePath = []
+                    resJson.forEach((v, k) => {
+                        resJson[k].lastModified = decodeURIComponent(escape(atob(resJson[k].lastModified)));
+                        resJson[k].name = decodeURIComponent(escape(atob(resJson[k].name)));
+                        if (resJson[k].perm) {
+                            resJson[k].perm = decodeURIComponent(escape(atob(resJson[k].perm)));
+                        }
+                        resJson[k].type = decodeURIComponent(escape(atob(resJson[k].type)));
+                        resJson[k].size = decodeURIComponent(escape(atob(resJson[k].size)));
+                        if (resJson[k].type === "directory" && resJson[k].name != "." && resJson[k].name != "..") {
+                            filePath.push(resJson[k].name)
+                        }
+
+                    })
+                    this.$set(node.data, 'isGetPath', true)
+                    this.page = 1
+                    this.tableData = resJson;
+                    node.tableData = resJson
+                    this.total = this.tableData.length
+                    resolve(this.pathsToTree(filePath, currentPath))
+                }).catch((error) => {
+                    parent.goby.showErrorMessage("ShellHub :" + error.message)
+                })
+            },
+            handleCurrentChange(val) {
+                this.page = val
+            },
+            nodeClick(val, node) {
+
+                if (!node.data.isGetPath) {
+                    const currentPath = this.getAllPath(node).filter(item => item).reverse().join('/').replace(/^\/\//, '/')
+                    this.currentPath = currentPath;
+                    let params = {
+                        "access_time_stamp": "",
+                        "char_set": "",
+                        "create_time_stamp": "",
+                        "current_path": "",
+                        "dir_name": "",
+                        "is_chunk": true,
+                        "local_path": "",
+                        "mode": "",
+                        "modify_time_stamp": "",
+                        "new_file_name": "",
+                        "old_file_name": "",
+                        "remote_path": ""
+                    }
+                    top.ShellsManagerX.operationFile("list", currentPath, "false", params).then(res => {
+                        if (res.msg.indexOf(",]") !== -1) {
+                            res.msg = res.msg.replace(",]", "]")
+                        }
+                        let resJson = JSON.parse(res.msg)
+
+                        let filePath = []
+                        resJson.forEach((v, k) => {
+                            resJson[k].lastModified = decodeURIComponent(escape(atob(resJson[k].lastModified)));
+                            resJson[k].name = decodeURIComponent(escape(atob(resJson[k].name)));
+                            if (resJson[k].perm) {
+                                resJson[k].perm = decodeURIComponent(escape(atob(resJson[k].perm)));
+                            }
+                            resJson[k].type = decodeURIComponent(escape(atob(resJson[k].type)));
+                            resJson[k].size = decodeURIComponent(escape(atob(resJson[k].size)));
+                            if (resJson[k].type == "directory" && resJson[k].name != "." && resJson[k].name != "..") {
+                                filePath.push(resJson[k].name)
+                            }
+                        })
+                        this.page = 1
+                        this.tableData = resJson;
+                        node.tableData = resJson
+                        this.total = this.tableData.length
+                        // console.log(filePath);
+                        // console.log(this.pathsToTree(filePath));
+                        let arr = this.pathsToTree(filePath, currentPath)
+                        this.$set(node.data, 'children', arr.length > 0 ? arr : null)
+                        this.$set(node.data, 'isGetPath', true)
+                        node.expanded = true;
+                    }).catch((error) => {
+                        parent.goby.showErrorMessage("ShellHub :" + error.message)
+                    })
+                } else {
+                    this.page = 1
+                    node.expanded = true;
+                    const currentPath = this.getAllPath(node).filter(item => item).reverse().join('/').replace(/^\/\//, '/')
+                    this.currentPath = currentPath;
+                    this.tableData = node.tableData || []
+                    this.total = this.tableData.length
+                }
+
+
+            },
+            onContextmenu(row, column, event, cell) {
+                // console.log(row, column, event, cell);
+                this.$contextmenu({
+                    items: [
+                        {
+                            label: this.$t('Refresh'),
+                            onClick: () => {
+                                let node = this.$refs.tree.getNode(this.currentPath)
+                                this.$set(node.data, 'children', [])
+                                this.$set(node, 'childNodes', [])
+                                this.$set(node.data, 'isGetPath', false)
+                                this.nodeClick(node.data, node)
+                            }
+                        },
+                        {
+                            label: this.$t("Open"),
+                            onClick: () => {
+
+                                let currentPath = this.path.join(this.currentPath, row.name).replace(/\\/g, '/').replace(/\/$/, '').replace(/^\/\//, '/')
+                                // this.currentPath = currentPath;
+                                let node = this.$refs.tree.getNode(currentPath)
+                                // console.log(currentPath);
+                                // console.log(node);
+                                // console.log(this.$refs.tree.getNode(key));
+                                switch (row.type) {
+                                    case 'directory':
+                                        this.nodeClick(node.data, node)
+
+                                        this.currentPath = currentPath;
+                                        this.$refs.tree.setCurrentKey(currentPath)
+                                        break;
+                                    case 'file':
+                                        let params = {
+                                            "access_time_stamp": "",
+                                            "char_set": "",
+                                            "create_time_stamp": "",
+                                            "current_path": "",
+                                            "dir_name": "",
+                                            "is_chunk": true,
+                                            "local_path": "",
+                                            "mode": "",
+                                            "modify_time_stamp": "",
+                                            "new_file_name": "",
+                                            "old_file_name": "",
+                                            "remote_path": ""
+                                        }
+                                        let pathList = currentPath.split("/")
+                                        params["old_file_name"] = pathList.pop()
+                                        params["char_set"] = this.decode
+                                        currentPath = pathList.join("/")
+                                        top.ShellsManagerX.operationFile("show", currentPath, "false", params).then(res => {
+                                            // console.log(res);
+                                            this.$set(this.fileCon, 'name', row.name)
+                                            this.$set(this.fileCon, 'con', res.msg)
+                                            this.isShowFileCon = true
+                                        }).catch((error) => {
+                                            parent.goby.showErrorMessage("ShellHub :" + error.message)
+                                        })
+                                        break;
+                                }
+
+                            }
+                        },
+                        {
+                            label: this.$t("Rename"),
+                            onClick: () => {
+                                this.$prompt('new Name', 'rename', {
+                                    confirmButtonText: 'Confirm',
+                                    cancelButtonText: 'Cancel'
+                                }).then(({value}) => {
+                                    let params = {
+                                        "access_time_stamp": "",
+                                        "char_set": "",
+                                        "create_time_stamp": "",
+                                        "current_path": "",
+                                        "dir_name": "",
+                                        "is_chunk": true,
+                                        "local_path": "",
+                                        "mode": "",
+                                        "modify_time_stamp": "",
+                                        "new_file_name": "",
+                                        "old_file_name": "",
+                                        "remote_path": ""
+                                    }
+                                    params.old_file_name = this.path.join(this.currentPath, row.name).replace(/\\/g, '/').replace(/\/$/, '');
+                                    params.new_file_name = this.path.join(this.currentPath, value).replace(/\\/g, '/').replace(/\/$/, '');
+                                    top.ShellsManagerX.operationFile('rename', '', 'false', params).then(res => {
+                                        // console.log(res);
+                                        if (res.status === 'success') {
+                                            let node = this.$refs.tree.currentNode.node
+                                            this.$set(node.data, 'children', [])
+                                            this.$set(node, 'childNodes', [])
+                                            this.$set(node.data, 'isGetPath', false)
+                                            this.nodeClick(node.data, node)
+                                        }
+                                    }).catch((error) => {
+                                        parent.goby.showErrorMessage("ShellHub :" + error.message)
+                                    })
+                                })
+                            }
+                        },
+                        {
+                            label: this.$t("Delete"),
+                            onClick: () => {
+                                let currentPath = this.path.join(this.currentPath, row.name).replace(/\\/g, '/').replace(/\/$/, '')
+                                let params = {
+                                    "access_time_stamp": "",
+                                    "char_set": "",
+                                    "create_time_stamp": "",
+                                    "current_path": "",
+                                    "dir_name": "",
+                                    "is_chunk": true,
+                                    "local_path": "",
+                                    "mode": "",
+                                    "modify_time_stamp": "",
+                                    "new_file_name": "",
+                                    "old_file_name": "",
+                                    "remote_path": ""
+                                }
+                                top.ShellsManagerX.operationFile('delete', currentPath, 'false', params).then(res => {
+                                    // console.log(res);
+                                    if (res.status === 'success') {
+                                        let node = this.$refs.tree.currentNode.node
+                                        this.$set(node.data, 'children', [])
+                                        this.$set(node, 'childNodes', [])
+                                        this.$set(node.data, 'isGetPath', false)
+                                        this.nodeClick(node.data, node)
+                                    }
+
+                                }).catch((error) => {
+                                    parent.goby.showErrorMessage("ShellHub :" + error.message)
+                                })
+                            }
+                        }
+                    ],
+                    event,
+                    //x: event.clientX,
+                    //y: event.clientY,
+                    customClass: "class-a",
+                    zIndex: 3,
+                    minWidth: 100
+                });
+                return false;
+            },
+            dblclick(row, column, event, cell) {
+                // console.log(row, column, event, cell);
+                let currentPath = this.path.join(this.currentPath, row.name).replace(/\\/g, '/').replace(/\/$/, '').replace(/^\/\//, '/')
+                // this.currentPath = currentPath;
+                let node = this.$refs.tree.getNode(currentPath)
+                switch (row.type) {
+                    case 'directory':
+                        // console.log(currentPath);
+                        // console.log(node);
+                        this.nodeClick(node.data, node)
+
+                        this.currentPath = currentPath;
+                        this.$refs.tree.setCurrentKey(currentPath)
+                        break;
+                    case 'file':
+                        let params = {
+                            "access_time_stamp": "",
+                            "char_set": "",
+                            "create_time_stamp": "",
+                            "current_path": "",
+                            "dir_name": "",
+                            "is_chunk": true,
+                            "local_path": "",
+                            "mode": "",
+                            "modify_time_stamp": "",
+                            "new_file_name": "",
+                            "old_file_name": "",
+                            "remote_path": ""
+                        }
+                        let pathList = currentPath.split("/")
+                        params["old_file_name"] = pathList.pop()
+                        params["char_set"] = this.decode
+                        currentPath = pathList.join("/")
+                        top.ShellsManagerX.operationFile("show", currentPath, "false", params).then(res => {
+                            // console.log(res);
+                            this.$set(this.fileCon, 'name', row.name)
+                            this.$set(this.fileCon, 'con', res.msg)
+                            this.isShowFileCon = true
+                        }).catch((error) => {
+                            parent.goby.showErrorMessage("ShellHub :" + error.message)
+                        })
+                        break;
+                    default:
+                        break;
+                }
+            }
+        },
+        computed: {
+            currTableData() {
+                return this.tableData.slice((this.page - 1) * this.size, this.page * this.size)
+            }
+        },
+        mounted() {
+            $('head').prepend(`
+                <style>
+                    :root{
+                            ${top.document.querySelector('html').style.cssText}
+                        }
+                </style>
+            `)
+            this.init();
+        },
+        i18n
+    }).$mount('#app')
+</script>
+</html>

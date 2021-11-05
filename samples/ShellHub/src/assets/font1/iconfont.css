@@ -1,0 +1,25 @@
+@font-face {font-family: "iconfont";
+  src: url('iconfont.eot?t=1607587182508'); /* IE9 */
+  src: url('iconfont.eot?t=1607587182508#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAAP8AAsAAAAACEgAAAOwAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEIGVgCDBgqEKINNATYCJAMMCwgABCAFhG0HPxscB8gOpaDAwAAoAABgPNAf6vsjc+GkLZjzYCiYTtCJpZZKBa3x9C2Q//+97L5gkNR4KxVmMvVqgkmHJ00XIL/0RX/2j3unf3Ue2HxAkWU0xzj/1AUYB5Rle+NawgWSoDeMXdASdxOAqggDoU1RBQcGFHNQAMKlIg8DQ8aAaigPDBBdxcwM6BFohjibuAfgIfh++Ie4YACI6ATmyO2hUICcr8x32eSkrknQ6iEgnM4GNg8kYA1kEPaVjh0ySqyRGFVBNecXURBiqnBXF4FAk+msPzwQIRCKYJbWAeYoGcFXpiNIlNlQdNXCh+tfBGrAC4BXydUH1Vq6Ya6IGaaXH8my8rJdQNzunrs3kFyzh01R/YjlHBA5+d1mBm15UeR27RkG5mnXpN3+LPX8Oe/+8mUDza7cO3mPY+1F1n3u/mBwO1v3rMDtxosI2nPstl0Az48SPE48obGNT5PZna3iDPPsGTcM9Xw/mrynxXTmRV9hmd+yoEbzzsBAeS9ae8CVmdCwbEeAaQWaHCjzDRmm7JXb/fnlMEn9+0P0KvWSsMmzFHETfvB+M08TlrxKfYRxqRYDPxzuGsvLF/Vc5I42+h3+wXXjf7RUoOpOSwPKsrn44qi6ouUHj4t2eOshaBb0Q++35vvKYWlmTa6rJNO9ohCS7mqB63z0ePU28O0rj0A64gPwU977QzWyKKg6EMUslmoUmOFN85aP3px0rIHzqCU+rbkvSPjYLdKgj+oxUVwza3dvinZd95LWYK52diM/k6G7pw6cMEYcesdds5Ovm9XIzWJoGApwnEP+JEcHqekUkFf/9zfw02tP1xDPjL8GlgLA5/9/DijqVgzKCNBZ+DeFHSuyJjaNKSsCR2AEkxZ/zBYB5HGLI/J0vR7uGoDEFhi4EEKkFw6JQU80UwZCASsBigyyoWqA4vk1vlQklI0AlqYDQLwcBIKHi0Dych+lKK+AFuAr6HgFEhim4Lsiq3dQmHxVHKaJAh4+Gitmp0OyzRoTlteJcqdtmJoWBzSTqHYoYRwbFZNPF4sOUZ1iTMcIOU7TJCypTjsuAvuJNpsTu1Rnu2jWoiya5kqLjpaqbhRldtqBkU8lGkYjEmDDjYYpzJwcJK+2hil8vo5I1slmGLWBVGU3Eak6KI1jsaLEdECLFY5OpFs5pMMIsjgajQSTqJzssCJgE9mshBPmqu7WTmSmiWIZEHNJE42qSV0VUcur7O+3DqrMTVIgEIkoMF4Oa1c0p0MeZLz+/EGioGgA') format('woff2'),
+  url('iconfont.woff?t=1607587182508') format('woff'),
+  url('iconfont.ttf?t=1607587182508') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+  url('iconfont.svg?t=1607587182508#iconfont') format('svg'); /* iOS 4.1- */
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-lajitong-:before {
+  content: "\e63f";
+}
+
+.icon-icon-edit:before {
+  content: "\e63d";
+}
+

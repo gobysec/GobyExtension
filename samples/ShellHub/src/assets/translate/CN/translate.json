@@ -1,0 +1,26 @@
+{
+    "description":"将通过FOFA查询的IP和端口，快速导入goby进行扫描。",
+    "contributes":{
+        "configuration":{
+           "Email": {
+                "description": "FOFA Email"
+            },
+            "Key": {
+                "description": "FOFA Key"
+            },
+            "Size": {
+                "description": "查询返回到每页的数量，默认100条，最大可设置为10000条。"
+            } 
+        },
+        "views":{
+            "scanDia": [
+                {
+                    "title": "FOFA",
+                    "tips":"FOFA"
+                }
+            ]
+        }
+    },
+    "readme":"./README.md",
+    "changelog":"./CHANGELOG.md"
+}

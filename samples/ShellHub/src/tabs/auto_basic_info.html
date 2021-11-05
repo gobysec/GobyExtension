@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>基本信息</title>
+    <style>
+        /* 滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 5px;
+            /*竖向滚动条的宽度*/
+            height: 5px;
+            /*横向滚动条的高度*/
+        }
+
+        /* 滚动条轨道的样式 */
+        ::-webkit-scrollbar-track {
+            background-color: transparent;
+            -webkit-border-radius: 0;
+            border-radius: 0;
+        }
+
+        /* 滚动条轨道内滑块的样式 */
+        ::-webkit-scrollbar-thumb {
+            border-radius: 0;
+            background-color: var(--primaryBorder-color);
+        }
+
+        /* 当焦点不在当前区域滑块的状态 */
+        ::-webkit-scrollbar-thumb:window-inactive {
+            background-color: var(--secondaryBorder-color);
+            -webkit-border-radius: 0;
+            border-radius: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<div>
+    <pre class="basicInfo">
+
+    </pre>
+</div>
+
+<script src="../assets/js/jquery-3.3.1.min.js"></script>
+
+<script>
+    $('head').prepend(`
+        <style>
+            :root{
+                    ${top.document.querySelector('html').style.cssText}
+                }
+        </style>
+    `)
+
+    function randomRange(min, max) {
+        let returnStr = "",
+            range = (max ? Math.round(Math.random() * (max - min)) + min : min),
+            arr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        for (let i = 0; i < range; i++) {
+            const index = Math.round(Math.random() * (arr.length - 1));
+            returnStr += arr[index];
+        }
+        return returnStr;
+    }
+
+    let randNum = randomRange(30, 200)
+    let id = window.location.href.split("?")[1];
+    let shellInfo = top.ShellsManagerX.shellsInfo()
+
+    if (id === undefined) {
+        id = shellInfo.length - 1
+    }
+    console.log(id)
+    top.ShellsManagerX.getBasicInfo(randNum, "false").then(res => {
+        console.log(res);
+        if (res === undefined) {
+            parent.goby.showErrorMessage("ShellHub :" + "The return value is empty")
+            res = ""
+        }
+        if ((res.basicInfo).length !== 0) {
+            if ((shellInfo[id].CPath).length === 0) {
+                shellInfo[id].OS = res.osInfo
+                shellInfo[id].CPath = res.currentPath.split('/').join("\\")
+                shellInfo[id].DList = res.driveList.split('/').join("\\")
+                top.ShellsManagerX.fixShellsInfo(shellInfo).then(ree => {
+
+                })
+            }
+            $('.basicInfo').html(decodeURIComponent(escape(atob(res.basicInfo))))
+        }
+    }).catch((error) => {
+        parent.goby.showErrorMessage("ShellHub :" + error.message)
+    });
+
+</script>
+</body>
+
+</html>

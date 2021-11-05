@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xray report</title>
+    <link rel="stylesheet" href="assets/lib/layui/css/layui.css">
+    <link rel="stylesheet" href="assets/css/index.css">
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/font/iconfont.css">
+    <style>
+        .layui-table-cell tr td {
+            font-size: 12px;
+            height: auto;
+            overflow: visible;
+            text-overflow: inherit;
+            white-space: normal;
+            word-break: break-all;
+        }
+
+        .layui-table th {
+            text-align: center;
+        }
+
+        .layui-icon-face-smile {
+            font-size: 15px;
+            color: #e06512;
+        }
+
+        .layui-btn {
+            margin-left: 823px;
+            width: 95px;
+            height: 25px;
+            font-size: 13px;
+            line-height: 3px;
+
+        }
+
+        .layui-tab-title li {
+            font-size: 12px;
+            padding-bottom: 7px;
+        }
+    </style>
+</head>
+
+<body class="layui-layout-body">
+<div class="layui-layout">
+    <!-- <div class="layui-body" style="top:0px"> -->
+    <!-- 内容主体区域 -->
+    <div class="layui-tab layui-tab-brief" lay-filter="demo1" lay-allowclose="true">
+        <ul class="layui-tab-title">
+
+
+        </ul>
+        <div class="layui-tab-content">
+
+        </div>
+    </div>
+
+</div>
+<script src="assets/lib/layui/layui.all.js"></script>
+<script src="assets/js/jquery-3.3.1.min.js"></script>
+<script src="assets/js/jquery.i18next.js"></script>
+<script>
+    (async function () {
+
+
+        const fs = top.require('fs')
+
+        function lang() {
+            return new Promise((resolve, reject) => {
+                //获取当前Languzge
+                let language = goby.getLang();
+
+                //判断翻译文件是否存在
+                let translateState = fs.existsSync(goby.__dirname + '/assets/translate/' + language + '/html.json');
+
+                //翻译文件存在则使用翻译文件,否则使用默认EN翻译
+                let lang = translateState ? language : 'EN';
+
+                let a = $.i18n.init({
+                    lng: language, //指定语言
+                    useCookie: false,
+                    // src/assets/translate/CN/html.json
+                    resGetPath: './assets/translate/' + lang + '/html.json',//语言包的路径
+                }, function (err, t) {
+
+                    if (!err) {
+                        $('[data-i18n]').i18n(); // 通过选择器集体翻译
+                        reject()
+                        return;
+                    }
+                    resolve()
+                });
+            })
+
+        }
+
+        //当lang改变时更新页面内容
+        goby.bindEvent('onChangeLang', () => {
+            lang();
+        })
+
+        await lang().then(res => res).catch(err => err)
+
+        function randomRange(min, max) {
+            let returnStr = "",
+                range = (max ? Math.round(Math.random() * (max - min)) + min : min),
+                arr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+            for (let i = 0; i < range; i++) {
+                const index = Math.round(Math.random() * (arr.length - 1));
+                returnStr += arr[index];
+            }
+            return returnStr;
+        }
+
+        layui.use(['element', 'layer'], function () {
+                const element = layui.element;
+                // const $ = layui.jquery;
+                $('head').prepend(`
+            <style>
+                :root{
+                        ${parent.document.querySelector('html').style.cssText}
+                    }
+            </style>
+            `)
+                $(window).on('unload', function () {
+                    parent.ShellsManagerX.cleanJar()
+                })
+                // let shellInfoMap = parent.ShellsManagerX.getShellInfo()
+                //触发事件
+                let active = {
+                    //在这里给active绑定几项事件，后面可通过active调用这些事件
+                    tabAdd: function (url, id, name) {
+                        //新增一个Tab项 传入三个参数，分别对应其标题，tab页面的地址，还有一个规定的id，是标签中data-id的属性值
+                        //关于tabAdd的方法所传入的参数可看layui的开发文档中基础方法部分
+                        element.tabAdd('demo1', {
+                            title: name,
+                            // content: '<iframe data-frameid="' + id + '" scrolling="no" frameborder="0" src="' + url + '" style="width:100%;height:500px"></iframe>',
+                            content: '<iframe id="' + id + '" frameborder="0" src="' + url + '" style="width:100%;height:100%"></iframe>',
+                            // content: getData(1, 1),
+                            id: id //规定好的id
+                        })
+                        element.render('tab');
+
+                    },
+                    tabChange: function (id) {
+                        //切换到指定Tab项
+                        element.tabChange('demo1', id); //根据传入的id传入到指定的tab项
+                    },
+                    tabDelete: function (id) {
+                        element.tabDelete("demo1", id);//删除
+                    }
+                    , tabDeleteAll: function (ids) {//删除所有
+                        $.each(ids, function (i, item) {
+                            element.tabDelete("demo1", item); //ids是一个数组，里面存放了多个id，调用tabDelete方法分别删除
+                        })
+                    }
+                };
+
+
+                //当点击有site-demo-active属性的标签时，即左侧菜单栏中内容 ，触发点击事件
+                function addTab(url, id, title) {
+
+                    //这时会判断右侧.layui-tab-title属性下的有lay-id属性的li的数目，即已经打开的tab项数目
+                    if ($(".layui-tab-title li[lay-id]").length <= 0) {
+                        //如果比零小，则直接打开新的tab项
+                        active.tabAdd(url, id, title);
+                    } else {
+                        //否则判断该tab项是否以及存在
+
+                        var isData = false; //初始化一个标志，为false说明未打开该tab项 为true则说明已有
+                        $.each($(".layui-tab-title li[lay-id]"), function () {
+                            //如果点击左侧菜单栏所传入的id 在右侧tab项中的lay-id属性可以找到，则说明该tab项已经打开
+                            if ($(this).attr("lay-id") == id) {
+                                isData = true;
+                            }
+                        })
+                        if (isData === false) {
+                            //标志为false 新增一个tab项
+                            active.tabAdd(url, id, title);
+                        }
+                    }
+                    //最后不管是否新增tab，最后都转到要打开的选项页面上
+                    active.tabChange("baseInfo");
+                }
+
+                console.log($.t)
+                const menu_data = [
+                    {'data': "./tabs/auto_basic_info.html", 'type': "baseInfo", 'title': $.t('Basic Information')},
+                    {'data': "./tabs/auto_file_oper.html", 'type': "fileOper", 'title': $.t('File management')},
+                    {'data': "./tabs/auto_run_exec.html", 'type': "runCmd", 'title': $.t('Virtual terminal')},
+                    // {'data': "url", 'type': 5, 'title': '交互终端'},
+                    // {'data': "data", 'type': 6, 'title': '数据库管理'},
+                ];
+                let randNum = randomRange(30, 200)
+                let id = window.location.href.split("?")[1];
+                let shellInfo = top.ShellsManagerX.shellsInfo()
+
+                if (id === undefined) {
+                    id = shellInfo.length - 1
+                }
+                top.ShellsManagerX.getBasicInfo(randNum, "false").then(res => {
+                    if (res === undefined) {
+                        goby.showErrorMessage("ShellHub :" + "The return value is empty")
+                        res = ""
+                    }
+                    if ((res.basicInfo).length !== 0) {
+                        if ((shellInfo[id].CPath).length === 0) {
+                            shellInfo[id].OS = res.osInfo
+                            shellInfo[id].CPath = res.currentPath.split('/').join("\\")
+                            shellInfo[id].DList = res.driveList.split('/').join("\\")
+                            shellInfo[id].Status = "Up"
+                            top.ShellsManagerX.fixShellsInfo(shellInfo).then(ree => {
+                                for (let valueMap of menu_data) {
+                                    addTab(valueMap.data, valueMap.type, valueMap.title)
+                                }
+                            })
+                        }
+                    }
+                    for (let valueMap of menu_data) {
+                        addTab(valueMap.data, valueMap.type, valueMap.title)
+                    }
+                }).catch((error) => {
+                    goby.showErrorMessage("ShellHub :" + error.message)
+                });
+            }
+        );
+    })()
+</script>
+</body>
+
+</html>
