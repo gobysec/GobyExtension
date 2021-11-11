@@ -1710,209 +1710,209 @@ devDependencies	| |Object	|Equivalent to npm's devDependencies
           }
 ```
 
-## 主题开发规范
+## Goby Gui Theme extension Writing Manual
 
 <table>
 	  	<tr>
-			<th ><img width=200/><br>名称<br><img width=200/></th>
-			<th>变量</th>
-			<th>使用场景</th>
+			<th ><img width=200/><br>Name<br><img width=200/></th>
+			<th>Variable</th>
+			<th>Scenes to be used</th>
 		</tr>
 	  	<tr>
-			<td>主色</td>
-			<td>main</td>
+			<td>Main color</td>
+			<td>Main</td>
 			<td>
 				<div>
-					<span>品牌色：</span>
-					<span>网站全局使用； 用于：页面模块背景色/可点击或部分提亮文字/按钮/线条选中状态</span>
+					<span>Brand color：</span>
+					<span>Global use of the website; used for: page module background color/clickable or partly brightened text/button/line selected state</span>
 				</div>
 				<div>
-					<span>1.背景色</span>
+					<span>1.Background (color)</span>
 					<ul>
 						<li>
 							<span >
-								启动页背景
+								Startup page background
 							</span>
 						</li>
 						<li>
 							<span>
-								扫描结果页面：
+								Scan results page:
 							</span>
 							<ul>
-								<li>主导航栏背景</li>
-								<li>右侧上部：（资产，IP...）4个模块背景色</li>
-								<li>右侧中间：饼形统计图背景色 </li>
+								<li>Main navigation bar background</li>
+								<li>Upper right side: background colors of 4 modules (Asset, Active IP, Port, Vulnerability)</li>
+								<li>Middle right: The background color of the pie chart (Hardware, Software) </li>
 							</ul>
 						</li>
 						<li>
 							<span>
-								报告页面+预览页面：
+								Report page , Preview page:
 							</span>
 							<ul>
-								<li>任务信息模块：数据统计背景色</li>
-								<li>资产分析模块：饼状图颜色</li>
-								<li>预览页面：封面背景</li>
-								<li>菜单展开弹窗顶部背景颜色</li>
+								<li>Task Information Module: Data statistics background color</li>
+								<li>Asset analysis module: Pie chart color</li>
+								<li>Preview page: Cover background</li>
+								<li>Menu expand displayed at the top of the background color</li>
 							</ul>
 						</li>
 						<li>
 							<span>
-								IP详情页面：IP banner （端口：协议）
+								IP details page: IP banner (Port:Protocol , application name)
 							</span>
 						</li>
 						<li>
 							<span>
-								功能区：新建扫描入口+子分类的图标
+								Function option: New Scan button+Sub-tabs of this tab
 							</span>
 						</li>
 						<li>
 							<span>
-								版本更新弹窗：顶部标题栏
+								Version update pop-up: Top title bar
 							</span>
 						</li>
 						<li>
 							<span>
-								IP库：导航栏
+								IP address library: Navigation bar
 							</span>
 						</li>
 					</ul>
 				</div>
 				<div>
-					<span>2.按钮</span>
+					<span>2.Button</span>
 					<ul>
 						<li>
 							<span>
-								翻页选中
+								Current page number
 							</span>
 						</li>
 						<li>
 							<span>
-								开始扫描
+								Scan button
 							</span>
 						</li>
 						<li>
 							<span>
-								报告页面
+								Report page
 							</span>
 							<ul>
-								<li>菜单按钮背景色</li>
-								<li>编辑</li>
+								<li>Option menu on the right catalog</li>
+								<li>Edit button (For example: Edit the report name, Edit the task name)</li>
 							</ul>
 						</li>
 						<li>
 							<span>
-								搜索按钮hover
+								Search button hovered (For example: the search button at the top left of the Extensions tab)
 							</span>
 						</li>
 						<li>
 							<span>
-								确认/扫描/开始按钮/保存/新建扫描/漏扫/扫描配置自定义/端口/提示/报错
+								Confirm button / Start (scan)  button/ Save button / Custom Scan Configuration(Advanced)button   / Port Info / Note info display / Error info display
 							</span>
 						</li>
 						<li>
 							<span>
-								IP详情页面：
+								IP details page:
 							</span>
 							<ul>
-								<li>IP banner 链接</li>
-								<li>添加证书</li>
-								<li>问题反馈</li>
+								<li>IP banner links</li>
+								<li>Add the certificate</li>
+								<li>Feedback</li>
 							</ul>
 						</li>
 						<li>
 							<span>
-								扫描配置自定义端口下拉：自定义列表 - 编辑+删除
+								Scan Configuration Custom Port drop-down (Before that, you need to add the port list through Port Combination): Custom Port List - Edit+Delete
 							</span>
 						</li>
 						<li>
 							<span>
-								web finder：
+								Web finder：
 							</span>
 							<ul>
-								<li>导出按钮</li>
-								<li>网站截图图标+链接图标</li>
+								<li>Export button</li>
+								<li>Website screenshot icon + link icon</li>
 							</ul>
 						</li>
 						<li>
 							<span>
-								申请license：复制
+								Application license: Copy
 							</span>
 						</li>
 						<li>
 							<span>
-								漏洞列表：筛选
+								List of vulnerabilities: Vulnerability name filter
 							</span>
 						</li>
 						<li>
 							<span>
-								IP库：start+展示形式+更新+下载
+								IP Lib Tab: Start button + layout style (For example: Force-oriented layout, Circular layout, Radial layout etc) + Update button + Download button
 							</span>
 						</li>
 						<li>
 							<span>
-								报错日志-更新、以后、修复、安装
+								Error log - Update、Later、Repair、Install
 							</span>
 						</li>
 					</ul>
 				</div>
 				<div>
-					<span>3.文字</span>
+					<span>3.Text</span>
 					<ul>
 						<li>
 							<span>
-								可点击 - 返回back
+								Clickable part - Back (to the previous page)
 							</span>
 						</li>
 						<li>
 							<span>
-								可点击 - 资产列表-总资产
+								Clickable part - Asset Tab : All Assets
 							</span>
 						</li>
 						<li>
 							<span>
-								可点击 - tab切换选中颜色文字+下划线
+								Clickable part - Asset Tab: Tab to switch to select color text and underline (For example: Support System, Network Device, Sofware System)
 							</span>
 						</li>
 						<li>
 							<span>
-								可点击 - 扫描首页：历史任务hover
+								Clickable part - Scan Tab :  Historical Task hovered
 							</span>
 						</li>
 						<li>
 							<span>
-								提亮：关于goby：@人名
+								The part that can be highlighted - Acknowledgements name in the About Goby page (For example: (Beta 1.7.186) @q1n9:Identify the version of products)
 							</span>
 						</li>
 						<li>
 							<span>
-								可点击 - 扫描配置页：高级配置折叠
+								Clickable part - Scan configuration page :  Advanced collapse (For example:Vulnerability (The scope of POC), Order (Asests First)(Simultaneously), Task name)
 							</span>
 						</li>
 						<li>
 							<span>
-								可点击 - 申请license (申请/导入)
+								Clickable part - Apply/Import  license
 							</span>
 						</li>
 						<li>
 							<span>
-								漏洞更新： 漏洞名称
+								Vulnerability Update - vulnerability name
 							</span>
 						</li>
 					</ul>
 				</div>
 				<div>
 					<span>
-						4.线条选中
+						4.Get the line of the form after the mouse focus:
 					</span>
 					<ul>
 						<li>
 							<span>
-								搜索框选中
+								Search box form
 							</span>
 						</li>
 						<li>
 							<span>
-								新建/设置/添加poc/添加字典/申请license表单等页面表单边框选中
+								New frame form/Settings form/Customize POC  (For example: Title, Query Rule, Level)/Customize dict/Apply for license form
 							</span>
 						</li>
 					</ul>
@@ -1920,69 +1920,69 @@ devDependencies	| |Object	|Equivalent to npm's devDependencies
 			</td>
 		</tr>
 		<tr>
-			<td>字体色</td>
+			<td>Font color</td>
 			<td>primaryFont</td>
 			<td>
 				<div>
-					<span>一级字体色：</span>
-					<span>: 用于界面中重量级文字信息</span>
+					<span>PrimaryFont：</span>
+					<span>: For heavyweight text information in the Goby GUI.</span>
 				</div>
 				<div>
-					<span>1.文字</span>
+					<span>1.Text</span>
 					<ul>
 						<li>
 							<span>
-								大标题：启动页/漏洞管理页面/所有页面右侧板块大标题/报告统计页面：报表标题/license:用户/企业 名字 
+								Headline: Startup page (For example : Welcome to Goby) / Vulnerability Tab (For example : Vulnerability) / Headline on the right side of all pages / Report statistics page : Report name  (For example : 20210919084510) / License: User Name / Company name
 							</span>
 						</li>
 						<li>
 							<span>
-								小标题：扫描结果页：每个模块标题/所有表单名称/漏洞管理：左上部柱状图名称/提示框标题/报告页 面：二级标题/漏洞列表/报错日志标题
+								Subtitle: Scanning result page: Title of each module (For example: Summary, Risk Analysis, Asset Analysis) / Title of all forms / Vulnerability management: Name of histogram in the upper left corner (For example: IP, Port, Asset, Protocol) / Title of prompt box / Report page: Secondary title / List of vulnerabilities / Title of error log
 							</span>
 						</li>
 						<li>
 							<span>
-								列表：IP列表，产品列表，厂商列表/漏洞列表/通用poc列表/暴力破解列表 IP弹窗列表/资产弹窗列表/ 端口弹窗列表/IP列表：端口+(moer）列表/协议+( more)列表/自定义端口列表 /web finder：IP和端口列表/历史任务弹窗：列表和IP，端口，漏洞/会话列表/漏洞升级：更新内容列表 
+								List: IP list, Product list, Vendor list / Vulnerability list / Universal POC list / Brute force cracking list / IP pop-up list / Asset pop-up list / Port pop-up list / IP list: Port list + Protocol list + ( more ) ip list + Custom port list / Web Finder: IP list + Port list / Historical task pop-up window: IP and port list + vulnerability list + session list / Vulnerability upgrade: update content list
 							</span>
 						</li>
 						<li>
 							<span>
-								翻页：数字/可点击翻译箭头
+								Page turning: Page number / clickable translation arrow
 							</span>
 						</li>
 						<li>
 							<span>
-								输入文字：搜索翻页输入文字/所有表单输入文字 
+								Input text: Enter text in the input box selected in the page search result page / All forms input text
 							</span>
 						</li>
 						<li>
 							<span>
-								下拉列表：搜索下拉/所有表单选项下拉列表 
+								Drop-down list: search drop-down / drop-down list of all form options
 							</span>
 						</li>
 						<li>
 							<span>
-								所有表格主题内容 
+								Subject content of all tables
 							</span>
 						</li>
 						<li>
 							<span>
-								详情：漏洞详情页-介绍详情/关于goby页面详情 
+								Details: Vulnerability details page - introduction details / About Goby details page (For example: A big Thank You! the following folks that helped to make Goby even better)
 							</span>
 						</li>
 						<li>
 							<span>
-								内容：申请license：内容
+								Content: Apply for a license - Content
 							</span>
 						</li>
 					</ul>
 				</div>
 				<div>
-					<span>2.按钮</span>
+					<span>2.Button</span>
 					<ul>
 						<li>
 							<span>
-								扫描历史任务：可点击删除按钮
+								Historical Tasks: Delete Button
 							</span>
 						</li>
 					</ul>
@@ -1990,54 +1990,54 @@ devDependencies	| |Object	|Equivalent to npm's devDependencies
 			</td>
 		</tr>
 		<tr>
-			<td>字体色</td>
+			<td>Font Color</td>
 			<td>secondaryFont</td>
 			<td>
 				<div>
-					<span>二级字体色：</span>
-					<span>用于界面中普通级文字信息，标题文字色</span>
+					<span>secondaryFont：</span>
+					<span>  Used for general text information in the Goby GUI and title text color.</span>
 				</div>
 				<div>
-					<span>1.文字</span>
+					<span>1.Text</span>
 					<ul>
 						<li>
 							<span>
-								启动页：小标题/扫描按钮右侧IP段/历史时间/部分表格表头文字色
+								Start page: subtitle (For exmaple: Attack surface mapping) / IP segment to the right of the scan button / Historical time / Header text color of part of the table
 							</span>
 						</li>
 						<li>
 							<span>
-								列表：扫描结果页：每个模块内容列表/扫描历史任务/资产：左侧资产列表/漏洞：暴力破解和通用poc左侧列表/设置页：左侧列表/资产列表more点开后每个资产的统计 漏洞管理：IP列表展开/漏洞列表/web finder：服务器和名称列表/IP库白名单，黑名单列表 
+								List: Scanning result page - Content list of each module / Scan history tasks / Assets - Asset list on the left / Vulnerability: Brute force + General poc list on the left / Settings page - Assert list on the left / The statistics of each asset after the asset list is opened   Vulnerability management: IP list expansion / Vulnerability list / Web Finder - server and name list / White list, Black list
 							</span>
 						</li>
 						<li>
 							<span>
-								统计名称：资产列表：左下角柱状图名称/漏洞管理：左下角饼状图名称/设置页面：资产，漏洞，端口名称 
+								Title of statistics: Asset List - Bar Chart Name in the Lower Left Corner / Vulnerability Management - Pie Chart Name in the Lower Left Corner / Settings Page - Assets, Vulnerabilities, Port Names
 							</span>
 						</li>
 						<li>
 							<span>
-								下拉默认：所有表单下拉选项默认文字 
+								Drop-down default: the default text of all form drop-down options
 							</span>
 						</li>
 						<li>
 							<span>
-								详情：banner详情和证书详情/端口弹窗详情/提示框详情/报告页面：详情文字和统计相关文字，列表文字/对话页面：过期时间文字/弹窗里刺激按钮文字
+								Details page: Banner details and certificate details / Port pop-up details / Prompt box details / Report page - Detailed text, Statistics-related text, List text / Dialog page: expiration time text / Stimulus button text in the pop-up window
 							</span>
 						</li>
 						<li>
 							<span>
-								资产列表：产品-产品名字
+								Asset List: Product-Product Name
 							</span>
 						</li>
 						<li>
 							<span>
-								tab: 添加POC：tab选中和默认文字/对话页面：tab选中和默认文字
+								tab: Add POC - Tab selected and default text / Dialog page: Tab selected and default text
 							</span>
 						</li>
 						<li>
 							<span>
-								报错日志-时间
+								Error log: time display
 							</span>
 						</li>
 					</ul>
@@ -2045,44 +2045,44 @@ devDependencies	| |Object	|Equivalent to npm's devDependencies
 			</td>
 		</tr>
 		<tr>
-			<td>字体色</td>
+			<td>Font Color</td>
 			<td>level3Font</td>
 			<td>
 				<div>
-					<span>三级字体色：</span>
-					<span>用于界面中辅助次要文字信息</span>
+					<span> level3Font</span>
+					<span> Used to assist secondary text information in the interface.</span>
 				</div>
 				<div>
-					<span>1.文字</span>
+					<span>1.Text</span>
 					<ul>
 						<li>
 							<span>
-								标题：所有页面顶部页面标题/关于goby页面标题/漏洞升级：更新信息
+								Title: Top page title of all pages / About Goby page title / Vulnerability upgrade: Update information
 							</span>
 						</li>
 						<li>
 							<span>
-								所有tab切换未选中文字（资产列表页/添加poc） 
+								All tab switching unselected text: (Asset list / Add POC)
 							</span>
 						</li>
 						<li>
 							<span>
-								翻页：文字/默认不可点击箭头 
+								Page turning: text / default non-clickable arrow
 							</span>
 						</li>
 						<li>
 							<span>
-								提示文字：搜索提示文字/组件：默认没有组件文字/表单中默认字体色 
+								Prompt text: Search prompt text / Component - no component text by default / Default font color in the form
 							</span>
 						</li>
 						<li>
 							<span>
-								统计文字：扫描结果页：每个模块内容统计文字/产品：统计名称/厂商：统计名称/资产列表：资产，漏洞，端口，IP统计文字/资产列表：左侧资产统计数字/资产列表：左下角 柱状图统计文字/漏洞列表：左上部柱状图统计和占比文字/IP详情页顶部统计/web finder：端口和IP统计
+								Statistical text: Scanning result page - Statistical text of each module content / Product - Statistical name / Manufacturer - Statistical name / List of assets: Assets, Vulnerabilities, Ports, IP statistical text, Asset statistics on the left, Lower left corner histogram statistics text, Vulnerabilities list - histogram statistics and andproportion text in the upper left corner, IP details page top statistics / Web Finder: Port and IP statistics
 							</span>
 						</li>
 						<li>
 							<span>
-								漏洞页面：暴力破解和通用poc置灰列表
+								Vulnerability page: Brute force cracking + General poc graying list
 							</span>
 						</li>
 						<li>
@@ -2093,11 +2093,11 @@ devDependencies	| |Object	|Equivalent to npm's devDependencies
 					</ul>
 				</div>
 				<div>
-					<span>2.按钮</span>
+					<span>2.Button</span>
 					<ul>
 						<li>
 							<span>
-								扫描历史任务：扫描历史任务：置灰操作按钮（导出，报告，删除）/通用poc和暴力破解列表不可点击//弹窗关闭按钮hover/扫描按钮
+								Scanning history task: Historical task - gray operation button (export, report, delete) / Universal poc and brute force cracking list cannot be clicked / Pop-up close button hoverd / Scan button
 							</span>
 						</li>
 					</ul>
@@ -2105,147 +2105,147 @@ devDependencies	| |Object	|Equivalent to npm's devDependencies
 			</td>
 		</tr>
 		<tr>
-			<td>边框色</td>
+			<td>Border color</td>
 			<td>primaryBorder</td>
 			<td>
 				<div>
-					<span>一级边框颜色：</span>
-					<span>表单边框默认色</span>
+					<span> primaryBorder：</span>
+					<span> Primary border color: the default color of the form border</span>
 				</div>
 			</td>
 		</tr>
 		<tr>
-			<td>边框色</td>
+			<td>Border color</td>
 			<td>secondaryBorder</td>
 			<td>
 				<div>
-					<span>二级边框颜色：</span>
-					<span>表单边框hover色</span>
+					<span>secondaryBorder：</span>
+					<span> Secondary border color: the color of the form border after it is selected</span>
 				</div>
 			</td>
 		</tr>
 		<tr>
-			<td>其它色</td>
+			<td>Other Color</td>
 			<td>PrimaryBackground</td>
 			<td>
 				<div>
-					<span>一级背景色：</span>
-					<span>页面整体背景色</span>
+					<span>PrimaryBackground：</span>
+					<span>Primary background color: the overall background color of the page</span>
 				</div>
 			</td>
 		</tr>
 		<tr>
-			<td>其它色</td>
+			<td>Other Color</td>
 			<td>Secondarybackground</td>
 			<td>
 				<div>
-					<span>二级背景色：</span>
-					<span>内容模块背景色</span>
+					<span>Secondarybackground：</span>
+					<span>Secondary background color: content module background color</span>
 				</div>
 			</td>
 		</tr>
 		<tr>
-			<td>其它色</td>
+			<td>Other Color</td>
 			<td>Level3background</td>
 			<td>
 				<div>
-					<span>三级背景色：</span>
-					<span>弹窗、下拉背景颜色</span>
+					<span>Level3background：</span>
+					<span>Three-level background color: pop-up window, drop-down background color</span>
 				</div>
 			</td>
 		</tr>
 		<tr>
-			<td>其它色</td>
+			<td>Other Color</td>
 			<td>Level4background</td>
 			<td>
 				<div>
-					<span>四级背景色：</span>
-					<span>下拉选项背景hover/统计图背景色/tab表格头</span>
+					<span>Level4background：</span>
+					<span>Four-level background color: the color of the drop-down option background after being hovered / the background color of the statistical graph / the color of the tab table header</span>
 				</div>
 			</td>
 		</tr>
 		<tr>
-			<td>其它色</td>
+			<td>Other Color</td>
 			<td>navBackground</td>
 			<td>
 				<div>
-					<span>导航背景色</span>
+					<span>Navigation bar background color</span>
 				</div>
 			</td>
 		</tr>
 		<tr>
-			<td>其它色</td>
+			<td>Other Color</td>
 			<td>navFont</td>
 			<td>
 				<div>
-					<span>左侧导航文字默认</span>
+					<span>The color of the text in the left navigation bar</span>
 				</div>
 			</td>
 		</tr>
 		<tr>
-			<td>其它色</td>
+			<td>Other Color</td>
 			<td>navHoverFont</td>
 			<td>
 				<div>
-					<span>左侧导航文字选中</span>
+					<span>The color of the text in the left navigation bar after being selected</span>
 				</div>
 			</td>
 		</tr>
 		<tr>
-			<td>其它色</td>
+			<td>Other Color</td>
 			<td>scanResTopMainFont</td>
 			<td>
 				<div>
-					<span>右侧顶部4个小导航模块大文字</span>
+					<span>The color of the large text in the top 4 small navigation modules on the right on Goby GUI</span>
 				</div>
 			</td>
 		</tr>
 		<tr>
-			<td>其它色</td>
+			<td>Other Color</td>
 			<td>scanResTopSubFont</td>
 			<td>
 				<div>
-					<span>右侧顶部4个小导航模块小文字</span>
+					<span>The color of the small text in the top 4 small navigation modules on the right on Goby GUI</span>
 				</div>
 			</td>
 		</tr>
 		<tr>
-			<td>其它色</td>
+			<td>Other Color</td>
 			<td>scanResTopIcon</td>
 			<td>
 				<div>
-					<span>右侧顶部4个小导航模块图标</span>
+					<span>The color of the 4 small navigation module icons on the top right side</span>
 				</div>
 			</td>
 		</tr>
 		<tr>
-			<td>其它色</td>
+			<td>Other Color</td>
 			<td>navOtherFont</td>
 			<td>
 				<div>
-					<span>左侧导航左下角/左上角字体</span>
+					<span>The color of the text in the lower left corner and upper left corner of the left navigation</span>
 				</div>
 			</td>
 		</tr>
 		<tr>
-			<td>其它色</td>
+			<td>Other Color</td>
 			<td>PrimaryIcon</td>
 			<td>
-				<span>模块装饰性图标</span>
+				<span>The color of the module's decorative icons</span>
 			</td>
 		</tr>
 		<tr>
-			<td>其它色</td>
+			<td>Other Color</td>
 			<td>chartColors</td>
 			<td>
-				<span>统计图透明色</span>
+				<span>The background color of various statistical graphs</span>
 			</td>
 		</tr>
 		<tr>
-			<td>其它色</td>
+			<td>Other Color</td>
 			<td>navSelectBackground</td>
 			<td>
-				<span>nav切换hover色</span>
+				<span>The color of the navigation after being hovered</span>
 			</td>
 		</tr>
 	  </table>
