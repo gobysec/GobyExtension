@@ -75,7 +75,7 @@
       line-height: 20px;
     }
   }
-  
+
 }
 .el-input--mini .el-input__icon {
   line-height: 20px;
@@ -96,7 +96,8 @@
   }
 }
 .fileCon{
-  width: 100%;
+  width: 100% !important;
+  height: calc(100% - 3px) !important;
   display: inline-block;
   white-space: pre-wrap;
   box-sizing: border-box;
@@ -164,8 +165,8 @@ body{
         #table{
             width: calc(100% - 200px);
             float: right;
-            height: 100%!important;
-            max-height: 100%!important;
+            height: 93%!important;
+            max-height: 93%!important;
             overflow: auto;
             position: relative;
             .el-table{
@@ -196,7 +197,7 @@ body{
                       background: var(--lv4Background-color);;
                     }
                 }
-                
+
             }
             .el-table--enable-row-hover .el-table__body tr:hover>td{
                 background-color: transparent;
@@ -211,7 +212,7 @@ body{
                 font-weight: normal;
                 padding-left: 0;
               }
-              
+
               .el-pagination .btn-next,
               .el-pagination .btn-prev,
               .el-pagination .el-pager li {
@@ -225,52 +226,52 @@ body{
                 text-align: center;
                 line-height: 22px;
               }
-              
+
               .el-pagination .el-pager li:not(.disabled).active {
                 background-color: var(--main-color);
                 color: #fff !important;
               }
-              
+
               .el-pagination__editor.el-input .el-input__inner {
                 height: 20px;
               }
-              
+
               .el-pagination span:not([class*=suffix]) {
                 font-size: 12px;
                 line-height: 22px;
               }
-              
+
               .el-pagination__total,
               .el-pagination__jump {
                 color: var(--level3Font-color);
                 margin-left: 0;
               }
-              
+
               .el-pagination:nth-of-type(1) {
                 margin-right: -10px;
                 vertical-align: middle;
                 display: inline-block;
               }
-              
+
               .el-pagination:nth-of-type(2) {
                 display: inline-block;
                 vertical-align: top;
               }
-              
+
               .el-pagination .el-pager li:not(.disabled):hover {
                 color: var(--primaryFont-color);
               }
-              
+
               .page_input {
                 display: inline-block;
                 font-size: 12px;
               }
-              
+
               .page_input .el-input {
                 width: 41px;
                 height: 20px;
               }
-              
+
               .page_input .el-input input {
                 width: 41px;
                 height: 18px;
@@ -324,7 +325,7 @@ body{
           border: none!important;
         }
     }
-        
+
 }
 .el-message-box{
   width: 30%;

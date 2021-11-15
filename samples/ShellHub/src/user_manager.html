@@ -12,12 +12,6 @@
     <link rel="stylesheet" href="assets/css/mouseRightMenu.css">
 
     <style>
-        /* .layui-table-wrap {
-            max-height: 360px;
-            overflow: auto;
-            margin-top: -15px;
-        } */
-
 
         .layui-table-cell tr td {
             font-size: 12px;
@@ -32,14 +26,6 @@
             text-align: center;
         }
 
-        .layui-btn {
-            margin-left: 823px;
-            width: 95px;
-            height: 25px;
-            font-size: 13px;
-            line-height: 3px;
-
-        }
     </style>
 </head>
 
@@ -85,6 +71,7 @@
     </div>
 
 </div>
+
 <script src="assets/lib/layui/layui.all.js"></script>
 <script src="assets/js/jquery-3.3.1.min.js"></script>
 <script src="assets/js/jquery.i18next.js"></script>
@@ -151,7 +138,7 @@
     layui.use(['mouseRightMenu', 'element', 'layer'], function () {
             var mouseRightMenu = layui.mouseRightMenu
             var element = layui.element;
-            var $ = layui.jquery;
+            var $ = layui.$;
             $('head').prepend(`
             <style>
                 :root{
@@ -163,6 +150,9 @@
                 parent.ShellsManagerX.cleanJar()
             })
 
+            $('#addShell').on('click', function () {
+                console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+            })
             function getData(page, type) {
                 let results = parent.ShellsManagerX.shellsInfo();
                 console.log(results);
@@ -234,7 +224,8 @@
                     $.each(ids, function (i, item) {
                         element.tabDelete("demo1", item); //ids是一个数组，里面存放了多个id，调用tabDelete方法分别删除
                     })
-                }
+                },
+
             };
 
 
@@ -380,6 +371,8 @@
                 })
                 return false;
             });
+
+
         }
     );
 </script>

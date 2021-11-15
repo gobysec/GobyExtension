@@ -40,6 +40,8 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/assets/css" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="watcher.settings" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -51,7 +53,7 @@
       <recent name="D:\Goby\goby-win-x64-1.8.283\extensions\shellsx\src" />
     </key>
   </component>
-  <component name="RunManager" selected="Node.js.payload.js">
+  <component name="RunManager" selected="Node.js.test.js">
     <configuration name="class_fix.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/src/behinder/class_fix.js" working-dir="$PROJECT_DIR$/src/behinder">
       <method v="2" />
     </configuration>
@@ -61,8 +63,16 @@
     <configuration name="payload.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/src/behinder/payload.js" working-dir="$PROJECT_DIR$/src/behinder">
       <method v="2" />
     </configuration>
+    <configuration name="test.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/src/test.js" working-dir="$PROJECT_DIR$/src">
+      <method v="2" />
+    </configuration>
+    <configuration name="utils.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/src/behinder/utils.js" working-dir="$PROJECT_DIR$/src/behinder">
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Node.js.test.js" />
+        <item itemvalue="Node.js.utils.js" />
         <item itemvalue="Node.js.payload.js" />
         <item itemvalue="Node.js.class_fix.js" />
         <item itemvalue="Node.js.crypto.js" />
@@ -81,6 +91,7 @@
       <workItem from="1635906952108" duration="2847000" />
       <workItem from="1635910286780" duration="18779000" />
       <workItem from="1636007490641" duration="38926000" />
+      <workItem from="1636351988190" duration="85334000" />
     </task>
     <servers />
   </component>

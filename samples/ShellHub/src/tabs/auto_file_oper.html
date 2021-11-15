@@ -24,11 +24,32 @@
                 lazy
         >
         </el-tree>
+
     </div>
+    <div>
+        <!--        <el-row>-->
+        <el-button type="primary" icon="el-icon-refresh" size="mini" @click="refreshBtn">
+            {{ $t('Refresh') }}
+        </el-button>
+        <el-button type="primary" icon="el-icon-upload" size="mini" @click="uploadBtn"
+                   :loading="ConfirmLoading">{{ $t('Upload') }}
+        </el-button>
+        <el-button type="primary" icon="el-icon-news" @click="newFile" size="mini">{{ $t('New File') }}
+        </el-button>
+        <el-button type="primary" icon="el-icon-folder" @click="newFolder" size="mini">{{ $t('New Folder') }}
+        </el-button>
+        <el-button v-if="isShowCancelBtn" @click="cancelBtn" type="danger" icon="el-icon-close" size="mini">
+            Cancel
+        </el-button>
+        <el-button v-if="isShowResultBtn" @click="resultBtn" type="primary" icon="el-icon-finished" size="mini">
+            获取结果
+        </el-button>
+        <!--        </el-row>-->
+    </div>
+
     <div id="table">
         <p class="lv3font">
-            {{ $t('Current path') }}: {{ currentPath || "" }}
-
+            {{ $t('Current path') }} : {{ currentPath || "" }}
 
             <el-select v-model="decode" size="mini" class="decode">
                 <el-option
@@ -88,16 +109,66 @@
                 layout="total,prev, pager, next, jumper"
                 :total="total">
         </el-pagination>
+        <div style="width: 270px;position: absolute;bottom: 12px;left: 0;">
+            <el-progress v-if="isShowProgress" :percentage="progress" :status="proStatus"></el-progress>
+        </div>
     </div>
+
+    <el-dialog :title="fixTime.name"
+               :visible.sync="isShowFixTime"
+               width="40%" height="80%"
+    >
+        <el-form ref="fixTime" :model="fixTime" label-width="100px"
+                 :model="formLabelAlign">
+            <el-form-item label="CreateTime: ">
+                <el-input v-model="fixTime.createTime"></el-input>
+            </el-form-item>
+            <el-form-item label="ModifiedTime: ">
+                <el-input v-model="fixTime.lastModifiedTime"></el-input>
+            </el-form-item>
+            <el-form-item label="AccessTime: ">
+                <el-input v-model="fixTime.lastAccessTime"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" size="small" @click="isShowFixTime = false">Back</el-button>
+                <el-button type="primary" size="small" @click="modTimestamp">Submit</el-button>
+            </el-form-item>
+        </el-form>
+    </el-dialog>
+
     <el-dialog
             :title="fileCon.name"
             :visible.sync="isShowFileCon"
             width="70%"
     >
-        <span class="fileCon" v-text="fileCon.con"></span>
+        <textarea ref="textarea" class="fileCon" v-model="fileCon.con"></textarea>
         <span slot="footer" class="dialog-footer">
-                <el-button type="primary" size="small" @click="isShowFileCon = false">Confirm</el-button>
+                <el-button type="primary" size="small" @click="isShowFileCon = false">Back</el-button>
+                <el-button v-if="isShowRefreshBtn" type="primary" size="small" @click="resultBtn">Refresh</el-button>
+                <el-button type="primary" size="small" @click="saveFile">Save</el-button>
             </span>
+    </el-dialog>
+
+    <el-dialog :title="runExe.name"
+               :visible.sync="isShowRunExe"
+               width="40%" height="60%"
+    >
+        <el-form ref="fixTime" :model="runExe" label-width="100px"
+                 :model="formLabelAlign">
+            <el-form-item label="File: ">
+                <el-input v-model="runExe.fileName"></el-input>
+            </el-form-item>
+            <el-form-item label="Args: ">
+                <el-input v-model="runExe.args"></el-input>
+            </el-form-item>
+            <el-form-item label="OutPut: ">
+                <el-input v-model="runExe.outputFile"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" size="small" @click="isShowRunExe = false">Cancel</el-button>
+                <el-button type="primary" size="small" @click="runExeBtn">Run</el-button>
+            </el-form-item>
+        </el-form>
     </el-dialog>
 </div>
 </body>
@@ -132,6 +203,7 @@
     parent.goby.bindEvent('onChangeLang', (lang) => {
         i18n.locale = lang
     })
+    // let utils = top.require(top.require('path').join(parent.goby.__dirname,'behinder/utils.js'))
     new Vue({
         data: {
             tableData: [],
@@ -152,6 +224,21 @@
                 name: "",
                 con: ""
             },
+            isShowFixTime: false,
+            fixTime: {
+                name: "",
+                createTime: "",
+                lastModifiedTime: "",
+                lastAccessTime: ""
+            },
+            runExe: {
+                name: "",
+                fileName: "",
+                args: "",
+                outputFile: "",
+                perm: "",
+            },
+            isShowRunExe: false,
             decode: 'UTF-8',
             decodeOptions: [
                 {
@@ -162,9 +249,42 @@
                     value: 'GBK',
                     label: 'GBK'
                 }
-            ]
+            ],
+            progress: "0",
+            isShowProgress: false,
+            ConfirmLoading: false,
+            ConfirmSuccess: false,
+            proStatus: "",
+            uploadFileName: "",
+            isShowCancelBtn: false,
+            // 结果按钮展示
+            isShowResultBtn: false,
+            isShowRefreshBtn: false,
+            // 记录文件名
+            outputFilePath: ""
         },
         methods: {
+            // form  https://github.com/AntSwordProject/antSword/blob/bdf2f9ae94498747b2eb3a194584190994a23a01/source/modules/filemanager/files.js
+            fileSize(t) {
+                let i = false;
+                let b = [
+                    "b",
+                    "Kb",
+                    "Mb",
+                    "Gb",
+                    "Tb",
+                    "Pb",
+                    "Eb"
+                ];
+                for (let q = 0; q < b.length; q++)
+                    if (t > 1024)
+                        t = t / 1024;
+                    else if (i === false)
+                        i = q;
+                if (i === false)
+                    i = b.length - 1;
+                return Math.round(t * 100) / 100 + " " + b[i];
+            },
             pathsToTree(paths, currpath = '') {
                 let dataStr = [];
                 paths.forEach(path => {
@@ -289,6 +409,7 @@
                     "old_file_name": "",
                     "remote_path": ""
                 }
+                console.log(currentPath)
                 top.ShellsManagerX.operationFile("list", currentPath, "false", params).then(res => {
                     if (res.msg.indexOf(",]") !== -1) {
                         res.msg = res.msg.replace(",]", "]")
@@ -302,12 +423,13 @@
                             resJson[k].perm = decodeURIComponent(escape(atob(resJson[k].perm)));
                         }
                         resJson[k].type = decodeURIComponent(escape(atob(resJson[k].type)));
-                        resJson[k].size = decodeURIComponent(escape(atob(resJson[k].size)));
-                        if (resJson[k].type === "directory" && resJson[k].name != "." && resJson[k].name != "..") {
+                        resJson[k].size = this.fileSize(decodeURIComponent(escape(atob(resJson[k].size))));
+                        if (resJson[k].type === "directory" && resJson[k].name !== "." && resJson[k].name !== "..") {
                             filePath.push(resJson[k].name)
                         }
 
                     })
+                    console.log(resJson)
                     this.$set(node.data, 'isGetPath', true)
                     this.page = 1
                     this.tableData = resJson;
@@ -315,14 +437,13 @@
                     this.total = this.tableData.length
                     resolve(this.pathsToTree(filePath, currentPath))
                 }).catch((error) => {
-                    parent.goby.showErrorMessage("ShellHub :" + error.message)
+                    parent.goby.showErrorMessage("ShellHub : " + error.message)
                 })
             },
             handleCurrentChange(val) {
                 this.page = val
             },
             nodeClick(val, node) {
-
                 if (!node.data.isGetPath) {
                     const currentPath = this.getAllPath(node).filter(item => item).reverse().join('/').replace(/^\/\//, '/')
                     this.currentPath = currentPath;
@@ -354,8 +475,8 @@
                                 resJson[k].perm = decodeURIComponent(escape(atob(resJson[k].perm)));
                             }
                             resJson[k].type = decodeURIComponent(escape(atob(resJson[k].type)));
-                            resJson[k].size = decodeURIComponent(escape(atob(resJson[k].size)));
-                            if (resJson[k].type == "directory" && resJson[k].name != "." && resJson[k].name != "..") {
+                            resJson[k].size = this.fileSize(decodeURIComponent(escape(atob(resJson[k].size))));
+                            if (resJson[k].type === "directory" && resJson[k].name !== "." && resJson[k].name !== "..") {
                                 filePath.push(resJson[k].name)
                             }
                         })
@@ -370,7 +491,7 @@
                         this.$set(node.data, 'isGetPath', true)
                         node.expanded = true;
                     }).catch((error) => {
-                        parent.goby.showErrorMessage("ShellHub :" + error.message)
+                        parent.goby.showErrorMessage("ShellHub : " + error.message)
                     })
                 } else {
                     this.page = 1
@@ -385,22 +506,26 @@
             },
             onContextmenu(row, column, event, cell) {
                 // console.log(row, column, event, cell);
+                let params = {
+                    "access_time_stamp": "",
+                    "char_set": "",
+                    "create_time_stamp": "",
+                    "current_path": "",
+                    "dir_name": "",
+                    "is_chunk": true,
+                    "local_path": "",
+                    "mode": "",
+                    "modify_time_stamp": "",
+                    "new_file_name": "",
+                    "old_file_name": "",
+                    "remote_path": ""
+                }
                 this.$contextmenu({
                     items: [
                         {
-                            label: this.$t('Refresh'),
-                            onClick: () => {
-                                let node = this.$refs.tree.getNode(this.currentPath)
-                                this.$set(node.data, 'children', [])
-                                this.$set(node, 'childNodes', [])
-                                this.$set(node.data, 'isGetPath', false)
-                                this.nodeClick(node.data, node)
-                            }
-                        },
-                        {
                             label: this.$t("Open"),
                             onClick: () => {
-
+                                this.isShowRefreshBtn = false
                                 let currentPath = this.path.join(this.currentPath, row.name).replace(/\\/g, '/').replace(/\/$/, '').replace(/^\/\//, '/')
                                 // this.currentPath = currentPath;
                                 let node = this.$refs.tree.getNode(currentPath)
@@ -415,23 +540,23 @@
                                         this.$refs.tree.setCurrentKey(currentPath)
                                         break;
                                     case 'file':
-                                        let params = {
-                                            "access_time_stamp": "",
-                                            "char_set": "",
-                                            "create_time_stamp": "",
-                                            "current_path": "",
-                                            "dir_name": "",
-                                            "is_chunk": true,
-                                            "local_path": "",
-                                            "mode": "",
-                                            "modify_time_stamp": "",
-                                            "new_file_name": "",
-                                            "old_file_name": "",
-                                            "remote_path": ""
-                                        }
+                                        // let params = {
+                                        //     "access_time_stamp": "",
+                                        //     "char_set": "",
+                                        //     "create_time_stamp": "",
+                                        //     "current_path": "",
+                                        //     "dir_name": "",
+                                        //     "is_chunk": true,
+                                        //     "local_path": "",
+                                        //     "mode": "",
+                                        //     "modify_time_stamp": "",
+                                        //     "new_file_name": "",
+                                        //     "old_file_name": "",
+                                        //     "remote_path": ""
+                                        // }
                                         let pathList = currentPath.split("/")
-                                        params["old_file_name"] = pathList.pop()
-                                        params["char_set"] = this.decode
+                                        params.old_file_name = pathList.pop()
+                                        params.char_set = this.decode
                                         currentPath = pathList.join("/")
                                         top.ShellsManagerX.operationFile("show", currentPath, "false", params).then(res => {
                                             // console.log(res);
@@ -439,7 +564,7 @@
                                             this.$set(this.fileCon, 'con', res.msg)
                                             this.isShowFileCon = true
                                         }).catch((error) => {
-                                            parent.goby.showErrorMessage("ShellHub :" + error.message)
+                                            parent.goby.showErrorMessage("ShellHub : " + error.message)
                                         })
                                         break;
                                 }
@@ -453,20 +578,7 @@
                                     confirmButtonText: 'Confirm',
                                     cancelButtonText: 'Cancel'
                                 }).then(({value}) => {
-                                    let params = {
-                                        "access_time_stamp": "",
-                                        "char_set": "",
-                                        "create_time_stamp": "",
-                                        "current_path": "",
-                                        "dir_name": "",
-                                        "is_chunk": true,
-                                        "local_path": "",
-                                        "mode": "",
-                                        "modify_time_stamp": "",
-                                        "new_file_name": "",
-                                        "old_file_name": "",
-                                        "remote_path": ""
-                                    }
+
                                     params.old_file_name = this.path.join(this.currentPath, row.name).replace(/\\/g, '/').replace(/\/$/, '');
                                     params.new_file_name = this.path.join(this.currentPath, value).replace(/\\/g, '/').replace(/\/$/, '');
                                     top.ShellsManagerX.operationFile('rename', '', 'false', params).then(res => {
@@ -477,9 +589,12 @@
                                             this.$set(node, 'childNodes', [])
                                             this.$set(node.data, 'isGetPath', false)
                                             this.nodeClick(node.data, node)
+                                            top.goby.showSuccessMessage("ShellHub : " + res.msg)
+                                        } else if (res.status === 'fail') {
+                                            top.goby.showErrorMessage("ShellHub : " + res.msg)
                                         }
                                     }).catch((error) => {
-                                        parent.goby.showErrorMessage("ShellHub :" + error.message)
+                                        top.goby.showErrorMessage("ShellHub : " + error.message)
                                     })
                                 })
                             }
@@ -488,35 +603,82 @@
                             label: this.$t("Delete"),
                             onClick: () => {
                                 let currentPath = this.path.join(this.currentPath, row.name).replace(/\\/g, '/').replace(/\/$/, '')
-                                let params = {
-                                    "access_time_stamp": "",
-                                    "char_set": "",
-                                    "create_time_stamp": "",
-                                    "current_path": "",
-                                    "dir_name": "",
-                                    "is_chunk": true,
-                                    "local_path": "",
-                                    "mode": "",
-                                    "modify_time_stamp": "",
-                                    "new_file_name": "",
-                                    "old_file_name": "",
-                                    "remote_path": ""
-                                }
+                                console.log(currentPath)
                                 top.ShellsManagerX.operationFile('delete', currentPath, 'false', params).then(res => {
-                                    // console.log(res);
                                     if (res.status === 'success') {
                                         let node = this.$refs.tree.currentNode.node
                                         this.$set(node.data, 'children', [])
                                         this.$set(node, 'childNodes', [])
                                         this.$set(node.data, 'isGetPath', false)
                                         this.nodeClick(node.data, node)
+                                        top.goby.showSuccessMessage("ShellHub : " + res.msg)
+                                    } else if (res.status === 'fail') {
+                                        top.goby.showErrorMessage("ShellHub : " + res.msg)
                                     }
 
                                 }).catch((error) => {
-                                    parent.goby.showErrorMessage("ShellHub :" + error.message)
+                                    top.goby.showErrorMessage("ShellHub : " + error.message)
+                                })
+                            },
+                            divided: true
+                        },
+                        {
+                            label: this.$t("Download"),
+                            onClick: () => {
+                                let currentPath = this.path.join(this.currentPath, "").replace(/\\/g, '/').replace(/\/$/, '')
+                                console.log(currentPath)
+                                params["remote_path"] = currentPath
+                                top.ShellsManagerX.operationFile('download', currentPath, 'false', params).then(res => {
+                                    console.log(res);
+                                    if (res === 'success') {
+                                        top.goby.showSuccessMessage("ShellHub : " + row.name + "Download Success")
+                                    } else {
+                                        top.goby.showErrorMessage("ShellHub : " + row.name + "Download fail")
+
+                                    }
+                                }).catch((error) => {
+                                    top.goby.showErrorMessage("ShellHub : Download " + error.message)
                                 })
                             }
-                        }
+                        },
+                        {
+                            label: this.$t("Modify Timestamp"),
+                            onClick: () => {
+                                let currentPath = this.path.join(this.currentPath, "/").replace(/\\/g, '/').replace(/\/$/, '')
+                                params.old_file_name = row.name
+                                top.ShellsManagerX.operationFile("getTimeStamp", currentPath, "false", params)
+                                    .then(res => {
+                                        console.log(res);
+                                        if (res.status === 'success') {
+                                            let timeJson = JSON.parse(res.msg)
+                                            this.$set(this.fixTime, 'name', row.name)
+                                            this.$set(this.fixTime, 'createTime', atob(timeJson.createTime));
+                                            this.$set(this.fixTime, 'lastModifiedTime', atob(timeJson.lastModifiedTime));
+                                            this.$set(this.fixTime, 'lastAccessTime', atob(timeJson.lastAccessTime));
+                                            this.isShowFixTime = true;
+                                        } else if (res.status === 'fail') {
+                                            top.goby.showErrorMessage("ShellHub : " + res.msg)
+                                        }
+                                    }).catch((error) => {
+                                    console.log(error)
+                                    top.goby.showErrorMessage("ShellHub : " + error.message)
+                                })
+                            }
+                        },
+                        {
+                            label: "Run",
+                            onClick: () => {
+                                let outputFilePath = this.path.join(this.currentPath, "out.txt").replace(/\\/g, '/').replace(/\/$/, '')
+                                this.outputFilePath = outputFilePath
+                                let runFilePath = this.path.join(this.currentPath, row.name).replace(/\\/g, '/').replace(/\/$/, '')
+                                this.$set(this.runExe, 'name', row.name)
+                                this.$set(this.runExe, 'fileName', runFilePath);
+                                this.$set(this.runExe, 'args', "");
+                                this.$set(this.runExe, 'outputFile', outputFilePath);
+                                this.$set(this.runExe, 'perm', row.perm);
+                                this.isShowRunExe = true;
+                            }
+                        },
                     ],
                     event,
                     //x: event.clientX,
@@ -527,8 +689,10 @@
                 });
                 return false;
             },
+            // 双击事件
             dblclick(row, column, event, cell) {
                 // console.log(row, column, event, cell);
+                this.isShowRefreshBtn = false
                 let currentPath = this.path.join(this.currentPath, row.name).replace(/\\/g, '/').replace(/\/$/, '').replace(/^\/\//, '/')
                 // this.currentPath = currentPath;
                 let node = this.$refs.tree.getNode(currentPath)
@@ -566,12 +730,289 @@
                             this.$set(this.fileCon, 'con', res.msg)
                             this.isShowFileCon = true
                         }).catch((error) => {
-                            parent.goby.showErrorMessage("ShellHub :" + error.message)
+                            top.goby.showErrorMessage("ShellHub : " + error.message)
                         })
                         break;
                     default:
                         break;
                 }
+            },
+            // 保存修改按钮
+            saveFile() {
+                let currentPath = this.path.join(this.currentPath, this.fileCon.name).replace(/\\/g, '/').replace(/\/$/, '')
+                top.ShellsManagerX.uploadFile(currentPath, "", this.fileCon.con, 'false', false)
+                    .then(res => {
+                        console.log(res);
+                        if (res.status === 'success') {
+                            let node = this.$refs.tree.currentNode.node
+                            this.$set(node.data, 'children', [])
+                            this.$set(node, 'childNodes', [])
+                            this.$set(node.data, 'isGetPath', false)
+                            this.nodeClick(node.data, node)
+                            top.goby.showSuccessMessage("ShellHub : " + this.fileCon.name + " Save Success")
+                        } else if (res.status === 'fail') {
+                            top.goby.showErrorMessage("ShellHub : " + res.msg)
+                        }
+                    }).catch((error) => {
+                    console.log(error)
+                    top.goby.showErrorMessage("ShellHub : " + error.message)
+                })
+            },
+            // 修改时间戳
+            modTimestamp() {
+                let params = {
+                    "access_time_stamp": "",
+                    "char_set": "",
+                    "create_time_stamp": "",
+                    "current_path": "",
+                    "dir_name": "",
+                    "is_chunk": true,
+                    "local_path": "",
+                    "mode": "",
+                    "modify_time_stamp": "",
+                    "new_file_name": "",
+                    "old_file_name": "",
+                    "remote_path": ""
+                }
+                let currentPath = this.path.join(this.currentPath, "/").replace(/\\/g, '/').replace(/\/$/, '')
+                params.old_file_name = this.fixTime.name
+                params.create_time_stamp = this.fixTime.createTime
+                params.modify_time_stamp = this.fixTime.lastModifiedTime
+                params.access_time_stamp = this.fixTime.lastAccessTime
+                console.log(params)
+                top.ShellsManagerX.operationFile("updateTimeStamp", currentPath, "false", params)
+                    .then(res => {
+                        console.log(res);
+                        if (res.status === 'success') {
+                            top.goby.showSuccessMessage("ShellHub : " + this.fixTime.name + " Modify Timestamp Success")
+                        } else if (res.status === 'fail') {
+                            top.goby.showErrorMessage("ShellHub : " + res.msg)
+                        }
+                    }).catch((error) => {
+                    console.log(error)
+                    top.goby.showErrorMessage("ShellHub : " + error.message)
+                })
+            },
+            // 上传按钮
+            uploadBtn() {
+                const {dialog} = top.require('electron').remote;
+                dialog.showOpenDialog({}, (res) => {
+                    if (res.length < 0) {
+                        return
+                    }
+                    top.ShellsManagerX.isDown = true;
+                    this.ConfirmLoading = true
+                    this.proStatus = ""
+                    let currentPath = this.path.join(this.currentPath, this.path.basename(res[0])).replace(/\\/g, '/').replace(/\/$/, '')
+                    console.log(currentPath)
+                    this.uploadFileName = currentPath
+                    top.ShellsManagerX.uploadFile(currentPath, res[0], "", 'false', true, (res) => {
+                        console.log(res)
+                        if (res !== 0 && !res) {
+                            this.proStatus = 'warning'
+                            this.progress = 0;
+                            this.isShowProgress = false;
+                            this.isShowCancelBtn = false
+                            return;
+                        }
+                        this.isShowProgress = true
+                        this.isShowCancelBtn = true
+                        this.progress = res;
+                    }).then(res => {
+                        console.log(res);
+                        if (!res) {
+                            this.ConfirmLoading = false
+                            top.goby.showSuccessMessage("ShellHub : Cancel Success")
+                            return;
+                        }
+                        if (res.status === 'success') {
+                            let node = this.$refs.tree.currentNode.node
+                            this.$set(node.data, 'children', [])
+                            this.$set(node, 'childNodes', [])
+                            this.$set(node.data, 'isGetPath', false)
+                            this.nodeClick(node.data, node)
+                            top.goby.showSuccessMessage("ShellHub : Upload Success")
+                            this.proStatus = res.status
+                            this.ConfirmLoading = false
+                            this.isShowCancelBtn = false
+                            setTimeout(() => {
+                                this.isShowProgress = false
+                            }, 1000)
+                        } else if (res.status === 'fail') {
+                            top.goby.showErrorMessage("ShellHub : " + res.msg)
+                            this.proStatus = 'warning'
+                            this.progress = 0;
+                            this.isShowProgress = false;
+                            this.ConfirmLoading = false
+                            this.isShowCancelBtn = false
+                        }
+                    }).catch(error => {
+                        top.goby.showErrorMessage("ShellHub : " + error.message)
+                        this.cancelBtn()
+                    })
+                })
+            },
+            // 取消上传按钮
+            cancelBtn() {
+                top.ShellsManagerX.isDown = false;
+                this.proStatus = 'warning'
+                this.progress = 0;
+                this.isShowProgress = false;
+                this.ConfirmLoading = false
+                this.isShowCancelBtn = false
+                let params = {
+                    "access_time_stamp": "",
+                    "char_set": "",
+                    "create_time_stamp": "",
+                    "current_path": "",
+                    "dir_name": "",
+                    "is_chunk": true,
+                    "local_path": "",
+                    "mode": "",
+                    "modify_time_stamp": "",
+                    "new_file_name": "",
+                    "old_file_name": "",
+                    "remote_path": ""
+                }
+                top.ShellsManagerX.operationFile('delete', this.uploadFileName, 'false', params).then(res => {
+                    if (res.status === 'success') {
+                        let node = this.$refs.tree.currentNode.node
+                        this.$set(node.data, 'children', [])
+                        this.$set(node, 'childNodes', [])
+                        this.$set(node.data, 'isGetPath', false)
+                        this.nodeClick(node.data, node)
+                        top.goby.showSuccessMessage("ShellHub : " + res.msg)
+                    } else if (res.status === 'fail') {
+                        top.goby.showErrorMessage("ShellHub : " + res.msg)
+                    }
+
+                }).catch((error) => {
+                    top.goby.showErrorMessage("ShellHub : " + error.message)
+                })
+            },
+            refreshBtn() {
+                let node = this.$refs.tree.getNode(this.currentPath)
+                this.$set(node.data, 'children', [])
+                this.$set(node, 'childNodes', [])
+                this.$set(node.data, 'isGetPath', false)
+                this.nodeClick(node.data, node)
+            },
+            newFile() {
+                this.fileCon = {
+                    name: "",
+                    con: ""
+                }
+                this.$prompt('File Name', 'New', {
+                    confirmButtonText: 'Confirm',
+                    cancelButtonText: 'Cancel'
+                }).then(({value}) => {
+                    this.isShowFileCon = true;
+                    this.$set(this.fileCon, 'name', value)
+                })
+            },
+            newFolder() {
+                this.$prompt('Folder Name', 'New', {
+                    confirmButtonText: 'Confirm',
+                    cancelButtonText: 'Cancel'
+                }).then(({value}) => {
+                    let params = {
+                        "access_time_stamp": "",
+                        "char_set": "",
+                        "create_time_stamp": "",
+                        "current_path": "",
+                        "dir_name": "",
+                        "is_chunk": true,
+                        "local_path": "",
+                        "mode": "",
+                        "modify_time_stamp": "",
+                        "new_file_name": "",
+                        "old_file_name": "",
+                        "remote_path": ""
+                    }
+                    let currentPath = this.path.join(this.currentPath, "/").replace(/\\/g, '/').replace(/\/$/, '')
+                    console.log(currentPath)
+                    params.dir_name = value
+                    top.ShellsManagerX.operationFile('createDirectory', currentPath, 'false', params)
+                        .then(res => {
+                            console.log(res);
+                            if (res.status === 'success') {
+                                let node = this.$refs.tree.currentNode.node
+                                this.$set(node.data, 'children', [])
+                                this.$set(node, 'childNodes', [])
+                                this.$set(node.data, 'isGetPath', false)
+                                this.nodeClick(node.data, node)
+                                top.goby.showSuccessMessage("ShellHub : " + res.msg)
+                            } else if (res.status === 'fail') {
+                                top.goby.showErrorMessage("ShellHub : " + res.msg)
+                            }
+
+                        }).catch(error => {
+                        console.log(error)
+                        top.goby.showErrorMessage("ShellHub : " + error.message)
+                    })
+                })
+            },
+            resultBtn() {
+                this.isShowRefreshBtn = true
+                let params = {
+                    "access_time_stamp": "",
+                    "char_set": "",
+                    "create_time_stamp": "",
+                    "current_path": "",
+                    "dir_name": "",
+                    "is_chunk": true,
+                    "local_path": "",
+                    "mode": "",
+                    "modify_time_stamp": "",
+                    "new_file_name": "",
+                    "old_file_name": "",
+                    "remote_path": ""
+                }
+                let pathList = this.outputFilePath.split("/")
+                params.old_file_name = pathList.pop()
+                params.char_set = this.decode
+                let currentPath = pathList.join("/")
+                top.ShellsManagerX.operationFile("show", currentPath, "false", params).then(res => {
+                    // console.log(res);
+                    this.$set(this.fileCon, 'name', this.outputFilePath)
+                    this.$set(this.fileCon, 'con', res.msg)
+                    this.isShowFileCon = true
+                }).catch((error) => {
+                    parent.goby.showErrorMessage("ShellHub : " + error.message)
+                })
+            },
+            // 执行文件
+            runExeBtn() {
+                let currentPath = this.path.join(this.currentPath, "/").replace(/\\/g, '/').replace(/\/$/, '')
+                let cmd
+                if (this.runExe.fileName.substr(0, 1) === "/") {
+                    console.log(this.runExe.perm)
+                    if (this.runExe.perm.indexOf("x") !== -1) {
+                        cmd = `${this.runExe.fileName} ${this.runExe.args}> ${this.runExe.outputFile}`
+                    } else {
+                        cmd = `chmod +x ${this.runExe.fileName};${this.runExe.fileName} ${this.runExe.args}> ${this.runExe.outputFile}`
+                    }
+                } else {
+                    cmd = `${this.runExe.fileName} ${this.runExe.args}>> ${this.runExe.outputFile}`
+                }
+                console.log(cmd)
+                let force = "false"
+                this.isShowResultBtn = true
+                this.isShowRunExe = false
+                top.ShellsManagerX.runCmd(cmd, currentPath, force).catch((error) => {
+                    console.log(error)
+                    top.goby.showErrorMessage("ShellHub : " + error.message)
+                })
+                setTimeout(() => {
+                    let node = this.$refs.tree.currentNode.node
+                    console.log(node)
+                    this.$set(node.data, 'children', [])
+                    this.$set(node, 'childNodes', [])
+                    this.$set(node.data, 'isGetPath', false)
+                    this.nodeClick(node.data, node)
+                    top.goby.showSuccessMessage("ShellHub : " + this.runExe.fileName + " Execution Succeed!")
+                }, 1000)
+
             }
         },
         computed: {
