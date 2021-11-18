@@ -1,16 +1,16 @@
 # Overview
 
-Goby has built-in expansion capabilities. Under the extension API blessing, the goby-supported parts can be customized or enhanced.
+Goby has built-in API extension capabilities. allowing goby-supported parts to be customized or enhanced.
 
 This document includes following items:
 
  - How to build, run, debug, test and release extensions.
  - How to use goby’s extensions and API better.
- - Guidelines and code example which help you get started quickly.
+ - Guidelines and code example to help you get started quickly.
 
 ## What can extensions do?
 
-1. Expend the workbench by adding custom components and views to interface.
+1. Expand the workbench by adding custom components and views to interface.
 
 If you want to have a general overview of all APIs, please refer to the function overview. The extension has included code example and guide.
 
@@ -22,14 +22,14 @@ It’s not easy to make a good extension. Let’s take a look at what each chapt
  - **Extension development** Contains various extension development processes, such as testing, packaging and publishing etc.
  - **Extension functions** We disassembled goby’s API into several parts to help you get the development details for each scene.
  - **Example Includes** code example and guide. Detailing specific API usage.
- - **Appendix Including** the details of goby API, contributors and other extra information.
+ - **Appendix Includes** the details of goby API, contributors and other related information.
 
 
 # Get started
 
 ## Your first extension
 
-In this section, you will learn some basic concepts.Please install the [Debug](https://api.gobies.org/api/plugin-download/version_hash/785a27e6263d88bf12a947c6b4c135ae)extension of goby first . After that, you need to download a project from (helloWorld). Unzip it under directory goby/extensions then start goby.
+In this section, you will learn some basic concepts.Please install the [Debug](https://api.gobies.org/api/plugin-download/version_hash/785a27e6263d88bf12a947c6b4c135ae) extension of goby first . After that, you need to download a project from (helloWorld). Unzip it under directory goby/extensions then start goby.
 
 Click "Start scan", you will find a hello button at the top of the pop-up window, click the button, if another pop-up windows with [(helloWorld)](https://gobies.org/helloWorld.zip) appears. Congratulations! You have finished this Step.
 
@@ -43,7 +43,7 @@ Now let’s change the pop-up information:
  - Edit file "extension.js", replace "helloWorld" in function "goby.showInformationMessage" with "helloGoby"
  - Restart goby, click the hello button.
 
-Now you should seen the changed information:
+Now you should see the changed information:
 
 ![](./img/helloMod.gif)
 
@@ -70,7 +70,7 @@ Now let’s take a look of the example code in "helloWorld", And how the two con
           ├── README.md           // Help document
           ├── CHANGELOG.md        // Update log file
           ├── src
-          │   └── extension.js    // Source code
+          │   └── extension.js    // Source codeextension is installed successfully, this function will be 
           ├── package.json        // extension configuration list
 
 
@@ -78,7 +78,7 @@ Now let’s concentrate on the key parts of the extension——package.json and 
 
 ###### extension list
 
-Every Goby extension must contain package.json, That is the extension configuration list. Package.json includes some of Node.js keywords. Such as scripts, dependencies, also added some goby unique fields, such as publisher, initEvents, contributes etc. All this could be found in reference of extension list. We only introduce some important fields in this section.
+Every Goby extension must contain package.json, That is the extension configuration list. Package.json includes some of Node.js keywords. Such as scripts, dependencies,and goby unique fields, such as publisher, initEvents, contributes etc. All this can be found in reference of extension list. We only introduce some important fields in this section.
 
  - **name**: The extension’s name.
  - **publisher**: The publisher’s name. Goby will combine "publisher" and "name" as a extension’s ID.
@@ -115,7 +115,7 @@ Every Goby extension must contain package.json, That is the extension configurat
 
 ###### Extension’s entry file
 
-Entry file need to export function activate, When the extension is installed successfully, this function will be executed. 
+Entry file needs to export a function, activate, when the extension is installed successfully, this function will be executed. 
       
 
 ``` scilab
@@ -130,7 +130,7 @@ Entry file need to export function activate, When the extension is installed suc
 
 ## Summary
 
-In this section, you learned how to create, run and debug extensions, and also learned the basic concepts of Goby extension development. But this is only a beginner's guide. how to develop extensions will be explained in further detail in later sections.
+In this section, you learned how to create, run and debug extensions, and also the basic concepts of Goby extension development. This is only a beginner's guide, how to develop extensions will be explained in further detail in later sections.
 
 # Extension development
 
@@ -155,26 +155,26 @@ Before publishing, you should [register](https://gobies.org/user/register) first
 ![](./img/register.png)
 
 ### Packing
-We only accept ".zip" format packages currently, you can convert it and upload by yourself or use automatic packaging (Please refer to the next section, we will tell you how to pack your extensions).
+We only accept ".zip" format packages currently, you can convert and upload it by yourself or use automatic packaging (Please refer to the next section, we will tell you how to pack your extensions).
 
-**Warning: the entire extension folder must be packaged when packaging, that means after performing automatic decompression, make sure that the directory structure of the entire extension is complete.**
+**Warning: the entire extension folder must be zipped when packaging, that means after performing automatic decompression, make sure that the directory structure of the entire extension is complete.**
 
 ![](./img/unzip.gif)
 
 ### Publishing
-After login, you can publish your extensions from personal center-Extensions management, when zip archive uploaded, we will have specialized personnel to review, after passing the review, the extension will appear in the market list.
+After login, you can publish your extensions from Your Profile-Extensions management, when zip archive is uploaded, we will have specialized personnel to review. Once approved, the extension will appear in the market list.
 
 ![](./img/publish.gif)
 
 ### Deleting
-You can delete extension in the personal center.
+You can delete extension in the Your Profile center.
 
 ![](./img/delete.png)
 
 ### Packaging extensions
 As mentioned before, when the goby extension is submitted, only zip format upload is supported. As for JavaScript, there are many optional packaging tools. This section mainly demonstrates the use of [jszip](https://www.npmjs.com/package/jszip) for packaging.
 
-1. Install the jszip package first
+1. Install the jszip first
 
 ``` ebnf
         npm install jszip
@@ -233,7 +233,7 @@ Goby provides some methods for extensions to extend the capabilities. But someti
  - Available function for extension.
  - Some inspiration
 
-However, we will also tell you some limit, such as: extensions cannot modify the underlying DOM of Goby UI.
+However, we will also tell you some limitations, such as: extensions cannot modify the underlying DOM of Goby UI.
 
 ### Common Functions
 Common functions are the core functions you may use in any extension.
@@ -248,14 +248,14 @@ Including:
  - Event Notifications
 
 ### Extension workbench
-The extension workbench is the view entry point that user can customized, it can enhance the function of goby. For example, you can add new button on the pop-up window. By clicking the corresponding button. You can also import specify IP from other location, adding buttons on the banner list interface, or sending HTTP packet to current IP, even create a custom HTML page for easy use.
+The extension workbench is the view entry point that user can customize, it can enhance the function of goby. For example, you can add new button on the pop-up window to import specified IP from other location, add buttons on the banner list interface to send HTTP packet to current IP, or create a custom HTML page for easy use.
 
 Inspiration
  - Customize the operation buttons and interactive behaviors at the top of the scan pop-up window
  - Customize the operation buttons and interactive behaviors of the banner list of the IP details page
  - Use "goby.showIframeDia" method to display custom page content
 
-### Limit
+### Limitations
 The extension does not have permission to access the underlying DOM of the goby UI, and it is forbidden to add custom CSS and HTML fragments to the goby UI.
 
 ## Common functions
@@ -267,21 +267,21 @@ Commands are the core of extension, for all the entry points of your customized 
 The goby.registerCommond is indispensable for all extensions to register commands.
 
 ### View entry point
-Users can customize the buttons at the top of the pop-up window, You can also customize the toolbar extension buttons. Currently goby cannot support much, you can see more in contributions.views.
+Users can customize the buttons at the top of the pop-up window, and customize the toolbar extension buttons. Currently goby cannot support much, you can see more details in contributions.views.
 
 Custom view
-In many cases, only configuring the view entry point is not enough for users. For example, you want to display a custom page which is searchable by clicking the button on the pop-up window, and let the user operate (edit, select) by himself. You need to use a custom view to achieve. Currently goby provides the following APIs to display custom pages:
+In many cases, only configuring the view entry point is not enough for users. For example, you want to display a custom page which is searchable by clicking the button on the pop-up window, and perform certain operations such as edit or select. You need to use a custom view to achieve this. Currently goby provides the following APIs to display custom pages:
 
  - Use the goby.showIframeDia method to display the content of a custom page. In goby, your page will be embedded in a pop-up window for display. The title, width and height of the window can be set by parameters.
 
  - You can also use the goby.showPagemethod to display the content of a custom page. Goby will embed your page on the right side and this page can run in the background.
 
 ### Extension settings
-Most extensions will be open for users. If you have this requirement, just fill in the relevant configuration items in contributions.configuration.
+Most extensions will be available for users. If you have this requirement, just fill in the relevant configuration items in contributions.configuration.
 
-At the same time, you can get the extension configuration item from goby.getConfiguration, you can also modify it from goby.setConfiguration.
+At the same time, you can acquire the extension configuration item from goby.getConfiguration, and modify it from goby.setConfiguration.
 
-### Notification
+### Notifications
 Almost all extensions need to prompt users at some point. Goby provides 4 APIs to display information of different importance.
 
  - goby.showInformationMessage
@@ -290,7 +290,7 @@ Almost all extensions need to prompt users at some point. Goby provides 4 APIs t
  - goby.showSuccessMessage
 
 ### Event Notifications
-In many cases, extensions need to participate in the scanning process and trigger some events when the scanning status changes, or obtain real time scan data. At this time, you can bind event notifications by goby.bindEvent.
+In many cases, extensions need to participate in the scanning process and trigger some events when the scanning status changes, or obtain real time scan data. Currently, you can bind event notifications by goby.bindEvent.
 
 ## Extension workbench
 Workbench refers to the entire goby UI, the current configurable parts are as follows:
@@ -356,7 +356,7 @@ You can configure contributes.views.leftNav in the extension list to add custom 
 
 ![](./img/leftNav.png)
 
-There is also a example for learning about the specific use of Left-nav, see the left navigation page for details.
+There is also an example for learning about the specific use of Left-nav, see the left navigation page for details.
 
 ## toolbar - **toolbar**
 **New in：v 1.8.230**
@@ -369,7 +369,7 @@ There is also a simple example for learning about the specific use of toolbar, s
 
 # Extension example
 ## Overview
-In the extension function section, document introduced what extension can do. This section details each function and provides detailed code examples.
+In the extension function section introduced what extensions can do. This section details each function and provides detailed code examples.
 
 In this section you will learn:
  - List of goby APIs used
@@ -377,7 +377,7 @@ In this section you will learn:
  - Gif or image of the sample extension
 
 ## Pop-up scan page - scanDia
-The configuration of the scan pop-up window allows users to customize the processing and operation of scan. This example is mainly to add a button in the scan pop-up window, click to display a custom page. In this page, you can perform FOFA query, get the scanned object, and import IP and port from object.
+The configuration of the scan pop-up window allows users to customize the processing and operation of scan. This example is mainly to add a button in the scan pop-up window to display a custom page. In this page, you can perform FOFA query, get the scanned object, import IP and port from object.
 
 ### Download link
 [FOFA](https://gobies.org/FOFA.zip)
@@ -464,7 +464,7 @@ Attention! When using the goby API object in a custom HTML page, it must be obta
 
 ![](./img/fofa-html.png)
 
-If you want know more, you can [download the code](https://gobies.org/FOFA.zip) to view the details.
+If you want to know more, you can [download the code](https://gobies.org/FOFA.zip) to view the details.
 
 The final effect is shown below:
 
@@ -522,7 +522,7 @@ Second, you need to configure the corresponding view entry point in package.json
         
 Third, after using the custom component, to display the specific interface, you can use goby.showIframeDia to transfer the html page.
 
-If you want know more, you can [download the code](https://gobies.org/ExportCsv.zip) to view the details.
+If you want to know more, you can [download the code](https://gobies.org/ExportCsv.zip) to view the details.
 
 The final effect is shown below:
 
@@ -572,14 +572,14 @@ Second, you need to configure the corresponding view entry point in package.json
         
 Third, after using the custom component, to display the specific interface, you can use goby.showIframeDia to transfer the html page.
 
-If you want know more, you can download the code to view the details.
+If you want to know more, you can download the code to view the details.
 
 The final effect is shown below:
 
 ![](./img/ex-http.gif)
 
 ## Vulnerability list - vulList
-This page allows users to customize the processing and operation of the vulnerability. Let’s look at a simple example. This example is mainly based on whether the current vulnerability name is in the custom list, display the MSF utilization button dynamically. Click the button to call the local Metasploit framework to detect the vulnerability.
+This page allows users to customize the processing and operation of the vulnerability. Let’s look at a simple example. This example is depends on whether the current vulnerability name is in the custom list, and displays the MSF utilization button dynamically. Click the button to call the local Metasploit framework to detect the vulnerability.
 
 ### Download link
 [MSF Sploit](https://gobies.org/MSFSploit.zip)
@@ -677,7 +677,7 @@ Third, because it will call the local Metasploit, you need to modify the configu
           }
 ```
         
-If you want know more, you can [download the code](https://gobies.org/MSFSploit.zip) to view the details.
+If you want to know more, you can [download the code](https://gobies.org/MSFSploit.zip) to view the details.
 
 The final effect is shown below:     
 
@@ -724,7 +724,7 @@ Second, you need to configure the corresponding view entry point in package.json
     }
 ```
         
-If you want know more, you can [download the code](https://gobies.org/Webfinder.zip) to view the details.
+If you want to know more, you can [download the code](https://gobies.org/Webfinder.zip) to view the details.
 
 The final effect is shown below:
 
@@ -733,7 +733,7 @@ The final effect is shown below:
 ## Left navigation page - leftNav
 **New in：v 1.8.225   Deprecated in：v 1.8.237**
 
-The navigation page on the left allows users to execute the extensions globally to perform custom processing and operations during the process. We will show you an example. This example is mainly on the left navigation page, click the button to call the showPage API and the bindEvent API on the custom page,so that you can get data and filter them.
+The navigation page on the left allows users to execute the extensions globally to perform custom processing and operations. This example is mainly on the left navigation page, click the button to call the showPage API and the bindEvent API on the custom page,so that you can get data and filter them.
 
 ### Download link
 [Database Asset](https://gobies.org/Database%20Asset.zip)
@@ -773,13 +773,13 @@ Secondly, you need to configure the corresponding view entry point in package.js
     }
 ```
 
-Thirdly, after clicking the custom component, you can use goby.showPage to display the user-defined interface, This function can also use to pass the html page path. Both absolute path and relative path are supported. The second parameter is whether to run this page in the background.
+Thirdly, after clicking the custom component, you can use goby.showPage to display the user-defined interface, this function can also use to pass the html page path. Both absolute path and relative path are supported. The second parameter is whether to run this page in the background.
 
 ``` javascript
     goby.showPage('./assets/index.html',true);
 ```
 
-Attention: when using the goby API object in the custom page provided by goby.showPage, there is no need to obtain it through parent.goby(This function is not recommended here).
+Attention: when using the goby API object in the custom page provided by goby.showPage, there is no need to obtain it through parent.goby(this function is not recommended here).
 
 Fourth, because goby.bindEvent is called in the showPage function, this command needs to be configured in initEvents parameters in package.json.
 
@@ -793,7 +793,7 @@ Fourth, because goby.bindEvent is called in the showPage function, this command 
           }
 ```
 
-Fifth, when the scan started, filter the returned data, display the corresponding data, and call goby.changeBadge to display the summary of current task.
+Finally, when the scan is started, filter the returned data, display the corresponding data, and call goby.changeBadge to display the summary of current task.
 
 Currently, the first parameter only supports leftNav, the second parameter is the command corresponding to the marked position, and the third parameter is the content displayed by Badge.
 
@@ -803,7 +803,7 @@ Currently, the first parameter only supports leftNav, the second parameter is th
           goby.changeBadge('leftNav','left-nav',num);
 ```
 
-If you want know more, you can [download the code](https://gobies.org/Database%20Asset.zip) to view the details.
+If you want to know more, you can [download the code](https://gobies.org/Database%20Asset.zip) to view the details.
 
 The final effect is shown below:
 
@@ -812,7 +812,7 @@ The final effect is shown below:
 ## toolbar - toolbar
 **New in：v 1.8.230**
 
-The configuration of the toolbar allows users to call the extensions globally. Let's look at a simple example below. This example is mainly to add a button in the toolbar, click the operation to generate a task queue.
+The configuration of the toolbar allows users to call the extensions globally. Let's look at a simple example below. This example is mainly to add a button in the toolbar, click the button to generate a task queue.
 
 ### Download link
 [Task Queue](https://gobies.org/Task%20Queue.zip)
@@ -860,9 +860,9 @@ Second, you need to configure the corresponding view entry point in package.json
     }
 ```
 
-Fourth, after using the custom component, to display the specific interface, you can use goby.showIframeDia to transfer the html page.
+Third, after using the custom component, to display the specific interface, you can use goby.showIframeDia to transfer the html page.
 
-If you want know more, you can [download the code](https://gobies.org/Task%20Queue.zip) to view the details.
+If you want to know more, you can [download the code](https://gobies.org/Task%20Queue.zip) to view the details.
 
 The final effect is shown below:
 
@@ -1452,7 +1452,7 @@ type : onRescanVulnerability restart vulnerability scan
   }
 ```
 
-type：onError,When an error occurs in Goby, return the error-related data
+type：onError,when an error occurs in Goby, return the error-related data
 
 **New in 1.8.239+**
 
@@ -1464,7 +1464,7 @@ type：onError,When an error occurs in Goby, return the error-related data
     "message":"service error"   //error message
   }
 ```
-type : onChangeLang, When the Goby language changes, return to the current language
+type : onChangeLang, when the Goby language changes, return to the current language
 
 **New in 1.8.292+**
 
