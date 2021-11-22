@@ -1,0 +1,17 @@
+{
+    "description":"启动靶场环境，一键漏扫。支持 Vulfocus 在线和本地方式，并可查看漏洞环境描述信息。",
+    "contributes":{
+        "configuration":{
+        },
+        "views":{
+            "scanDia": [
+                {
+                    "title": "Vulfocus",
+                    "tips":"Vulfocus"
+                }
+            ]
+        }
+    },
+    "readme":"./README.md",
+    "changelog":"./CHANGELOG.md"
+}

@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Vulfocus</title>
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <link rel="stylesheet" href="./assets/element-ui/lib/theme-chalk/index.css">
+
+  <style>
+    body{
+      padding: 0px;
+      margin: 0px;
+    }
+    [v-cloak] {
+      display: none;
+    }
+
+    /* 滚动条样式 */
+    ::-webkit-scrollbar {
+      width: 5px;
+      /*竖向滚动条的宽度*/
+      height: 5px;
+      /*横向滚动条的高度*/
+    }
+
+    /* 滚动条轨道的样式 */
+    ::-webkit-scrollbar-track {
+      background-color: transparent;
+      -webkit-border-radius: 0;
+      border-radius: 0;
+    }
+
+    /* 滚动条轨道内滑块的样式 */
+    ::-webkit-scrollbar-thumb {
+      border-radius: 0;
+      background-color: var(--primaryBorder-color);
+    }
+
+    /* 当焦点不在当前区域滑块的状态 */
+    ::-webkit-scrollbar-thumb:window-inactive {
+      background-color: var(--secondaryBorder-color);
+      -webkit-border-radius: 0;
+      border-radius: 0;
+    }
+    /*.el-table__body-wrapper::-webkit-scrollbar {*/
+    /*  width: 10px;*/
+    /*  height: 10px;*/
+    /*}*/
+    /*.el-table__body-wrapper::-webkit-scrollbar-thumb {*/
+    /*  background-color: #a1a3a9;*/
+    /*  border-radius: 3px;*/
+    /*}*/
+  </style>
+</head>
+
+<body>
+<div id="app">
+  <template>
+    <el-table
+            v-loading.fullscreen.lock="fullscreenLoading"
+            :data="tableData.filter(data => !search || data.vulnerabilityNameVulfocus.toLowerCase().includes(search.toLowerCase()))"
+            stripe
+            height="460"
+            style="width: 100%">
+      <el-table-column
+              fixed
+              prop="cvenumber"
+              label="Number"
+              width="150"
+              sortable
+              :filters="[{text: 'Vulfocus Environment', value: 'From_Vulfocus'},{text: 'Local Environment', value: 'From_Local'}]"
+              :filter-method="filterHandler">
+        <template slot-scope="scope">
+          <el-popover trigger="hover" placement="top">
+            <p>{{ scope.row.imageDesc }}</p>
+            <div slot="reference" class="name-wrapper" v-if="scope.row.cvenumber">
+              <el-tag size="medium">{{ scope.row.cvenumber }}</el-tag>
+            </div>
+          </el-popover>
+        </template>
+      </el-table-column>
+<!--      <el-table-column-->
+<!--              fixed-->
+<!--              prop="id"-->
+<!--              label="id"-->
+<!--              width="50">-->
+<!--      </el-table-column>-->
+      <el-table-column
+              fixed
+              prop="vulnerabilityNameVulfocus"
+              label="Vulnerability Name"
+              width="450">
+        <template slot="header" slot-scope="scope">
+          <label>Vulnerability Name</label>
+          <el-input
+                  v-model="search"
+                  size="mini"
+                  style="width: 50%;"
+                  prefix-icon="el-icon-search"
+                  placeholder="Search">
+          </el-input>
+        </template>
+      </el-table-column>
+      <el-table-column
+              fixed="right"
+              label="Operation"
+              :filters="[{text: 'Scannable', value: 'Scan_Available'}]"
+              :filter-method="filterHandler">
+        <template slot-scope="scope">
+          <el-button :type="scope.row.buttonType" :icon="scope.row.buttonIcon" :loading="scope.row.loading" @click="handleStartClick(scope.row)" size="mini" v-if="scope.row.isIncludedInGoby" circle></el-button>
+          <el-button @click="handleScanClick(scope.row)" size="mini" type="primary" v-if="scope.row.isStarted" round>Scan</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+  </template>
+</div>
+
+</body>
+<script src="assets/js/jquery-3.3.1.min.js"></script>
+
+<!--<script src="https://unpkg.com/vue/dist/vue.js"></script>-->
+<!--<script src="https://unpkg.com/element-ui@2.15.6/lib/index.js"></script>-->
+<!--<script src="https://unpkg.com/element-ui/lib/umd/locale/en.js"></script>-->
+<script src="./assets/js/vue.min.js"></script>
+<script src="./assets/element-ui/lib/index.js"></script>
+<script src="./assets/element-ui/lib/umd/locale/en.js"></script>
+<script src="./assets/element-ui/lib/umd/locale/zh-CN.js"></script>
+
+
+<!--<script src="https://unpkg.com/element-ui/lib/umd/locale/zh-CN.js"></script>-->
+<script>
+  ELEMENT.locale(ELEMENT.lang.en);
+
+  let goby = parent.goby;
+  let vulArrGoby = [];
+  let resultsGoby = [];
+
+  let vulArrVulfocus = [];
+  let resultsVulfocus = [];
+
+  let vulArrLocal = [];
+  let resultsLocal = [];
+
+  let vulArrAll = [];
+
+  let vulArrGobyStr = '';
+  // let username = 'zhe';
+  // let licence = '9d674f5a492611ecbb205b2d8cfe1269';
+  let username = goby.getConfiguration('Username');
+  let licence = goby.getConfiguration('License');
+  let usernameLocal = goby.getConfiguration('UsernameLocal');
+  let licenceLocal = goby.getConfiguration('LicenseLocal');
+  let apiUrl = '/api/imgs/operation';
+  let vulUrl = 'http://vulfocus.fofa.so' + apiUrl;
+  let vulUrlLocal = goby.getConfiguration('LocalVulAddress') + apiUrl;
+
+  prepareData();
+
+  // let fs = parent.require('fs');
+  //
+  //
+  // lang();
+  //
+  // //当lang改变时更新页面内容
+  // goby.bindEvent('onChangeLang',()=>{
+  //   lang();
+  // })
+  //
+  // function lang(){
+  //   //获取当前Languzge
+  //   let language = goby.getLang();
+  //
+  //   //判断翻译文件是否存在
+  //   let translateState = fs.existsSync(goby.__dirname + '/assets/translate/' + language+'/html.json');
+  //
+  //   //翻译文件存在则使用翻译文件,否则使用默认EN翻译
+  //   let lang = translateState?language:'EN';
+  //
+  //   let a = $.i18n.init({
+  //     lng: language, //指定语言
+  //     useCookie:false,
+  //     resGetPath: './assets/translate/'+lang+'/html.json',//语言包的路径
+  //   }, function(err, t) {
+  //     if(!err){
+  //       $('[data-i18n]').i18n(); // 通过选择器集体翻译
+  //       return;
+  //     }
+  //     goby.showErrorMessage(err)
+  //   });
+  // }
+
+  function prepareData(){
+    getVulFromGoby();
+    getVulFromVulfocus();
+    getVulFromLocal();
+    vulArrAll = vulArrVulfocus;
+    vulArrLocal.forEach(function (element) {
+      vulArrAll.push(element);
+    });
+  }
+
+  function getVulFromGoby() {
+    let urlGoby = `http://127.0.0.1:8361/api/v1/getPOCList`;
+    $.ajax({
+      type: "POST",
+      url: urlGoby,
+      async:false,  // make sure goby vul data got before connect to Vulfocus
+      contentType: 'application/json;charset=utf-8',
+      data:JSON.stringify({
+        "options":{
+          "page":{
+            "page":1,
+            "size":3000
+          }
+        }
+      }),
+      dataType: "json",
+      success(res) {
+        if (res.error) {
+          resultsGoby = [];
+          return;
+        }
+        resultsGoby = res.data.lists;
+        // console.log(res);
+        if (resultsGoby && resultsGoby.length > 0) {
+          resultsGoby.forEach(function(element){
+            let item = {
+              "vulnerabilityNameGoby":element.name
+            };
+            // console.log(item);
+            vulArrGobyStr += element.name;
+            vulArrGoby.push(item);
+          });
+        } else {
+
+        }
+      },
+      error(res) {
+        resultsGoby = [];
+      }
+    });
+  }
+
+  function getVulFromVulfocus(){
+
+    let theUrl = vulUrl + '?' + 'username=' + username + '&licence=' + licence;
+    $.ajax({
+      type: "GET",
+      url: theUrl,
+      contentType: 'application/x-www-form-urlencoded;charset=utf-8',
+      // contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      success(res) {
+        if (res.error) {
+          goby.showWarningMessage(res.error);
+          return;
+        }
+        resultsVulfocus = res.data;
+
+        let reg = new RegExp("(CVE|cve|CNVD|wooyun|WooYun)(-|_)[0-9]*(-|_)[0-9]*");
+        if (resultsVulfocus && resultsVulfocus.length > 0) {
+          resultsVulfocus.forEach(function(element,index){
+            let cveNumber = ((reg.exec(element.image_vul_name) != null) ? reg.exec(element.image_vul_name)[0]:'').toUpperCase().replace(/_/g,'-');
+            let isIncludedInGoby;
+            let imageName = element.image_name;
+            let imageDesc = element.image_desc;
+            let vulnerabilityNameGoby;
+            if(cveNumber){
+              isIncludedInGoby = (vulArrGobyStr.search(cveNumber) != -1) ? true:false;
+            }else {
+              isIncludedInGoby = false;
+            }
+            if(cveNumber) {
+              try {
+                resultsGoby.forEach(function (element) {
+                  if ((element.name.search(cveNumber) != -1)) {
+                    vulnerabilityNameGoby = element.name;
+                    // when searched successfully, should break out the iteration.
+                    throw Error();
+                  } else {
+                    vulnerabilityNameGoby = '';
+                  }
+                });
+              } catch(e){
+
+              }
+            }else{
+              vulnerabilityNameGoby = '';
+            }
+
+            let item = {
+              "id":index,
+              "image_vul_name":element.image_vul_name,
+              "vulnerabilityNameGoby":vulnerabilityNameGoby,
+              "vulnerabilityNameVulfocus":element.image_vul_name,
+              "cvenumber":cveNumber,
+              "imageName":imageName,
+              "imageDesc":imageDesc,
+              "ip":[],
+              "port":"",
+              "isIncludedInGoby":isIncludedInGoby,
+              "isStarted":false,
+              "loading":false,
+              "buttonType":'primary',
+              "buttonIcon":'el-icon-video-play',
+              "from":"From_Vulfocus"
+            }
+            vulArrVulfocus.push(item);
+          });
+
+        } else {
+          goby.showWarningMessage("No data");
+        }
+        if(res.status == 500){
+          goby.showWarningMessage("Vulfocus " + res.msg);
+        }
+        return vulArrVulfocus;
+      },
+      error(res) {
+        goby.showWarningMessage(res);
+        return;
+      }
+    });
+  }
+
+  function getVulFromLocal(){
+
+    let theUrl = vulUrlLocal + '?' + 'username=' + usernameLocal + '&licence=' + licenceLocal;
+    // console.log(theUrl);
+
+    if(goby.getConfiguration('LocalVulAddress')){
+      $.ajax({
+        type: "GET",
+        url: theUrl,
+        async:false,
+        contentType: 'application/x-www-form-urlencoded;charset=utf-8',
+        // contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success(res) {
+          if (res.error) {
+            goby.showWarningMessage(res.error);
+            return;
+          }
+          resultsLocal = res.data;
+
+          let reg = new RegExp("(CVE|cve|CNVD|wooyun|WooYun)(-|_)[0-9]*(-|_)[0-9]*");
+          if (resultsLocal && resultsLocal.length > 0) {
+            resultsLocal.forEach(function(element,index){
+              let cveNumber = ((reg.exec(element.image_vul_name) != null) ? reg.exec(element.image_vul_name)[0]:'').toUpperCase().replace(/_/g,'-');
+              let isIncludedInGoby;
+              let imageName = element.image_name;
+              let imageDesc = element.image_desc;
+              let vulnerabilityNameGoby;
+              if(cveNumber){
+                isIncludedInGoby = (vulArrGobyStr.search(cveNumber) != -1) ? true:false;
+              }else {
+                isIncludedInGoby = false;
+              }
+              if(cveNumber) {
+                try {
+                  resultsGoby.forEach(function (element) {
+                    if ((element.name.search(cveNumber) != -1)) {
+                      vulnerabilityNameGoby = element.name;
+                      // when searched successfully, should break out the iteration.
+                      throw Error();
+                    } else {
+                      vulnerabilityNameGoby = '';
+                    }
+                  });
+                } catch(e){
+
+                }
+              }else{
+                vulnerabilityNameGoby = '';
+              }
+
+              let item = {
+                "id":index,
+                "image_vul_name":element.image_vul_name,
+                "vulnerabilityNameGoby":vulnerabilityNameGoby,
+                "vulnerabilityNameVulfocus":element.image_vul_name,
+                "cvenumber":cveNumber,
+                "imageName":imageName,
+                "imageDesc":imageDesc,
+                "ip":[],
+                "port":"",
+                "isIncludedInGoby":isIncludedInGoby,
+                "isStarted":false,
+                "loading":false,
+                "buttonType":'primary',
+                "buttonIcon":'el-icon-video-play',
+                "from":"From_Local"
+              }
+              vulArrLocal.push(item);
+            });
+
+          } else {
+            goby.showWarningMessage("No data");
+          }
+          if(res.status == 500){
+            goby.showWarningMessage("Local " + res.msg);
+          }
+          return vulArrLocal;
+        },
+        error(res) {
+          goby.showWarningMessage(res);
+          return;
+        }
+      });
+    } else {
+    }
+  }
+
+  new Vue({
+    el: '#app',
+    methods: {
+      handleStartClick(row) {
+        row.loading = true;
+        let image_name = row.imageName;
+        let theUrl = '';
+
+          if(row.from == 'From_Local'){
+            if (goby.getConfiguration('LocalVulAddress')){
+              theUrl = vulUrlLocal;
+            } else {
+              goby.showWarningMessage('本地靶场地址未配置');
+            }
+          } else if(row.from == 'From_Vulfocus'){
+            theUrl = vulUrl;
+          }
+
+        let requisition = '';
+        if(row.buttonType == 'primary'){
+          requisition = 'start';
+        } else if(row.buttonType == 'danger'){
+          requisition = 'stop';
+        }
+
+        let data = {
+          "username": username,
+          "licence": licence,
+          "image_name": image_name,
+          "requisition": requisition
+        }
+        $.ajax({
+          type: "POST",
+          url: theUrl,
+          contentType: 'application/x-www-form-urlencoded;charset=utf-8',
+          // contentType: "application/json; charset=utf-8",
+          data:data,
+          dataType: "json",
+          success(res) {
+            if (res.error) {
+              row.loading = false;
+              return;
+            }
+            if(res.status == 200){
+              goby.showSuccessMessage(row.cvenumber + ' ' + res.msg);
+              row.loading = false;
+              if(row.buttonType == 'primary'){
+                let host = res.data.host.split(':');
+                row.ip.push(host[0]);
+                row.port = host[1];
+                row.isStarted = true;
+                row.buttonType = 'danger';
+                row.buttonIcon = 'el-icon-video-pause';
+              } else if(row.buttonType == 'danger'){
+                row.isStarted = false;
+                row.buttonType = 'primary';
+                row.buttonIcon = 'el-icon-video-play';
+              }
+            } else if(res.status == 500){
+              row.loading = false;
+              if(res.msg == "镜像已经停止"){
+                row.isStarted = false;
+                row.buttonType = 'primary';
+                row.buttonIcon = 'el-icon-video-play';
+              }
+              goby.showWarningMessage(res.msg);
+            }
+          },
+          error(res) {
+            row.loading = false;
+            return;
+          }
+        });
+      },
+      handleScanClick(row){
+        let vulnerability = {};
+        let key = row.vulnerabilityNameGoby;
+        vulnerability[key] = null;
+        goby.startScan({
+          'ip':row.ip,
+          'port':row.port,
+          'vulnerability':vulnerability,
+          'vulnerabilityType':3
+        });
+        goby.showSuccessMessage("扫描任务开始");
+        // goby.closeIframeDia();
+      },
+      filterHandler(value, row, column){
+        // const property = column['property'];
+
+        // From_Vulfocus
+        if(value==='From_Vulfocus'){
+          return row.from === value;
+        }
+
+        // From_Local
+        if(value==='From_Local'){
+          return row.from === value;
+        }
+
+        if(value==='Scan_Available'){
+          return row.isIncludedInGoby;
+        }
+      }
+    },
+    data: function() {
+      return {
+        tableData:vulArrAll,
+        search: '',
+        fullscreenLoading: false
+      }
+    },
+    mounted(){
+      $('head').prepend(`
+          <style>
+              :root{
+                      ${top.document.querySelector('html').style.cssText}
+                  }
+          </style>
+      `)
+    }
+  })
+</script>
+</html>

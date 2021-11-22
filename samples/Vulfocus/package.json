@@ -1,0 +1,66 @@
+{
+    "name": "Vulfocus",
+    "publisher": "zhe",
+    "description": "Start vulnerability environment, one-click vulnerability scanning. Supports Vulfocus online and local environments, and can view the description of the vulnerability environment.",
+    "version": "0.1.0",
+    "icon": "src/assets/img/Vulfocus.png",
+    "engines": "1.6.170",
+    "initEvents": "",
+    "main": "./src/extension.js",
+    "contributes": {
+        "configuration": {
+            "Username": {
+                "type": "string",
+                "default": "",
+                "description": "Vulfocus username"
+            },
+            "License": {
+                "type": "string",
+                "default": "",
+                "description": "Vulfocus license"
+            },
+            "LocalVulAddress": {
+                "type": "string",
+                "default": "http://ip:port",
+                "description": "Set your local Vulfocus address, keep it empty if there is no local address."
+            },
+            "UsernameLocal": {
+                "type": "string",
+                "default": "",
+                "description": "Set your local Vulfocus Username, keep it empty if there is no local address."
+            },
+            "LicenseLocal": {
+                "type": "string",
+                "default": "",
+                "description": "Set your local Vulfocus License, keep it empty if there is no local address."
+            }
+        },
+        "views": {
+            "scanDia": [
+                {
+                    "command": "Vulfocus",
+                    "title": "Vulfocus",
+                    "icon": "src/assets/img/Vulfocus.png"
+                }
+            ],
+            "toolbar": [
+                {
+                    "command": "Vulfocus",
+                    "title": "Vulfocus",
+                    "icon": "src/assets/img/Vulfocus.png",
+                    "tips": "Vulfocus"
+                }
+            ]
+        }
+    },
+    "language": {
+        "CN": "src/assets/translate/CN/translate.json"
+    },
+    "scripts": {},
+    "dependencies": {
+        "element-ui": "^2.15.6"
+    },
+    "devDependencies": {
+
+    }
+}
