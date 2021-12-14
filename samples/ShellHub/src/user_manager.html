@@ -153,6 +153,7 @@
             $('#addShell').on('click', function () {
                 console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
             })
+
             function getData(page, type) {
                 let results = parent.ShellsManagerX.shellsInfo();
                 console.log(results);
@@ -264,15 +265,15 @@
                     {'data': "./tabs/auto_basic_info.html", 'type': "baseInfo", 'title': $.t('Basic Information')},
                     {'data': "./tabs/auto_file_oper.html", 'type': "fileOper", 'title': $.t('File management')},
                     {'data': "./tabs/auto_run_exec.html", 'type': "runCmd", 'title': $.t('Virtual terminal')},
-                    // {'data': "./tabs/basic_info.html", 'type': 2, 'title': '基本信息'},
-                    // {'data': "./tabs/file_oper.html", 'type': 'fileOper', 'title': '文件管理'},
+                    {'data': "./tabs/get_av_name.html", 'type': "avCheck", 'title': 'avCheck'},
+                    {'data': "", 'type': 'HTTP Tunnel Open', 'title': 'HTTP Tunnel Open'},
+                    {'data': "", 'type': 'HTTP Tunnel Close', 'title': 'HTTP Tunnel Close'},
                     // {'data': "./tabs/run_exec.html", 'type': 'runCmd', 'title': '虚拟终端'},
                     // {'data': "url", 'type': 5, 'title': '交互终端'},
                     // {'data': "data", 'type': 6, 'title': '数据库管理'},
                 ]
                 let shellInfo = parent.ShellsManagerX.shellsInfo()
                 mouseRightMenu.open(menu_data, false, function (d) {
-                    // layer.alert(JSON.stringify(d));
                     console.log(d.data, d.type, d.title);
                     parent.ShellsManagerX.init(data[3] - 1)
                     let randNum = randomRange(30, 200)
@@ -338,34 +339,20 @@
                     } else if (d.title === $.t("Basic Information")) {
                         let id = data[3] - 1
                         addTab(d.data + "?" + id, d.type, d.title)
-
-
                     } else if (d.title === $.t("File management")) {
                         let id = data[3] - 1
                         addTab(d.data + "?" + id, d.type, d.title)
-
-                        // if ((shellInfo[data[3] - 1].CPath).length !== 0) {
-                        //     let cPath = shellInfo[data[3] - 1].CPath
-                        //     let dlist = shellInfo[data[3] - 1].DList
-                        //     let fileOper = btoa(unescape(encodeURIComponent(cPath))) + "|" + btoa(unescape(encodeURIComponent(dlist)))
-                        //     addTab(d.data + "?" + fileOper, d.type, d.title)
-                        // } else {
-                        //     parent.ShellsManagerX.getBasicInfo(randNum, "false").then(res => {
-                        //         console.log(res);
-                        //         if ((res.basicInfo).length !== 0) {
-                        //             let cPath = shellInfo[data[3] - 1].CPath
-                        //             let dlist = shellInfo[data[3] - 1].DList
-                        //             let fileOper = btoa(unescape(encodeURIComponent(cPath))) + "|" + btoa(unescape(encodeURIComponent(dlist)))
-                        //             addTab(d.data + "?" + fileOper, d.type, d.title)
-                        //         } else {
-                        //             $('.layui-table-status-' + data[3]).html("未存活")
-                        //         }
-                        //     });
-                        // }
                     } else if (d.title === $.t("Virtual terminal")) {
                         let id = data[3] - 1
-                        console.log(id);
                         addTab(d.data + "?" + id, d.type, d.title)
+                    } else if (d.title === "avCheck") {
+                        let id = data[3] - 1
+                        addTab(d.data + "?" + id, d.type, d.title)
+                    } else if (d.title === "HTTP Tunnel Open") {
+                        console.log(132131321)
+                        parent.ShellsManagerX.startProxy()
+                    } else if (d.title === "HTTP Tunnel Close") {
+                        parent.ShellsManagerX.stopProxy()
                     }
 
                 })

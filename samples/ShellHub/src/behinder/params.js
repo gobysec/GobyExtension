@@ -76,7 +76,7 @@ function getParamedAssembly(fileName, params) {
         }
         paramsStr = paramsStr.substring(0, paramsStr.length - 1);
         let token = "~~~~~~" + paramsStr
-        console.log(token)
+        // console.log(token)
         let bufToken = Buffer.from(token)
         return Buffer.concat([bufcode, bufToken]);
     }

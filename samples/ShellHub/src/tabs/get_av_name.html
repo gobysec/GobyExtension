@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>getAVName</title>
+    <meta charset="utf-8">
+</head>
+<body>
+<div id="result"></div>
+
+<script src="../behinder/avlist.js"></script>
+<script src="../assets/js/jquery-3.3.1.min.js"></script>
+<script>
+    $('head').prepend(`
+        <style>
+            :root{
+                    ${top.document.querySelector('html').style.cssText}
+                }
+        </style>
+    `)
+
+    function getAVName(tasklist) {
+        let re = new RegExp("(.*?)\.exe", "g");
+        let tasks = tasklist.match(re);
+        let result = document.getElementById('result');
+        let htmlContent = "";
+        for (let i = 0; i < Object.keys(avList).length; i++) {
+            let taskid = Object.keys(avList)[i];
+            for (let x = 0; x < tasks.length; x++) {
+                if (taskid.toLowerCase() === tasks[x].toLowerCase()) {
+                    htmlContent += taskid + " <=> " + avList[taskid] + "<br>";
+                }
+            }
+        }
+        result.innerHTML = htmlContent;
+    }
+
+    let id = window.location.href.split("?")[1];
+    let shellInfo = top.ShellsManagerX.shellsInfo()
+    let data
+    if (id === undefined) {
+        data = shellInfo[shellInfo.length - 1]
+    } else {
+        data = shellInfo[id]
+    }
+    let currpath = data.CPath.replace(/\\/g, "/")
+    console.log(id)
+    top.ShellsManagerX.runCmd("tasklist /svc", currpath, "false").then(res => {
+        console.log(res)
+        if (res.status === 'success') {
+            getAVName(res.msg)
+        } else if (res.status === 'error') {
+            document.getElementById('result').innerHTML = res.msg
+        }
+    }).catch((error) => {
+        parent.goby.showErrorMessage("ShellHub :" + error.message)
+    })
+
+</script>
+</body>
+</html>

@@ -21,7 +21,7 @@ function GetData(key, className, params, types, encryptType) {
         //}
         let encrypedBincls = crypto.encryptForCSharp(bincls, key)
 
-        console.log(Buffer.from(encrypedBincls, 'base64'))
+        // console.log(Buffer.from(encrypedBincls, 'base64'))
         return Buffer.from(encrypedBincls, 'base64')
     } else if (types === 'asp') {
         bincls = payload.getParamedAsp(className, params)

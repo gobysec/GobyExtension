@@ -34,6 +34,9 @@
         <el-button type="primary" icon="el-icon-upload" size="mini" @click="uploadBtn"
                    :loading="ConfirmLoading">{{ $t('Upload') }}
         </el-button>
+<!--        <el-button type="primary" icon="el-icon-upload" size="mini" @click="gobyBtn"-->
+<!--                   :loading="GobyLoading"> Goby-->
+<!--        </el-button>-->
         <el-button type="primary" icon="el-icon-news" @click="newFile" size="mini">{{ $t('New File') }}
         </el-button>
         <el-button type="primary" icon="el-icon-folder" @click="newFolder" size="mini">{{ $t('New Folder') }}
@@ -253,6 +256,7 @@
             progress: "0",
             isShowProgress: false,
             ConfirmLoading: false,
+            GobyLoading: false,
             ConfirmSuccess: false,
             proStatus: "",
             uploadFileName: "",
@@ -671,14 +675,35 @@
                                 let outputFilePath = this.path.join(this.currentPath, "out.txt").replace(/\\/g, '/').replace(/\/$/, '')
                                 this.outputFilePath = outputFilePath
                                 let runFilePath = this.path.join(this.currentPath, row.name).replace(/\\/g, '/').replace(/\/$/, '')
+                                let args
+                                if (runFilePath.indexOf('goby-cmd') !== -1) {
+                                    args = "-apiauth user:pass -mode api -bind 0.0.0.0:8361"
+                                }
                                 this.$set(this.runExe, 'name', row.name)
                                 this.$set(this.runExe, 'fileName', runFilePath);
-                                this.$set(this.runExe, 'args', "");
+                                this.$set(this.runExe, 'args', args);
                                 this.$set(this.runExe, 'outputFile', outputFilePath);
                                 this.$set(this.runExe, 'perm', row.perm);
                                 this.isShowRunExe = true;
                             }
                         },
+                        // {
+                        //     label: "HTTP Tunnel Open",
+                        //     onClick: () => {
+                        //         top.ShellsManagerX.startProxy()
+                        //     }
+                        // },
+                        // {
+                        //     label: "HTTP Tunnel Close",
+                        //     onClick: () => {
+                        //         // 172.16.30.39
+                        //         // let data = "RVQgLyBIVFRQLzEuMQ0KSG9zdDogMTcyLjE2LjMwLjM5OjgwODANCkNvbm5lY3Rpb246IGtlZXAtYWxpdmUNCkNhY2hlLUNvbnRyb2w6IG1heC1hZ2U9MA0KVXBncmFkZS1JbnNlY3VyZS1SZXF1ZXN0czogMQ0KVXNlci1BZ2VudDogTW96aWxsYS81LjAgKFdpbmRvd3MgTlQgMTAuMDsgV2luNjQ7IHg2NCkgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbGlrZSBHZWNrbykgQ2hyb21lLzk1LjAuNDYzOC42OSBTYWZhcmkvNTM3LjM2DQpBY2NlcHQ6IHRleHQvaHRtbCxhcHBsaWNhdGlvbi94aHRtbCt4bWwsYXBwbGljYXRpb24veG1sO3E9MC45LGltYWdlL2F2aWYsaW1hZ2Uvd2VicCxpbWFnZS9hcG5nLCovKjtxPTAuOCxhcHBsaWNhdGlvbi9zaWduZWQtZXhjaGFuZ2U7dj1iMztxPTAuOQ0KQWNjZXB0LUVuY29kaW5nOiBnemlwLCBkZWZsYXRlDQpBY2NlcHQtTGFuZ3VhZ2U6IHpoLUNOLHpoO3E9MC45LGVuLVVTO3E9MC44LGVuO3E9MC43DQpDb29raWU6IEpTRVNTSU9OSUQ9OEZCRkQ5NDM0RUMwRDY4MTlDMURENkMzMEJCMzk2QUENCg0K"
+                        //         // 172.17.0.2
+                        //         top.ShellsManagerX.stopProxy()
+                        //
+                        //
+                        //     }
+                        // }
                     ],
                     event,
                     //x: event.clientX,
@@ -797,7 +822,7 @@
             uploadBtn() {
                 const {dialog} = top.require('electron').remote;
                 dialog.showOpenDialog({}, (res) => {
-                    if (res.length < 0) {
+                    if (res === undefined) {
                         return
                     }
                     top.ShellsManagerX.isDown = true;
@@ -850,6 +875,111 @@
                         top.goby.showErrorMessage("ShellHub : " + error.message)
                         this.cancelBtn()
                     })
+                })
+            },
+            // 上传 goby 按钮
+            gobyBtn() {
+                // let options = {
+                //     type: 1,// 0 分组  1服务器
+                //     name: this.getInfo().URL,
+                //     host: "127.0.0.1",
+                //     port: "8361",
+                //     username: "user",
+                //     password: "pass",
+                //     proxy: "socks5://127.0.0.1:1080",
+                //     parentId: "", //分组ID  如果需要放到最第一层 则不传
+                // }
+                // let gobyServer = top.goby.addGobyServer(options)
+                // top.goby.setGobyServer(gobyServer.data)
+                // top.goby.showSuccessMessage("ShellHub : 设置远程服务器成功!")
+                let cPath = this.getInfo().CPath
+                top.ShellsManagerX.isDown = true;
+                this.ConfirmLoading = true
+                this.proStatus = ""
+                let currentPath = this.path.join(cPath, 'goby-cmd-linux').replace(/\\/g, '/').replace(/\/$/, '')
+                console.log(currentPath)
+                this.uploadFileName = currentPath
+                top.ShellsManagerX.uploadFile(currentPath, 'D:\\Goby\\goby-linux-x64-1.9.307\\golib\\goby-cmd-linux', "", 'false', true, (res) => {
+                    console.log(res)
+                    if (res !== 0 && !res) {
+                        this.proStatus = 'warning'
+                        this.progress = 0;
+                        this.isShowProgress = false;
+                        this.isShowCancelBtn = false
+                        return;
+                    }
+                    this.isShowProgress = true
+                    this.isShowCancelBtn = true
+                    this.progress = res;
+                }).then(res => {
+                    console.log(res);
+                    if (!res) {
+                        this.ConfirmLoading = false
+                        top.goby.showSuccessMessage("ShellHub : Cancel Success")
+                        return;
+                    }
+                    if (res.status === 'success') {
+                        let node = this.$refs.tree.currentNode.node
+                        this.$set(node.data, 'children', [])
+                        this.$set(node, 'childNodes', [])
+                        this.$set(node.data, 'isGetPath', false)
+                        this.nodeClick(node.data, node)
+                        top.goby.showSuccessMessage("ShellHub : Upload Success")
+                        this.proStatus = res.status
+                        this.ConfirmLoading = false
+                        this.isShowCancelBtn = false
+                        setTimeout(() => {
+                            this.isShowProgress = false
+                            let currentPath = this.path.join(cPath, "/").replace(/\\/g, '/').replace(/\/$/, '')
+                            let gobyPath
+                            let gobyArgs
+                            let cmd
+                            if (currentPath.substr(0, 1) === "/") {
+                                gobyPath = this.path.join(currentPath, "/goby-cmd-linux").replace(/\\/g, '/').replace(/\/$/, '')
+                                gobyArgs = "-apiauth user:pass -mode api -bind 127.0.0.1:8361"
+                                // gobyArgs = "-apiauth user:pass -mode api -bind 0.0.0.0:8361"
+                                cmd = `chmod +x ${gobyPath};${gobyPath} ${gobyArgs} >> goby_out.txt 2>&1`
+                            } else {
+                                gobyPath = this.path.join(currentPath, "/goby-cmd.exe").replace(/\\/g, '/').replace(/\/$/, '')
+                                let outPut = this.path.join(currentPath, "/goby_out.txt").replace(/\\/g, '/').replace(/\/$/, '')
+                                gobyArgs = "-apiauth user:pass -mode api -bind 127.0.0.1:8361"
+                                cmd = `${gobyPath} ${gobyArgs}>> ${outPut} 2>&1`
+                            }
+                            console.log(cmd)
+                            let force = "false"
+                            this.isShowResultBtn = true
+                            this.isShowRunExe = false
+                            top.ShellsManagerX.runCmd(cmd, currentPath, force).catch((error) => {
+                                console.log(error)
+                                top.goby.showErrorMessage("ShellHub : " + error.message)
+                            })
+                            setTimeout(() => {
+                                let options = {
+                                    type: 1,// 0 分组  1服务器
+                                    name: this.getInfo().URL,
+                                    host: "127.0.0.1",
+                                    port: "8361",
+                                    username: "user",
+                                    password: "pass",
+                                    parentId: "", //分组ID  如果需要放到最第一层 则不传
+                                }
+                                let gobyServer = top.goby.addServer(options)
+                                top.goby.setServer(gobyServer.data)
+                                top.goby.showSuccessMessage("ShellHub : 设置远程服务器成功!")
+                                top.ShellsManagerX.startProxy()
+                            }, 1000)
+                        }, 1000)
+                    } else if (res.status === 'fail') {
+                        top.goby.showErrorMessage("ShellHub : " + res.msg)
+                        this.proStatus = 'warning'
+                        this.progress = 0;
+                        this.isShowProgress = false;
+                        this.ConfirmLoading = false
+                        this.isShowCancelBtn = false
+                    }
+                }).catch(error => {
+                    top.goby.showErrorMessage("ShellHub : " + error.message)
+                    this.cancelBtn()
                 })
             },
             // 取消上传按钮
@@ -985,15 +1115,16 @@
             runExeBtn() {
                 let currentPath = this.path.join(this.currentPath, "/").replace(/\\/g, '/').replace(/\/$/, '')
                 let cmd
+                let args = (this.runExe.args === undefined) ? "" : this.runExe.args
                 if (this.runExe.fileName.substr(0, 1) === "/") {
                     console.log(this.runExe.perm)
                     if (this.runExe.perm.indexOf("x") !== -1) {
-                        cmd = `${this.runExe.fileName} ${this.runExe.args}> ${this.runExe.outputFile}`
+                        cmd = `${this.runExe.fileName} ${args} >> ${this.runExe.outputFile} 2>&1`
                     } else {
-                        cmd = `chmod +x ${this.runExe.fileName};${this.runExe.fileName} ${this.runExe.args}> ${this.runExe.outputFile}`
+                        cmd = `chmod +x ${this.runExe.fileName};${this.runExe.fileName} ${args} >> ${this.runExe.outputFile} 2>&1`
                     }
                 } else {
-                    cmd = `${this.runExe.fileName} ${this.runExe.args}>> ${this.runExe.outputFile}`
+                    cmd = `${this.runExe.fileName} ${args}>> ${this.runExe.outputFile} 2>&1`
                 }
                 console.log(cmd)
                 let force = "false"

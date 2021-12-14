@@ -1,6 +1,5 @@
 const request = require('request');
 
-
 function RequestAndParse(url, jar, proxy, headers, data, beginIndex, endIndex) {
     let resultObj = sendPostRequestBinary(url, jar, proxy, headers, data)
     // let resData = bytes.TrimRight(resultObj.Data, "\r\n\r\n")
@@ -21,16 +20,18 @@ function sendPostRequestBinary(urlPath, jar, proxy, headers, data) {
         request(urlPath, {
             jar: jar,
             proxy: proxy,
+            rejectUnauthorized: false,
             method: "POST",
             encoding: null,
             headers: headers,
             body: data
         }, (error, response, body) => {
+            console.log(error)
             if (!error) {
                 body = body.toString('hex')
-                if (body.substr(body.length - 8, body.length) === "0d0a0d0a") {
-                    body = body.substr(0, body.length - 8);
-                }
+                // if (body.substr(body.length - 8, body.length) === "0d0a0d0a") {
+                //     body = body.substr(0, body.length - 8);
+                // }
                 response.body = body
                 resolve(response);
             } else {
