@@ -51,7 +51,7 @@
     "scripts": {},
     "devDependencies": {},
     "dependencies": {
-        "nodemailer": "^6.5.0",
+        "nodemailer": "^6.6.1",
         "xlsx": "^0.16.9"
     }
 }
