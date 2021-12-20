@@ -913,6 +913,11 @@ height|Number|auto|No|Height of iframe，the maximum height is 500, if exceeds s
 #### closeIframeDia
 Close the pop-up window.
 
+#### minimizeIframeDia
+**New in v 1.9.315+**
+
+Minimize pop ups with embedded iframe
+
 #### showPage
 **New in 1.8.225+**
 
@@ -1008,6 +1013,171 @@ value|String	|	|Yes|The extension value you want to modify
 
 #### showConfigurationDia
 The pop-up windows to show all configurations.
+
+#### getServer
+**New in v 1.9.315**
+
+Get Goby server management data
+
+**Response**
+
+Response|Type|Description
+--|:--|:--
+result|Object|Goby server management data
+
+**Example of returning result object data**
+```javascript
+	{
+		  	"curServerId":"2", //the server configuration id currently used by Goby
+		  	"lastServerId":"5",//the server configuration id last added by Goby
+		  	"curServer_host":"127.0.0.1",	//the server configuration host currently used
+		  	"curServer_port":"8361",	//the server configuration portcurrently used
+		  	"curAuthUsername":"",	//the server configuration username currently used
+		  	"curAuthPassword":"",	//the server configuration password currently used
+		  	"data":[
+		          {
+		                "id": 1,			//group id
+		                "label": "Group",	 	//Group name
+		                "data": {
+		                      "type": "group",	//Item type is group
+		                      "name": "Group"		//Group name
+		                },
+		                "children": [
+		                      {
+		                            "id": 2,				//Server id
+		                            "label": "System",		//Server name
+		                            "data": {
+		                                  "type": "item",		//Item type is server
+		                                  "name": "System",		//server name
+		                                  "host": "127.0.0.1",	//server host
+		                                  "port": "8361",		//server port
+		                                  "username": "",		//server username
+		                                  "password": ""		//server password
+		                            }
+		                      },
+		                      {
+		                            "id": 3,
+		                            "label": "test1",
+		                            "data": {
+		                                  "type": "item",
+		                                  "name": "test1",
+		                                  "host": "192.168.13.1",
+		                                  "port": "8361",
+		                                  "username": "",
+		                                  "password": ""
+		                            }
+		                      },
+		                      {
+		                            "id": 4,
+		                            "label": "Group",
+		                            "data": {
+		                                  "type": "group",
+		                                  "name": "Group"
+		                            },
+		                            "children": [
+		                                  {
+		                                        "id": 5,
+		                                        "label": "test2",
+		                                        "data": {
+		                                              "type": "item",
+		                                              "name": "test2",
+		                                              "host": "192.168.13.1",
+		                                              "port": "8361",
+		                                              "username": "",
+		                                              "password": ""
+		                                        }
+		                                  }
+		                            ]
+		                      }
+		                ]
+		          }
+		  	]
+		  }
+```
+#### addServer
+**New in v 1.9.315**
+
+Add goby server management configuration
+
+**Request**
+
+Parameter|Type|Default Value|Required|Description
+--|:--|:--|:--|:--
+Options|Object| |Y|Add server configuration item
+
+**Options**
+
+Property|Type|Default Value|Required|Description
+--|:--|:--|:--|:--
+type|Number| |Y|Add the type of server configuration. 0 represents grouping and 1 represents service group
+name|String| |Y|Name of new configuration
+host|String| | |Add the host configured by the server. When the type is 1, this item is required
+port|String| | |Add the port configured by the server. When the type is 1, this item is required
+username|String| |N|username of new server configuration
+password|String| |N|password of new server configuration
+parentId|Number|1|N|Group id of the new server
+
+**Response**
+
+Response|Type|Description
+--|:--|:--
+result|Object|Server configuration added this time
+
+**Example of returning result object data**
+
+```javascript
+	{
+		"id":"5",	//id of the newly added configuration
+		"label":"test1",//Name of the newly added configuration
+		"data":{
+			"id":"5",		//id of the newly added configuration
+			"type": "item",		//The newly added configuration type, group is current group and item is server
+			"name":"test1",		//Name of the newly added configuration
+			"host":"192.168.13.1",	//The host of the new server configuration
+			"port":"8361",		//The port of the new server configuration
+			"username":"",		//The username of the new server configuration
+			"password":""		//The password of the new server configuration
+		}
+	}
+		  
+```
+#### setServer
+
+**New in v 1.9.315+**
+
+Set current Goby server
+
+**Request**
+
+Parameter|Type|Default Value|Required|Description
+--|:--|:--|:--|:--
+Options|Object| |Y|Set the information required by the current goby server. You can directly use addserver to return the data in the information
+
+**Options**
+
+Property|Type|Default Value|Required|Description
+--|:--|:--|:--|:--
+host|String| |Y|Set host of Goby server
+port|String| |Y|Set port of Goby server
+username|String| |Y|Set username of Goby server
+password|String| |Y|Set password of Goby server
+
+#### delServer
+**New in v 1.9.315+**
+
+Delete configuration of Goby server
+
+**Request**
+
+Parameter|Type|Default Value|Required|Description
+--|:--|:--|:--|:--
+Options|Object|||Delete the information required for goby server configuration
+
+**Options**
+
+Property|Type|Default Value|Required|Description
+--|:--|:--|:--|:--
+delIds|Array|[]||Delete the id array required for goby server configuration
 
 ### About notification
 #### showInformationMessage
@@ -1368,6 +1538,87 @@ data|Promise|Returned information when scan stop，This is a Promise object. You
 	}
 ```
 
+#### proxyRequest
+**New in 1.9.315+**
+
+Proxy request of Goby
+
+**Request**
+
+Parameter|Type|Default Value|Required|Description
+--|:--|:--|:--|:--
+callback(req,cb)|Function||Y|Set the callback function of proxy access request. The parameters in the callback function contain some data required by the request
+
+**callback(req,cb)**
+
+Property|Type|Example|Description
+--|:--|:--|:--
+req|Object|{ "headers":{ "authorization":"Basic Og==" "connection":"close" "content-type":"application/json;charset=UTF-8" }, "method":'GET', "url":"/api/v1/tasks", "body":"" }|Request the required data, which can be used by the plug-in to implement the proxy request
+cb|Function|cb(200,'{"statusCode":200,"messages":"","data":[]}')|Response data callback. After the plug-in agent completes the request, it needs to return the status code and response data through cb
+
+**Example**
+```javascript
+	const request = require('request')
+	goby.proxyRequest((req,cb)=>{
+		request({
+			headers:req.headers,
+			method:req.method,
+			url:req.url,
+			body:req.body,
+		}).on('response', function(response) {
+			let statusCode = req.statusCode;
+			response.setEncoding('utf8');
+			var body = "";
+			response.on('data', function(data) {
+				body += data;
+			})
+			response.on('end',function(){
+				cb(statusCode,body)
+			})
+		})
+	})
+```
+
+#### closeProxyRequest
+**New in v 1.9.315+**
+
+Cancel Goby’s proxy access request
+
+**Response**
+
+
+Response|Type|Example|Description
+--|:--|:--|:--
+result|Object|{ statusCode:200, message:"Success" }|Cancels information returned on success or failure
+
+#### insertData
+**New in v 1.9.315+**
+
+Data insertion. The data inserted by the plug-in will be displayed in goby
+
+**Request**
+
+Parameter|Type|Default Value|Required|Description]
+--|:--|:--|:--|:--
+taskId|String||Y|ID of the task to insert data
+location|String||Y|The location displayed after data insertion. Currently, only report is supported
+showType|String||Y|The display form of inserted data. Currently, only table is supported
+dataType|String||Y|Insert data type. At present, only JSON is supported
+data|Object||Y|Information required for data insertion
+callback(result)|Function||Y|Callback function, result is the success or failure information, for example: {status: 200, data: null, message: 'success'}
+
+**data**
+
+Parameter	|Type	|Default Value	|Required	|Description
+--|:--|:--|:--|:--
+ip|String||Y|IP address of the inserted data
+port|Number||Y|Port of the inserted data
+protocol|String||N|Insert the protocol corresponding to the data port
+baseprotocol|String|tcp|N|Whether the inserted data port is a TCP port or a UDP port ,a nd only TCP or UDP is supported
+name|String||N|Vulnerability name. This item is required when vulnerability data needs to be stored
+level|Number|1|N|Vulnerability level
+vulurl|String||N|Vulnerability address. This item is required when vulnerability data needs to be stored
+
 ###  Event notification
 
 #### bindEvent
@@ -1470,6 +1721,19 @@ type : onChangeLang, when the Goby language changes, return to the current langu
 
 ```
 	EN
+```
+
+type : onWebShell，When the vulnerability verification pop-up window，Click the webshell button
+
+**New in 1.9.307+**
+
+```javascript
+	 {
+		"output":"WebShell URL: http://127.0.0.1:30516/RgYacQin.jsp↵Password: CQCTHN↵WebShell tool: Behinder v3.0" //Vulnerability verification pop-up window output output information
+		"url":"http://127.0.0.1:30516/RgYacQin.jsp",	//webshell address
+		"pwd":"CQCTHN" //webshell password
+		"tools":"Behinder v3.0"//Other information, such as: version information
+	  }
 ```
 
 ### Language related
