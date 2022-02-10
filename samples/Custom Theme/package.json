@@ -2,9 +2,9 @@
     "name": "Custom Theme",
     "publisher": "GobySec",
     "description": "This extension can debug Goby GUI themes online and generate theme extensions with one click.",
-    "version": "0.2.2",
+    "version": "0.2.5",
     "icon": "src/assets/img/icon.png",
-    "engines": "1.8.230",
+    "engines": "1.9.326",
     "initEvents": "",
     "main": "./src/extension.js",
     "contributes": {

@@ -29,7 +29,7 @@
     let ipItem = "";
     let portItem = "";
     let protocolItem = "";
-	let dialog = parent.require('electron').remote.dialog,
+	let dialog = parent.require('@electron/remote').dialog,
 		fs = parent.require('fs');
 	let load;
     // 导出
@@ -107,27 +107,25 @@
 		  
             const parser = new json2csv.Parser(opts);
             const csv = parser.parse(myData);
-			dialog.showSaveDialog({
-				properties: ['openFile', 'openDirectory', 'multiSelections'],
-				defaultPath: 'goby.csv'
-			}, function (d) {
-			  if (!d) {
-				  layer.close(load);
-				  return;
-			  }
-			  fs.writeFile(d,csv,(err)=>{
-				  if(err){
-					  layer.close(load);
-					  goby.showErrorMessage(err);
-					  goby.closeIframeDia();
-					  return;
-				  }
-				  layer.close(load); 
-				  goby.showSuccessMessage("导出成功");
-				  goby.closeIframeDia();
-			  })
-			  
-			});
+            dialog.showSaveDialog({
+              properties: ['openFile', 'openDirectory', 'multiSelections'],
+              defaultPath: 'goby.csv'
+            }).then(res=>{
+              console.log(res);
+              if(res.canceled) return;
+              fs.writeFile(res.filePath,csv,(err)=>{
+                if(err){
+                  layer.close(load);
+                  goby.showErrorMessage(err);
+                  goby.closeIframeDia();
+                  return;
+                }
+                layer.close(load); 
+                goby.showSuccessMessage("导出成功");
+                goby.closeIframeDia();
+              })
+            })
+            
         } else {
 		  layer.close(load);
           goby.showInformationMessage("无数据");

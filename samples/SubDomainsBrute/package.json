@@ -2,7 +2,7 @@
 	"name": "SubDomainsBrute",
 	"publisher": "GobySec",
 	"description": "Enter the root domain and brute force the subdomain.",
-	"version": "0.2.5",
+	"version": "0.2.8",
 	"icon": "src/assets/img/logo.png",
 	"engines": "1.6.170",
 	"initEvents": "",

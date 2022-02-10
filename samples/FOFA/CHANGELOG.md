@@ -21,3 +21,9 @@ Increase English translation, adapt to Goby multi-language.
 
 ## 0.1.4 - 16th July,2021
 Fixed display issues
+
+## 0.1.5 - 23th July,2021
+Change to get the domain name or IP from the host for import
+
+## 0.1.6 - 9th Feb,2022
+The request address is changed to https://fofa.info

@@ -292,7 +292,6 @@
 <script src="./assets/element-ui/lib/index.js"></script>
 <script src="./assets/element-ui/lib/umd/locale/en.js"></script>
 <script>
-    // require('electron').remote.getCurrentWindow().openDevTools();
     ELEMENT.locale(ELEMENT.lang.en)
 	Vue.use(require('mavon-editor'))
     var app = new Vue({
@@ -300,10 +299,11 @@
         data: {
             fs:require('fs'),
             path:require('path'),
+            ipc:require("electron").ipcRenderer,
             opener:opener,
             color:require('color'),
             rgb_hex:require('rgb-hex'),
-            dialog:require('electron').remote.dialog,
+            // dialog:require('@electron/remote').dialog,
             package:require('./template/package.json'),
             build:require('./assets/js/index.js'),
             recentlyUse:[],
@@ -426,12 +426,11 @@
                 if(lock){
                     this.activeColor = color;
                 }
-				this.opener.postMessage({
-				    target:'ThemeDevelop',
-				    operate:'setColor',
-				    key,
+                this.ipc.send('setColor',{
+                    key,
 				    color
-				})
+                })
+
 				switch (key1){
 					case 'main':
 						this.$set(this.theme,'chartColors',[
@@ -458,50 +457,41 @@
 				switch (name){
 					case 'primaryFont':
 						this.$set(this.theme,'secondaryFont',this.color(this.theme.primaryFont).alpha(0.6).rgb().string());
-						this.opener.postMessage({
-							target:'ThemeDevelop',
-							operate:'setColor',
-							key:'--secondaryFont-color',
+						this.ipc.send('setColor',{
+                            key:'--secondaryFont-color',
 							color:this.theme.secondaryFont
-						})
+                        })
 						this.$set(this.theme,'level3Font',this.color(this.theme.primaryFont).alpha(0.36).rgb().string())
-						this.opener.postMessage({
-							target:'ThemeDevelop',
-							operate:'setColor',
-							key:'--level3Font-color',
+						this.ipc.send('setColor',{
+                            key:'--level3Font-color',
 							color:this.theme.level3Font
-						})
+                        })
+                         
 						this.$set(this.theme,'primaryBorder',this.color(this.theme.primaryFont).alpha(0.22).rgb().string())
-						this.opener.postMessage({
-							target:'ThemeDevelop',
-							operate:'setColor',
-							key:'--primaryBorder-color',
+						this.ipc.send('setColor',{
+                            key:'--primaryBorder-color',
 							color:this.theme.primaryBorder
-						})
+                        })
+                        
 						this.$set(this.theme,'secondaryBorder',this.color(this.theme.primaryFont).alpha(0.15).rgb().string())
-						this.opener.postMessage({
-							target:'ThemeDevelop',
-							operate:'setColor',
-							key:'--secondaryBorder-color',
+						this.ipc.send('setColor',{
+                            key:'--secondaryBorder-color',
 							color:this.theme.secondaryBorder
-						})
+                        })
+                        
                         this.$set(this.theme,'lv4Background',this.color(this.theme.primaryFont).alpha(0.19).rgb().string())
-						this.opener.postMessage({
-							target:'ThemeDevelop',
-							operate:'setColor',
-							key:'--lv4Background-color',
+						this.ipc.send('setColor',{
+                            key:'--lv4Background-color',
 							color:this.theme.lv4Background
-						})
+                        })
 						break;
 					case 'secondaryBackground':
 						let color = this.color(this.theme.secondaryBackground).color;
 						this.$set(this.theme,'lv3Background',this.color(this.build.toRgb(color,0.98)).rgb().string())
-						this.opener.postMessage({
-							target:'ThemeDevelop',
-							operate:'setColor',
-							key:'--lv3Background-color',
+						this.ipc.send('setColor',{
+                            key:'--lv3Background-color',
 							color:this.theme.lv3Background
-						})			
+                        })			
 						break;
 				}
 						
@@ -522,9 +512,7 @@
                             this.color(color).alpha(0.1).rgb().string()
                         ])
                     }
-                    this.opener.postMessage({
-                        target:'ThemeDevelop',
-                        operate:'setColor',
+                    this.ipc.send('setColor',{
                         key,
                         color:this.oldTheme[key1]
                     })
@@ -692,20 +680,7 @@
                 this.init();
             },
             getPath(path){
-                this.dialog.showOpenDialog(null, {
-                    properties: ['openFile'],
-                    filters:[
-                        {
-                            name:'image',
-                            extensions:this.imgFormat
-                        }
-                    ]
-                },(d)=>{
-                    if(!d){
-                        return;
-                    }
-                    this.examine(d[0],path);
-                });
+                this.ipc.send('getPath',path);
             },
             examine(filePath,path){
                 let filePathState = this.fs.existsSync(filePath);
@@ -718,8 +693,7 @@
                     return;
                 }
                 this.$set(this['theme'],path,filePath);
-                this.opener.postMessage({
-                    target:'ThemeDevelop',
+                this.ipc.send('setColor',{
                     operate:'setColor',
                     key:this.mappingTable[path],
                     color:`url("${filePath.replace(/\\/ig,'/')}")`
@@ -728,59 +702,80 @@
             deleteImg(path){
                 let oldImg = this.oldTheme[this.mappingTable[path]]?this.oldTheme[this.mappingTable[path]].replace(/\\/ig,'/'):null
                 this.$set(this['theme'],path,'');
-                this.opener.postMessage({
-                    target:'ThemeDevelop',
+                this.ipc.send('setColor',{
                     operate:'setColor',
                     key:this.mappingTable[path],
                     color:oldImg
                 })
             },
             getConfig(){
-                this.opener.postMessage({
-                    target:'ThemeDevelop',
-                    operate:'getConfig'
-                })
+                this.ipc.send('getConfig')
             },
             getTheme(){
-                this.opener.postMessage({
-                    target:'ThemeDevelop',
-                    operate:'getTheme'
+                // this.opener.postMessage({
+                //     target:'ThemeDevelop',
+                //     operate:'getTheme'
+                // })
+                this.ipc.send("getTheme");
+                this.ipc.once("getThemeRes", (event, themeRes) => {
+                    console.log(themeRes, "themeRes");
+                    let theme = themeRes.split(';');
+                            theme = theme.filter(v=>v).map(item=>item.split(':'));
+                            let theme1 = {};
+                            theme.forEach(item=>{
+                                    theme1[item[0].trim()] = item[1];
+                            })
+                            
+                            for(let i in this.mappingTable){
+                                    if(this.mappingTable[i] && this.mappingTable[i].includes('-color')){
+                                            this.$set(this.theme,i,this.color(theme1[this.mappingTable[i]]).rgb().string());
+                                            this.$set(this.oldTheme,i,this.color(theme1[this.mappingTable[i]]).rgb().string());
+                                    }
+                            }
+                            this.$set(this.theme,'chartColors',[
+                                    this.color(this.theme.main).alpha(1).rgb().string(),
+                                    this.color(this.theme.main).alpha(0.6).rgb().string(),
+                                    this.color(this.theme.main).alpha(0.4).rgb().string(),
+                                    this.color(this.theme.main).alpha(0.2).rgb().string(),
+                                    this.color(this.theme.main).alpha(0.1).rgb().string()
+                            ])
                 })
             },
             message(event){
-                
-                switch (event.data.operate) {
-                    case 'getConfig':
-                        for(let i in event.data.config){
-                            this.$set(this.package,i,event.data.config[i].default);
+                this.ipc.on('getConfig',(event,data)=>{
+                    for(let i in data.config){
+                        this.$set(this.package,i,data.config[i].default);
+                    }
+                    this.generate();
+                })
+                this.ipc.on('getTheme',(event,data)=>{
+                    let theme = data.theme.split(';');
+                    theme = theme.filter(v=>v).map(item=>item.split(':'));
+                    let theme1 = {};
+                    theme.forEach(item=>{
+                        theme1[item[0].trim()] = item[1];
+                    })
+                    
+                    for(let i in this.mappingTable){
+                        if(this.mappingTable[i] && this.mappingTable[i].includes('-color')){
+                            this.$set(this.theme,i,this.color(theme1[this.mappingTable[i]]).rgb().string());
+                            this.$set(this.oldTheme,i,this.color(theme1[this.mappingTable[i]]).rgb().string());
                         }
-                        this.generate();
-                        break;
-                    case 'getTheme':
-                        let theme = event.data.theme.split(';');
-                        theme = theme.filter(v=>v).map(item=>item.split(':'));
-                        let theme1 = {};
-                        theme.forEach(item=>{
-                            theme1[item[0].trim()] = item[1];
-                        })
-                        
-                        for(let i in this.mappingTable){
-                            if(this.mappingTable[i] && this.mappingTable[i].includes('-color')){
-                                this.$set(this.theme,i,this.color(theme1[this.mappingTable[i]]).rgb().string());
-                                this.$set(this.oldTheme,i,this.color(theme1[this.mappingTable[i]]).rgb().string());
-                            }
-                        }
-                        this.$set(this.theme,'chartColors',[
-                            this.color(this.theme.main).alpha(1).rgb().string(),
-                            this.color(this.theme.main).alpha(0.6).rgb().string(),
-                            this.color(this.theme.main).alpha(0.4).rgb().string(),
-                            this.color(this.theme.main).alpha(0.2).rgb().string(),
-                            this.color(this.theme.main).alpha(0.1).rgb().string()
-                        ])
-                    default:
-                        
-                        break;
-                }
+                    }
+                    this.$set(this.theme,'chartColors',[
+                        this.color(this.theme.main).alpha(1).rgb().string(),
+                        this.color(this.theme.main).alpha(0.6).rgb().string(),
+                        this.color(this.theme.main).alpha(0.4).rgb().string(),
+                        this.color(this.theme.main).alpha(0.2).rgb().string(),
+                        this.color(this.theme.main).alpha(0.1).rgb().string()
+                    ])
+                })
+                this.ipc.on('getPath',(event,data)=>{
+                    if(data.canceled){
+                        return;
+                    }
+                    this.examine(data.filePaths[0],data.path)
+                })
                 
             },
             handleTrigger(res,item){
@@ -806,10 +801,7 @@
                 return res;
             },
             exit(){
-                this.opener.postMessage({
-                    target:'ThemeDevelop',
-                    operate:'exit'
-                })
+                this.ipc.send('exit')
             }
         },
         computed:{
@@ -820,15 +812,11 @@
             }
         },
         mounted(){
-            window.onbeforeunload = function(e) {
-                this.opener.postMessage({
-                    target:'ThemeDevelop',
-                    operate:'exit'
-                })
-                return false;
-            };
+            
+            // console.log(this.message, "message", window);
+            // window.addEventListener('message',this.message,false);
+            this.message()
             this.init();
-            window.addEventListener('message',this.message,false);
             this.getTheme()
             
         }

@@ -60,24 +60,24 @@
         layer = layui.layer,
         element = layui.element;
       let fs = require('fs');
-      
+      let ipc = require("electron").ipcRenderer
       //let goby = parent.goby; // 获取GobyAPi
       let results = []; // 定义搜索结果数组
       // let userDictFilePath = parent.goby.getConfiguration("dictFilePath");
       let userDictFilePath = ()=>{
         return new Promise((resolve,reject)=>{
-          opener.postMessage({
+          ipc.send('execApi',{
             target:'subDomainsBrute',
             api:'getConfiguration',
             val:['dictFilePath']
           })
-          window.addEventListener('message',(event)=>{
-            if(event.data.target=='getConfiguration'){
-              resolve(event.data);
+          ipc.once('getConfiguration',(event,data)=>{
+            if(data.target=='getConfiguration'){
+              resolve(data)
             }else{
               reject()
             }
-          },false)
+          })
         })
           
       }
@@ -116,11 +116,16 @@
           } else {
             // goby.showConfigurationDia();
             // goby.closeIframeDia();
-            opener.postMessage({
-                target:'subDomainsBrute',
-                api:'showConfigurationDia',
-                val:[]
+            ipc.send('execApi',{
+              target:'subDomainsBrute',
+              api:'showConfigurationDia',
+              val:[]
             })
+            // opener.postMessage({
+            //     target:'subDomainsBrute',
+            //     api:'showConfigurationDia',
+            //     val:[]
+            // })
             // opener.postMessage({
             //     target:'subDomainsBrute',
             //     api:'closeIframeDia',
@@ -142,7 +147,8 @@
         if (isFinish) {
           let dictArr = await readDict().then(res=>res).then(err=>err);
           if(!dictArr){
-            window.close();
+            // window.close();
+            ipc.send('close')
             return;
           }
           let domain = $("#fofa-input").val();
@@ -163,7 +169,7 @@
               })
             } else {
               // goby.showInformationMessage("请输入根域名");
-              opener.postMessage({
+              ipc.send('execApi',{
                 target:'subDomainsBrute',
                 api:'showInformationMessage',
                 val:['请输入根域名']
@@ -171,18 +177,18 @@
             }
           } else {
             // goby.showInformationMessage("字典大小不能超过50M");
-            opener.postMessage({
-                target:'subDomainsBrute',
+            ipc.send('execApi',{
+              target:'subDomainsBrute',
                 api:'showInformationMessage',
                 val:['字典大小不能超过50M']
             })
           }
         } else {
           // goby.showInformationMessage("正在爆破中，请稍等");
-          opener.postMessage({
-              target:'subDomainsBrute',
-              api:'showInformationMessage',
-              val:['正在爆破中，请稍等']
+          ipc.send('execApi',{
+            target:'subDomainsBrute',
+            api:'showInformationMessage',
+            val:['正在爆破中，请稍等']
           })
         }
       }
@@ -204,7 +210,6 @@
               contentType: 'application/x-www-form-urlencoded;charset=utf-8',
               dataType: "json",
               success(res) {
-                console.log(res);
                 if (res.status == 200) {
                   let html = `
                 <tr>
@@ -236,10 +241,10 @@
                 if (num == $(".total").html()) {
                   isFinish = true;
                   // goby.showSuccessMessage("爆破结束");
-                  opener.postMessage({
-                      target:'subDomainsBrute',
-                      api:'showSuccessMessage',
-                      val:['爆破结束']
+                  ipc.send('execApi',{
+                    target:'subDomainsBrute',
+                    api:'showSuccessMessage',
+                    val:['爆破结束']
                   })
                 }
               }
@@ -294,16 +299,17 @@
           // goby.addScanIps(ips, 0);
           // goby.showSuccessMessage("导入扫描对象成功");
           // goby.closeIframeDia();
-          opener.postMessage({
-              target:'subDomainsBrute',
-              api:'addScanIps',
-              val:[ips,0]
+          ipc.send('execApi',{
+            target:'subDomainsBrute',
+            api:'addScanIps',
+            val:[ips,0]
           })
-          opener.postMessage({
-              target:'subDomainsBrute',
+          ipc.send('execApi',{
+            target:'subDomainsBrute',
               api:'showSuccessMessage',
               val:['导入扫描对象成功']
           })
+          
           // opener.postMessage({
           //     target:'subDomainsBrute',
           //     api:'closeIframeDia',
@@ -311,10 +317,10 @@
           // })
         } else {
           // goby.showInformationMessage("导入对象不能为空");
-          opener.postMessage({
-              target:'subDomainsBrute',
-              api:'showInformationMessage',
-              val:['导入对象不能为空']
+          ipc.send('execApi',{
+            target:'subDomainsBrute',
+            api:'showInformationMessage',
+            val:['导入对象不能为空']
           })
         }
       })
@@ -326,11 +332,12 @@
           })
           exportRaw('subdomain.txt',ips.join('\n'));
         }else{
-          opener.postMessage({
-              target:'subDomainsBrute',
-              api:'showInformationMessage',
-              val:['导出对象不能为空']
+          ipc.send('execApi',{
+            target:'subDomainsBrute',
+            api:'showInformationMessage',
+            val:['导出对象不能为空']
           })
+          
         }
         
       })

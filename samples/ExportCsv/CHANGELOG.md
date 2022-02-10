@@ -17,3 +17,6 @@ Fix the bug that download error occurs when the amount of data is too large.
 ## 0.1.5 - 25th Oct, 2021
 
 Multi language in Chinese and English
+
+## 0.1.6 - 9th Feb, 2022
+Some changes

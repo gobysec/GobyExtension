@@ -18,3 +18,6 @@
 
 ## 0.2.5 - 25th Oct, 2021
 1.Multi language in Chinese and English
+
+## 0.2.8 - 9th Feb, 2022
+1.Some changes

@@ -6,3 +6,6 @@ File management add download, upload
 
 ## 0.0.3 - 12th Nov,2021
 add av check,add http Tunnel
+
+## 0.0.4 - 9th Feb, 2022
+Some changes

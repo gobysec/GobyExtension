@@ -820,18 +820,17 @@
             },
             // 上传按钮
             uploadBtn() {
-                const {dialog} = top.require('electron').remote;
-                dialog.showOpenDialog({}, (res) => {
-                    if (res === undefined) {
-                        return
-                    }
+                const {dialog} = top.require('@electron/remote');
+                dialog.showOpenDialog({}).then(res=>{
+                    if(res.canceled) return;
                     top.ShellsManagerX.isDown = true;
                     this.ConfirmLoading = true
                     this.proStatus = ""
                     let currentPath = this.path.join(this.currentPath, this.path.basename(res[0])).replace(/\\/g, '/').replace(/\/$/, '')
                     console.log(currentPath)
                     this.uploadFileName = currentPath
-                    top.ShellsManagerX.uploadFile(currentPath, res[0], "", 'false', true, (res) => {
+                    this.uploadFileName = currentPath
+                    top.ShellsManagerX.uploadFile(currentPath, res.filePaths[0], "", 'false', true, (res) => {
                         console.log(res)
                         if (res !== 0 && !res) {
                             this.proStatus = 'warning'

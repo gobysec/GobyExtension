@@ -13,3 +13,7 @@ Updated translation.
 ## 0.2.2 - 25th Oct, 2021 
 
 Multi language in Chinese and English
+
+## 0.2.5 - 9th Feb, 2022
+
+Some changes
