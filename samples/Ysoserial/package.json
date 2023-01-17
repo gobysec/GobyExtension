@@ -1,0 +1,35 @@
+{
+    "name": "Ysoserial",
+    "publisher": "GobySec",
+    "description": "Ysoserial",
+    "version": "0.1.0",
+    "icon": "src/assets/img/icon.png",
+    "engines": "2.2.0",
+    "initEvents": "",
+    "main": "./src/extension.js",
+    "contributes": {
+        "views": {
+            "expDia": [
+                {
+                    "command": "expDia",
+                    "title": "Ysoserial",
+                    "icon" : "src/assets/img/icon.png",
+                    "visible": "isShow"
+                }
+            ],
+            "toolbar": [
+                {
+                    "command": "toolbar",
+                    "title": "Ysoserial",
+                    "icon" : "src/assets/img/icon.png"
+                }
+            ]
+        }
+    },
+    "language": {
+        "CN": "src/assets/translate/CN/translate.json"
+    },
+    "scripts": {},
+    "devDependencies": {},
+    "dependencies": {}
+}

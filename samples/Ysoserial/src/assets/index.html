@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="./css/index.css">
+</head>
+
+<body>
+    <div id="app">
+        <template v-for="(item, key) in GadgetList">
+            <el-form v-if="currentGadget?.value == item.value" ref="form" :key="item.value" :rules="rules"
+                v-loading.fullscreen.lock="loading" element-loading-text="loading..."
+                element-loading-background="rgba(255, 255, 255, 0.1)" :model="parameters[item.value]"
+                label-position="left" label-width="auto">
+                <div class="required">
+                    <el-form-item label="Gadget" class="require">
+                        <el-select v-model="gadget" size="mini" :filter-method="filterMethod" filterable placeholder="Please select Gadget"
+                            style="width:100%">
+                            <el-option v-for="(item, key) in GadgetLists" :key="item.value" :label="item.label"
+                            :value="item.value">
+                                <el-tooltip v-if="item.tooltip" placement="top" :open-delay="300">
+                                    <div slot="content">
+                                        {{item.tooltip}}
+                                    </div>
+                                    <div>
+                                        {{item.label}} 
+                                    </div>
+                                </el-tooltip>
+                                <div v-else>
+                                    {{item.label}} 
+                                </div>
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <template v-for="(value, index) in Category[item.type]">
+                        <el-form-item :label="value.name" :class="{require: value.require}" :prop="value.name"
+                            v-if="isShow(parameters[item.value], value)">
+                            <el-input v-if="value.type == 'input'" size="mini"
+                                v-model="parameters[item.value][value.name]"></el-input>
+                            <el-input v-if="value.type == 'textarea'" type="textarea" :rows="3"
+                                v-model="parameters[item.value][value.name]"></el-input>
+                            <el-select v-if="value.type == 'select'" size="mini" placeholder="Please Select"
+                                v-model="parameters[item.value][value.name]" style="width:100%">
+                                <el-option v-for="(v, k) in value.select_list" :key="k" :label="v.label"
+                                :value="v.value">
+                                    <el-tooltip v-if="v.tooltip" placement="top" :open-delay="300">
+                                        <div slot="content">
+                                            {{v.tooltip}}
+                                        </div>
+                                        <div>
+                                            {{v.label}} 
+                                        </div>
+                                    </el-tooltip>
+                                    <div v-else>
+                                        {{v.label}} 
+                                    </div>
+                                </el-option>
+                            </el-select>
+                            <el-radio-group v-if="value.type == 'radio'" v-model="parameters[item.value][value.name]">
+                                <el-radio v-for="(v,k) in value.radio_list" :key="k" :label="v.value">{{v.label}}
+                                </el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </template>
+                    <div style="text-align: right;">
+                        <span @click="Advanced = !Advanced" :class="{Advanced, pointer: true}">Advanced <i
+                                class="el-icon-caret-bottom"></i></span>
+                    </div>
+                    <el-collapse-transition>
+                        <div v-if="Advanced">
+                            <template v-for="(value, index) in Category['-1']">
+                                <el-form-item :label="value.name" :class="{require: value.require}"
+                                    v-if="isShow(e_fn['extension'], value)">
+                                    <div slot="label">
+                                        <span class="middle">{{value.name}} </span>
+                                        <el-tooltip v-if="value.tooltip" :open-delay="300">
+                                            <div slot="content">
+                                                {{value.tooltip}}
+                                            </div>
+                                            <svg t="1670230211615" class="icon icontishi-01 middle" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="11045" width="200" height="200"><path d="M512 0C229.2 0 0 229.2 0 512s229.2 512 512 512 512-229.2 512-512C1023.7 229.4 794.6 0.3 512 0z m3.2 823.5h-7c-33.5 0-60.6-27.1-60.6-60.6s27.1-60.6 60.6-60.6h7c33.5 0 60.6 27.1 60.6 60.5 0 33.5-27.1 60.6-60.6 60.7z m189.1-399.4c-8 14.8-18.2 28.3-30.1 40.1-12.4 12.1-25.7 23.2-39.8 33.3-13.9 10.4-27.3 21.5-40 33.3-11.9 11.4-22.2 24.3-30.7 38.4-8.3 15.1-12.5 32.2-12.2 49.5v31.6H468l1.1-52.9c0.3-17.3 4.7-34.2 12.8-49.5 8.1-15.6 18.4-29.9 30.5-42.7 12.2-13.6 25.3-26.5 39.2-38.4 13.9-11.9 26.9-23.9 38.9-35.8 11.1-11 21.2-23 30.1-35.8 7.8-11 12.1-24.1 12.2-37.5 0.2-12.4-3.2-24.5-9.8-35a91.19 91.19 0 0 0-26.4-28.2c-11.4-7.9-24-13.9-37.3-17.9-13.8-4.4-28.2-6.7-42.7-6.8-14.5 0.2-29 2.8-42.7 7.7-15.5 5.5-29.9 13.6-42.7 23.9-13.6 11.6-24.8 25.8-32.8 41.8-9 18-13.5 37.9-13 58H307c-0.7-30.5 5.2-60.7 17.1-88.8 10.7-23.8 26.4-45 45.9-62.3 18.9-16.8 41-29.5 65-37.5 24.2-7.8 49.4-11.8 74.8-11.9 53.6-3.9 106.9 10.9 150.9 41.8 37.3 32.5 57.4 80.4 54.6 129.7 0.8 17.9-3 35.7-11 51.9z" fill="#9EA2A7" p-id="11046"></path></svg>
+                                        </el-tooltip>
+                                    </div>
+                                    <el-input v-if="value.type == 'input'" size="mini"
+                                        v-model="e_fn['extension'][value.name]"></el-input>
+                                    <el-input v-if="value.type == 'textarea'" type="textarea" :rows="3"
+                                        v-model="e_fn['extension'][value.name]"></el-input>
+                                    <el-select v-if="value.type == 'select'" size="mini" placeholder="Please Select"
+                                        v-model="e_fn['extension'][value.name]" style="width:100%">
+                                        <el-option v-for="(v, k) in value.select_list" :key="k" :label="v.label"
+                                        :value="v.value">
+                                            <el-tooltip v-if="v.tooltip" placement="top" :open-delay="300">
+                                                <div slot="content">
+                                                    {{v.tooltip}}
+                                                </div>
+                                                <div>
+                                                    {{v.label}} 
+                                                </div>
+                                            </el-tooltip>
+                                            <div v-else>
+                                                {{v.label}} 
+                                            </div>
+                                        </el-option>
+                                    </el-select>
+                                    <el-radio-group v-if="value.type == 'radio'"
+                                        v-model="e_fn['extension'][value.name]">
+                                        <el-radio v-for="(v,k) in value.radio_list" :key="k" :label="v.value">
+                                            {{v.label}}</el-radio>
+                                    </el-radio-group>
+                                </el-form-item>
+                            </template>
+                        </div>
+                    </el-collapse-transition>
+                </div>
+                <el-form-item label="" class="submit">
+                    <el-button type="primary" size="mini" @click="getpayLoad">Generate</el-button>
+                    <span v-if="util.isBoolean(state)" :class="{
+                        success: state,
+                        fail: !state
+                    }">
+                        {{state ? 'Success' : 'Fail'}}
+                    </span>
+                    <div class="fail">
+                        {{error}}
+                    </div>
+                </el-form-item>
+            </el-form>
+        </template>
+    </div>
+</body>
+<script src="./js/vue.js"></script>
+<script src="./element-ui/lib/index.js"></script>
+<script type="module" src="./js/index.js"></script>
+</html>

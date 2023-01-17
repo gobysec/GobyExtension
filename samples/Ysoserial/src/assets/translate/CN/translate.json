@@ -1,0 +1,5 @@
+{
+      "description": "Java 反序列化漏洞利用, 支持内存马",
+      "readme": "./README.md",
+      "changelog": "./CHANGELOG.md"
+}
