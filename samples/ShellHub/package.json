@@ -2,7 +2,7 @@
   "name": "ShellHub",
   "publisher": "GobySec",
   "description": "WebShell Tools,Support Behinder tool",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "engines": "1.9.326",
   "icon": "src/assets/img/shells.png",
   "initEvents": "",

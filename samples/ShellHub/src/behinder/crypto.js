@@ -119,10 +119,8 @@ function decryption_ecb(data, key) {
     let cipherChunks = [];
     let decipher = crypto.createDecipheriv('aes-128-ecb', key, iv);
     decipher.setAutoPadding(true);
-
     cipherChunks.push(decipher.update(data, cipherEncoding, clearEncoding));
     cipherChunks.push(decipher.final(clearEncoding));
-
     return cipherChunks.join('');
 }
 

@@ -9,3 +9,6 @@ add av check,add http Tunnel
 
 ## 0.0.4 - 9th Feb, 2022
 Some changes
+
+## 0.0.5 - 17th Jan, 2023
+Support delete shell and view shell information

@@ -6,5 +6,9 @@
     "Check alive":"Check alive",
     "Down":"Down",
     "Up":"Up",
-    "No data":"No data"
+    "No data":"No data",
+    "Delete": "Delete",
+    "Delete All": "Delete All",
+    "Shell Info": "Shell Info",
+    "Copy Success": "Copy Success"
 }

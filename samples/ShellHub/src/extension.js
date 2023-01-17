@@ -52,6 +52,7 @@ function activate() {
                 console.log(fixjson);
                 let queue = this.getQueue();
                 queue.info['shells'] = fixjson;
+                console.log(queue);
                 this.fs.writeFile(this.filePath, JSON.stringify(queue, null, 6), (err, res) => {
                     if (err) {
                         reject(err);
@@ -70,6 +71,13 @@ function activate() {
             return jsondata.info.shells;
         }
 
+        //删除某个shell
+        delete(idArr = []){
+            console.log(this.shellsInfo());
+            console.log(idArr);
+            return this.fixShellsInfo(this.shellsInfo().filter(item => !idArr.includes(item.ID)))
+        }
+
         echo(content, force) {
             let params = new Map();
             params.set("content", content);
@@ -79,7 +87,7 @@ function activate() {
             let data = this.GetData(this.pwd, "EchoGo", params, this.script, this.encryptType)
             return this.http.RequestAndParse(this.url, jar, this.proxy, this.headers, data, 0, 0).then(res => {
                 let resObj = Buffer.from(res.body, 'hex');
-                console.log(resObj)
+                console.log(this.pwd);
                 return this.cryptox.decrypt(resObj, this.pwd, this.encryptType, this.script)
             })
             // let res = this.http.RequestAndParse(this.url, jar, this.proxy, this.headers, data, 0, 0)
@@ -94,6 +102,9 @@ function activate() {
             params.set("whatever", whatever);
             if (this.script === "jsp") {
                 params.set("forcePrint", force);
+                // 生成下随机字符串
+                
+                params.set("BasicInfoGo", "CCC" +　Math.random().toString(16).substr(-4));
             }
             let data = this.GetData(this.pwd, "BasicInfoGo", params, this.script, this.encryptType)
             return this.http.RequestAndParse(this.url, jar, this.proxy, this.headers, data, 0, 0).then(res => {
@@ -122,6 +133,7 @@ function activate() {
             return this.http.RequestAndParse(this.url, jar, this.proxy, this.headers, data, 0, 0).then(res => {
                 let resObj = Buffer.from(res.body, 'hex');
                 let resMap = this.cryptox.decrypt(resObj, this.pwd, this.encryptType, this.script)
+                console.log(resMap)
                 let resJson = JSON.parse(resMap)
                 for (let k in resJson) {
                     resJson[k] = Buffer.from(resJson[k], 'base64').toString('utf-8');
@@ -723,13 +735,28 @@ function activate() {
         window.ShellsManagerX = new ShellsManagerX();
     }
     goby.bindEvent('onWebShell', (res) => {
-        console.log(res)
+       
         let shellInfo = window.ShellsManagerX.shellsInfo()
-        console.log(shellInfo);
+        let info = res.output.split(/\r\n|\n/).map(item=>item.replace(/(([^:])+):(\s+)?(.+)/,'{"$1":"$4"}')).reduce((total,prev)=>{
+            try {
+                let json = JSON.parse(prev)
+                total = {
+                    ...total,
+                    ...json
+                }
+            } catch (error) {
+                total = total
+            }
+            return total
+        },{})
+
+        let headers = {}
+        if(info.Referer){
+            headers.Referer = info.Referer
+        }
         let urlParse = require('url');
         if (shellInfo.length === 0) {
             let script = urlParse.parse(res.url).pathname.split('.').slice(-1)[0]
-            console.log(script)
             shellInfo.push({
                 "ID": shellInfo.length + 1,
                 "URL": res.url,
@@ -737,10 +764,12 @@ function activate() {
                 "CPath": "",
                 "DList": "",
                 "PWD": res.pwd,
-                "Script": script,
-                "Proxy": config.Proxy.default,
+                "Script": info['Webshell type'] || script,
+                "Proxy": goby.getConfiguration().Proxy.default,
                 "IsXor": false,
-                "Headers": {},
+                "Headers": {
+                    ...headers
+                },
                 "Time": Date.now(),
                 "Status": "Null"
             })
@@ -759,17 +788,18 @@ function activate() {
                     "CPath": "",
                     "DList": "",
                     "PWD": res.pwd,
-                    "Script": script,
-                    "Proxy": config.Proxy.default,
+                    "Script": info['Webshell type'] || script,
+                    "Proxy": goby.getConfiguration().Proxy.default,
                     "IsXor": false,
-                    "Headers": {},
+                    "Headers": {
+                        ...headers
+                    },
                     "Time": Date.now(),
                     "Status": "Null"
                 })
             }
         }
         let randStr = utils.randomRange(30, 200)
-        console.log(this.url)
         window.ShellsManagerX.fixShellsInfo(shellInfo).then(res => {
             window.ShellsManagerX.init(shellInfo.length - 1)
             window.ShellsManagerX.echo(randStr, "false").then(res => {
@@ -787,6 +817,7 @@ function activate() {
                 }
 
             }).catch((error) => {
+                console.log(error);
                 goby.showErrorMessage("ShellHub :" + error.message)
             })
         })
@@ -801,3 +832,6 @@ function activate() {
 }
 
 exports.activate = activate;
+
+
+// baseInfo1  fileOper1  runCmd1  avCheck1

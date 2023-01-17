@@ -6,5 +6,9 @@
     "Check alive":"验证存活",
     "Down":"未存活",
     "Up":"存活",
-    "No data":"暂无数据"
+    "No data":"暂无数据",
+    "Delete": "删除",
+    "Delete All": "删除所有",
+    "Shell Info": "Shell 信息",
+    "Copy Success": "复制成功"
 }

@@ -44,7 +44,7 @@
 </div>
 
 <script src="../assets/js/jquery-3.3.1.min.js"></script>
-
+<!-- <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script> -->
 <script>
     $('head').prepend(`
         <style>
@@ -53,7 +53,6 @@
                 }
         </style>
     `)
-
     function randomRange(min, max) {
         let returnStr = "",
             range = (max ? Math.round(Math.random() * (max - min)) + min : min),

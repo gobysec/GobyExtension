@@ -19,7 +19,7 @@ function sendPostRequestBinary(urlPath, jar, proxy, headers, data) {
     return new Promise((resolve, reject) => {
         request(urlPath, {
             jar: jar,
-            proxy: proxy,
+            proxy: proxy || goby.getConfiguration().Proxy.default,
             rejectUnauthorized: false,
             method: "POST",
             encoding: null,

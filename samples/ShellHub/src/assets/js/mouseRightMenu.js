@@ -43,8 +43,8 @@ layui.define(['jquery','layer'],function(exports){
            if(x>$(window).width() -100){
                x = x-110;
            }
-           if(y>$(window).height() -150){
-               y = y-150;
+           if(y>$(window).height() -200){
+               y = y-200;
            }
            return [y+'px',x+'px'];
        }

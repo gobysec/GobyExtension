@@ -3,9 +3,9 @@ const fix = require("./class_fix");
 const utils = require("./utils");
 
 function getParamedClass(className, params) {
-    let payload = fs.readFileSync(__dirname + "/../payload/java/" + className + ".class");
-    payload = Buffer.from(payload, 'utf-8').toString('base64');
+    let payload = fs.readFileSync(__dirname + "/../payload/java/" + className + ".class").toString('base64');
     for (let [k, v] of params) {
+        console.log(className, ": ", k, "===" , v);
         payload = fix(payload, k, v)
     }
     // console.log("payload :" + payload);
